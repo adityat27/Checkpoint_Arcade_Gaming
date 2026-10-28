@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CHECKPOINT!!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@700;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/brawl.css">
+<link rel="stylesheet" href="css/glaze.css">
+<link rel="stylesheet" href="css/overdrive.css">
+<link rel="stylesheet" href="css/cipher.css">
+<link rel="stylesheet" href="css/hang.css">
+<link rel="stylesheet" href="css/rps.css">
+<link rel="stylesheet" href="css/boardroom.css">
+<link rel="stylesheet" href="css/airhockey.css">
+<link rel="stylesheet" href="css/orderup.css">
+<link rel="stylesheet" href="css/deadweight.css">
+</head><body>
+<!-- The hub. Each game adds its own menu + game screens to #app (see js/games/). -->
+<div id="app">
+<h1 class="logo" id="home-logo" title="Back to the CHECKPOINT!! hub">CHECKPOINT<span>!!</span></h1>
+
+<section id="hub">
+<div class="card prof">
+  <div class="pava" id="pava"></div>
+  <div class="pmain">
+    <label class="nml">Your Name<input id="nm" maxlength="12" autocomplete="off"></label>
+    <p class="lb">Pick your avatar</p>
+    <div class="picks" id="picks"></div>
+  </div>
+</div>
+<div class="card inv2" id="ibx" hidden><b id="it"></b><button class="btn hot" id="ib">Join now!</button></div>
+<p class="note" id="hmsg" style="text-align:center"></p>
+<h2 class="hh">Pick a game!</h2>
+<div class="games">
+<button class="gc" data-g="brawl" data-badge="FIGHTING · 1-2P"><span class="art a" id="a1"></span><b>Bam! Brawl</b></button>
+<button class="gc" data-g="donut" data-badge="3D BAKERY · 1-2P"><span class="art min b" data-art="m_donut"></span><b>Glaze Craze</b></button>
+<button class="gc" data-g="race" data-badge="3D RACING · 1-2P"><span class="art scene" data-art="race"></span><b>Overdrive</b></button>
+<button class="gc" data-g="puzzle" data-badge="PUZZLES · 1-2P"><span class="art full dark" data-art="puzzle"></span><b>Cipher Sync</b></button>
+<button class="gc" data-g="hang" data-badge="WORDS · 1-2P"><span class="art scene" data-art="hang"></span><b>Hang Tight</b></button>
+<button class="gc" data-g="rps" data-badge="QUICK DUEL · 1-2P"><span class="art scene" data-art="rps"></span><b>Rock Paper Scissors</b></button>
+<button class="gc" data-g="board" data-badge="STRATEGY · 1-2P"><span class="art scene" data-art="board"></span><b>Board Room</b></button>
+<button class="gc" data-g="hockey" data-badge="ARCADE · 1-2P"><span class="art scene" data-art="hockey"></span><b>Air Hockey</b></button>
+<button class="gc" data-g="order" data-badge="CO-OP COOKING · 2P ONLINE"><span class="art scene" data-art="order"></span><b>Order Up!</b></button>
+<button class="gc" data-g="deadweight" data-badge="3D CO-OP CLIMB · 1-2P"><span class="art scene" data-art="deadweight"></span><b>Deadweight</b></button>
+</div>
+</section>
+
+<!-- ONLINE LOBBY (shared by every game) -->
+<section id="lobby" class="card" hidden style="text-align:center">
+<h2 style="font-size:34px;margin:0">Waiting for your rival...</h2>
+<p>Send your friend this link. They join instantly:</p><div class="code" id="lc"></div><p id="ln" style="word-break:break-all;user-select:all;margin:0 0 12px"></p>
+<div class="row"><button class="btn m" id="cp">Copy invite</button><button class="btn b" id="bk">Back</button></div>
+<p class="note" id="lm"></p><p class="note">Tip: your friend opens the link, enters a name and presses the pulsing <b>Join now!</b> button.</p>
+</section>
+</div>
+
+<div id="net" hidden>○ connecting...</div>
+<div id="snd">
+  <button class="chip" id="bt" title="Switch Light / Dark Arcade Theme" aria-label="Switch Theme">🌓</button>
+  <button class="chip" id="bm" title="Music on/off" aria-label="Music on or off">🎵</button>
+  <button class="chip" id="bs" title="Sound effects on/off" aria-label="Sound effects on or off">🔊</button>
+</div>
+<div id="over" hidden><div class="card"><h2 id="ot">YOU WIN!</h2><p id="os"></p><div class="row"><button class="btn m" id="rm">Rematch!</button><button class="btn b" id="mn">Menu</button></div></div></div>
+
+
+<!-- Scripts load in this order: shared core, built-in games, startup, then the plug-in games. -->
+<script src="js/core/utils.js"></script>
+<script src="js/core/audio.js"></script>
+<script src="js/core/state.js"></script>
+<script src="js/core/ui.js"></script>
+<script src="js/core/net.js"></script>
+<script src="js/core/art.js"></script>
+<script src="js/games/brawl.js"></script>
+<script src="js/games/glaze.js"></script>
+<script src="js/games/overdrive/cars.js"></script>
+<script src="js/games/overdrive/race.js"></script>
+<script src="js/games/cipher.js"></script>
+<script src="js/games/hang.js"></script>
+<script src="js/games/rps.js"></script>
+<script src="js/core/main.js"></script>
+<script src="js/games/boardroom.js"></script>
+<script src="js/games/airhockey.js"></script>
+<script src="js/games/orderup.js"></script>
+<script src="js/games/deadweight/core.js"></script>
+<script src="js/games/deadweight/game.js"></script>
+</body></html>

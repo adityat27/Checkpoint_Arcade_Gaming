@@ -1,0 +1,283 @@
+/* CHECKPOINT!! arcade · shared look
+   Colours, buttons, cards, the hub, game menus, overlays, card art and the shared
+   phone/tablet layout. Each game has its own stylesheet in this folder. */
+:root{
+  --ink:#14111f;
+  --bg:#ffe14d;
+  --dot:#ff3e8a44;
+  --pink:#ff3e8a;
+  --blue:#2d7bff;
+  --mint:#2fe3a0;
+  --org:#ff8a1f;
+  --purp:#8a5cff;
+  --card:#fffdf4;
+  --sub:#fff9db;
+  --hub-txt:#14111f;
+  --hub-pill:#ffffffeb;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px)
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#1f1647;
+    --dot:#ff3e8a38;
+    --hub-txt:#fffdf4;
+    --hub-pill:#2d2268f2
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1f1647;
+  --dot:#ff3e8a38;
+  --hub-txt:#fffdf4;
+  --hub-pill:#2d2268f2
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  background-color:var(--bg);
+  background-image:radial-gradient(var(--dot) 22%,transparent 24%);
+  background-size:16px 16px;
+  font:900 16px/1.35 'Comic Neue','Comic Sans MS',system-ui,sans-serif;
+  color:var(--ink);
+  overflow-x:hidden
+}
+h1,h2,h3,.bang,.btn,.mv b,.nm{font-family:Bangers,Impact,'Arial Black',sans-serif;font-weight:400;letter-spacing:1px}
+#app{max-width:1060px;margin:0 auto;padding:10px 12px 18px;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+#menu,#dmenu,#rmenu,#pmenu,#lobby{width:100%;max-width:780px;margin:0 auto}
+#game,#dgame,#rgame,#pgame{flex:1;display:flex;flex-direction:column;min-height:0}
+.ingame .logo{font-size:32px;margin:0 0 6px;-webkit-text-stroke:2px var(--ink);text-shadow:3px 3px 0 var(--ink)}
+.ingame .sub-banner{display:none}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.logo{
+  font-size:clamp(40px,10vw,82px);
+  line-height:1;
+  text-align:center;
+  color:#fff;
+  -webkit-text-stroke:3px var(--ink);
+  paint-order:stroke fill;
+  text-shadow:5px 5px 0 var(--ink),0 8px 0 var(--pink);
+  transform:rotate(-2deg);
+  margin:4px 0 6px;
+  cursor:pointer;
+  user-select:none
+}
+.logo span{color:#ffe14d}
+.sub-banner{
+  align-self:center;
+  background:var(--ink);
+  color:#ffe14d;
+  font:400 17px/1.2 Bangers,Impact,sans-serif;
+  letter-spacing:1.5px;
+  padding:5px 16px;
+  border-radius:999px;
+  border:3px solid #fff;
+  box-shadow:3px 3px 0 var(--pink);
+  margin:0 auto 14px;
+  text-align:center
+}
+.card{background:var(--card);border:4px solid var(--ink);border-radius:16px;box-shadow:7px 7px 0 var(--ink);padding:16px;color:var(--ink)}
+.btn{font-size:25px;padding:8px 18px;border:4px solid var(--ink);border-radius:12px;background:var(--pink);color:#fff;-webkit-text-stroke:1px var(--ink);paint-order:stroke fill;box-shadow:5px 5px 0 var(--ink);cursor:pointer;transition:transform .08s,box-shadow .08s,filter .12s}
+.btn:hover:not(:disabled){filter:brightness(1.06)}
+.btn:active:not(:disabled){transform:translate(4px,4px);box-shadow:1px 1px 0 var(--ink)}
+.btn.b{background:var(--blue)}.btn.m{background:var(--mint);color:#fff}.btn.o{background:var(--org)}.btn.p{background:var(--purp)}
+.btn.sm{font-size:19px;padding:5px 12px;border-width:3px;box-shadow:3px 3px 0 var(--ink)}
+.btn:disabled{filter:grayscale(1);opacity:.5;cursor:not-allowed}
+:focus-visible{outline:4px dashed var(--blue);outline-offset:3px}
+[hidden]{display:none!important}
+input,select{font:900 18px 'Comic Neue',sans-serif;border:4px solid var(--ink);border-radius:10px;padding:8px 12px;width:100%;background:#fff;color:var(--ink)}
+label{display:block;margin:0 0 10px}.lb{margin:6px 0}
+.picks{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:6px}
+.pick{background:#fff;border:4px solid var(--ink);border-radius:14px;padding:2px 2px 6px;cursor:pointer;font:inherit;color:var(--ink);transition:transform .12s,box-shadow .12s}
+.pick svg{width:100%;display:block}.pick b{font:400 20px Bangers,Impact,sans-serif}
+.pick.on{background:var(--org);transform:translateY(-5px) rotate(-2deg);box-shadow:5px 7px 0 var(--ink)}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row .btn{flex:1;min-width:140px}
+.note{margin:10px 0 0;font-size:14px}
+#hub>.note{
+  color:var(--hub-txt);
+  background:var(--hub-pill);
+  border:3px solid var(--ink);
+  border-radius:999px;
+  padding:4px 16px;
+  display:table;
+  margin:12px auto 0;
+  box-shadow:3px 3px 0 var(--ink);
+  font-weight:900
+}
+#hub>#hmsg:empty{display:none}
+.rules{font-size:14px;padding-left:18px;margin:8px 0 0}.rules li{margin:4px 0}
+.code{font:400 clamp(52px,15vw,88px)/1 Bangers,Impact,sans-serif;letter-spacing:8px;text-align:center;background:var(--mint);border:4px dashed var(--ink);border-radius:14px;margin:12px 0;user-select:all;padding:6px}
+
+/* Fixed high-contrast "Pick a game!" header */
+.hh{
+  font-size:clamp(34px,7vw,46px);
+  margin:18px auto 12px;
+  text-align:center;
+  color:#ffffff;
+  -webkit-text-stroke:2.5px var(--ink);
+  paint-order:stroke fill;
+  text-shadow:4px 4px 0 var(--ink);
+  background:linear-gradient(135deg,var(--pink),var(--org));
+  border:4px solid var(--ink);
+  border-radius:999px;
+  padding:4px 28px;
+  width:fit-content;
+  box-shadow:5px 5px 0 var(--ink);
+  transform:rotate(-1deg)
+}
+.mh{font-size:38px;margin:0 0 10px;color:var(--pink);-webkit-text-stroke:1.5px var(--ink);paint-order:stroke fill;text-shadow:2px 2px 0 var(--ink)}
+
+/* Hub Game Grid (4 Games) */
+#hub{width:100%;max-width:920px;margin:0 auto}
+.games{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(max-width:600px){.games{grid-template-columns:1fr}}
+.gc{
+  position:relative;
+  background:#fff;
+  border:4px solid var(--ink);
+  border-radius:18px;
+  box-shadow:7px 7px 0 var(--ink);
+  padding:10px 10px 12px;
+  cursor:pointer;
+  font:inherit;
+  color:var(--ink);
+  text-align:center;
+  transition:transform .14s,box-shadow .14s;
+  display:flex;
+  flex-direction:column
+}
+.gc::after{
+  content:attr(data-badge);
+  position:absolute;
+  top:16px;
+  right:16px;
+  background:var(--ink);
+  color:#ffe14d;
+  font:400 14px Bangers,Impact,sans-serif;
+  padding:2px 9px;
+  border-radius:999px;
+  border:2px solid #fff;
+  letter-spacing:.8px;
+  z-index:2
+}
+.gc:hover,.gc:focus-visible{transform:translate(-2px,-5px) rotate(-1deg);box-shadow:10px 11px 0 var(--ink)}
+.gc b{display:block;font:400 32px Bangers,Impact,sans-serif;margin-top:8px;color:var(--ink)}
+.art{display:flex;justify-content:center;align-items:center;height:124px;border:3px solid var(--ink);border-radius:12px;overflow:hidden;background:repeating-conic-gradient(from 0deg at 50% 60%,#ffc2dc 0 9deg,#fff0f7 9deg 18deg)}
+.art.b{background:repeating-conic-gradient(from 0deg at 50% 60%,#9be7ff 0 9deg,#e6faff 9deg 18deg)}
+.art.c{background:repeating-conic-gradient(from 0deg at 50% 60%,#ffcf8b 0 9deg,#fff4e0 9deg 18deg)}
+.art.d{background:repeating-conic-gradient(from 0deg at 50% 60%,#c8b6ff 0 9deg,#f3edff 9deg 18deg)}
+.art svg{height:100%;width:50%}
+.art.b svg{width:82%}
+.art.c,.art.d{background:#14111f;height:140px}
+.art.c svg,.art.d svg{width:100%;height:100%;display:block;transition:transform .35s ease}
+.rfl{animation:rflk .12s infinite alternate;transform-origin:180px 108px}
+@keyframes rflk{from{transform:scaleY(.7);opacity:.75}to{transform:scaleY(1.15);opacity:1}}
+.rtl{animation:rtl 1.2s infinite alternate}
+@keyframes rtl{from{opacity:.55}to{opacity:1}}
+.pdial{animation:pdial 6s linear infinite;transform-origin:180px 62px}
+@keyframes pdial{to{transform:rotate(360deg)}}
+.plz{animation:rtl .8s infinite alternate}
+
+.inv2{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:var(--mint);margin-top:14px}.inv2 b{font-size:18px}
+
+
+/* ---- overlays & floating controls ---- */
+.ov{position:fixed;inset:0;background:#14111fcc;display:grid;place-items:center;padding:12px;z-index:20;overflow:auto}
+#over{position:fixed;inset:0;background:#14111fcc;display:grid;place-items:center;padding:16px;z-index:20}
+#over .card{text-align:center;max-width:460px;width:100%}#over h2{font-size:60px;margin:0 0 6px;color:var(--pink);-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;text-shadow:4px 4px 0 var(--ink)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+#snd{position:fixed;right:max(8px,env(safe-area-inset-right,0px));top:calc(env(safe-area-inset-top,0px) + 8px);display:flex;flex-direction:column;gap:6px;z-index:30}
+.chip{position:relative;width:42px;height:42px;border-radius:50%;border:3px solid var(--ink);background:#fff;font-size:20px;line-height:1;box-shadow:3px 3px 0 var(--ink);cursor:pointer;color:var(--ink);padding:0}
+.chip.off{background:#d8d2e8;opacity:.8}.chip.off:after{content:"";position:absolute;left:5px;right:5px;top:50%;height:4px;margin-top:-2px;background:var(--pink);border:1px solid var(--ink);rotate:-45deg}
+#net{position:fixed;left:max(8px,env(safe-area-inset-left,0px));top:calc(env(safe-area-inset-top,0px) + 8px);z-index:30;font:400 15px Bangers,Impact,sans-serif;background:#fff;border:3px solid var(--ink);border-radius:10px;padding:2px 10px;box-shadow:3px 3px 0 var(--ink);color:var(--ink)}
+.hot{animation:pulse .6s infinite alternate}
+@media(orientation:landscape) and (max-height:540px){
+ .logo,.sub-banner{display:none}#app{padding:8px 10px}
+}
+
+/* ---- Hub ---- */
+#hub{max-width:1040px}
+.prof{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center;padding:14px 16px}
+.pava{height:170px;border:3px solid var(--ink);border-radius:14px;background:repeating-conic-gradient(from 0deg at 50% 70%,#ffd9ea 0 10deg,#fff3f8 10deg 20deg);overflow:hidden;position:relative}
+.pava svg{width:100%;height:100%;display:block;animation:bob 1.3s ease-in-out infinite}
+.pava b{position:absolute;left:50%;bottom:6px;translate:-50% 0;background:var(--ink);color:#ffe14d;font:400 17px Bangers,Impact,sans-serif;letter-spacing:1px;padding:1px 12px;border-radius:999px;white-space:nowrap}
+.nml{font-weight:900;margin-bottom:6px}
+.picks{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin:0}
+.pick{padding:2px 2px 4px;border-width:3px;border-radius:12px;box-shadow:3px 3px 0 var(--ink)}
+.pick b{font-size:15px;display:block;line-height:1.1}
+.pick:hover{transform:translateY(-2px)}
+.pick.on{transform:translateY(-4px) rotate(-2deg);box-shadow:4px 6px 0 var(--ink)}
+@media(max-width:720px){.prof{grid-template-columns:1fr}.pava{display:none}.picks{grid-template-columns:repeat(4,1fr)}}
+.hh{font-size:clamp(28px,6vw,40px);margin:20px auto 14px;padding:2px 24px}
+.games{grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:860px){.games{grid-template-columns:repeat(2,1fr);gap:12px}}
+@media(max-width:380px){.games{grid-template-columns:1fr}}
+.gc{padding:8px 8px 10px;border-radius:16px;box-shadow:6px 6px 0 var(--ink)}
+.gc::after{top:14px;right:14px;font-size:12.5px;padding:1px 8px}
+.gc b,.gc-hero b{font:400 clamp(22px,2.6vw,30px)/1.05 Bangers,Impact,sans-serif;margin-top:8px;color:var(--ink);-webkit-text-stroke:0;text-shadow:none;letter-spacing:.5px}
+.art{height:128px;border-radius:10px}
+.art.full{background:#fff}.art.full svg{width:100%;height:100%;display:block;transition:transform .35s ease}
+.art.full.dark{background:#14111f}
+@media(max-width:600px){.art{height:98px}.gc::after{font-size:10.5px;top:12px;right:12px}}
+/* ---- Game menus ---- */
+.gmenu{padding:0 16px 16px;overflow:hidden}
+.mhero{margin:0 -16px 10px;position:relative}
+.mart{height:150px;display:block;border-bottom:4px solid var(--ink);overflow:hidden}.mart.short{height:110px}.mart.dark{background:#14111f}.mart svg{width:100%;height:100%;display:block}
+.mart.a{display:flex;justify-content:center;background:repeating-conic-gradient(from 0deg at 50% 60%,#ffc2dc 0 9deg,#fff0f7 9deg 18deg)}.mart.a svg{width:30%}
+.mhero .mh{margin:10px 16px 0;font-size:clamp(32px,6vw,44px);color:var(--ink);-webkit-text-stroke:0;text-shadow:none}
+.mhero.dhero{height:auto;padding:30px 16px 14px;background:repeating-linear-gradient(90deg,#ffd9e8 0 26px,#ffeef5 26px 52px)}
+.mhero.dhero .awn{position:absolute;left:0;right:0;top:0}
+.mhero.dhero .mh{position:static;color:#ff5c98}.mhero.dhero p{margin:4px 0 0;font-size:14px}
+.gmenu .back{margin-top:12px;font-size:20px}
+.gmenu select,.gmenu input{font-size:16px;padding:7px 10px}
+
+/* ---- phone layout ---- */
+@media(max-width:640px){
+ #app{padding-top:50px}
+ #snd{flex-direction:row;gap:5px}.chip{width:36px;height:36px;font-size:17px}
+ .logo{margin-top:0}
+ .ingame .logo{font-size:26px;margin:0 0 6px}
+}
+
+/* minimal hub card art */
+.art.min{display:flex;justify-content:center;align-items:center;border:3px solid var(--ink);background:repeating-conic-gradient(from 0deg at 50% 60%,#ffc2dc 0 9deg,#fff0f7 9deg 18deg)}
+.art.min.b{background:repeating-conic-gradient(from 0deg at 50% 60%,#9be7ff 0 9deg,#e6faff 9deg 18deg)}
+.art.min.c2{background:repeating-conic-gradient(from 0deg at 50% 60%,#ffcf8b 0 9deg,#fff4e0 9deg 18deg)}
+.art.min.d2{background:repeating-conic-gradient(from 0deg at 50% 60%,#c8b6ff 0 9deg,#f3edff 9deg 18deg)}
+.art.min.e{background:repeating-conic-gradient(from 0deg at 50% 60%,#ffe58a 0 9deg,#fff8dc 9deg 18deg)}
+.art.min.f{background:repeating-conic-gradient(from 0deg at 50% 60%,#a8ecb8 0 9deg,#eafbee 9deg 18deg)}
+.art.min svg{height:84%;width:70%;margin-top:14px;transition:transform .3s ease}
+.gc:hover .art.min svg,.gc:focus-visible .art.min svg{transform:scale(1.08) rotate(-2deg)}
+
+/* ===== unified card hover + scene art ===== */
+.art.scene{display:block;padding:0;background:#14111f;border:3px solid var(--ink);overflow:hidden}
+.art.scene svg{width:100%!important;height:100%!important;display:block}
+.art svg,.mart svg{transform-origin:50% 55%}
+.gc .art svg{transition:transform .4s cubic-bezier(.3,1.5,.5,1),filter .25s}
+.gc:hover .art svg,.gc:focus-visible .art svg{transform:scale(1.09) rotate(-1.5deg);filter:saturate(1.12)}
+.gc .art.a svg{transform-origin:50% 100%}
+.gc:hover .art.a svg:first-child,.gc:focus-visible .art.a svg:first-child{transform:scale(1.08) rotate(-4deg) translateX(4%)}
+.gc:hover .art.a svg:last-child,.gc:focus-visible .art.a svg:last-child{transform:scale(1.08) rotate(4deg) translateX(-4%)}
+.gc:hover,.gc:focus-visible{transform:translateY(-5px);box-shadow:9px 11px 0 var(--ink)}
+/* scene animations: always on in menu banners, only on hover in hub cards */
+.gc .art.scene *{animation-play-state:paused}
+.gc:hover .art.scene *,.gc:focus-visible .art.scene *{animation-play-state:running}
+
+/* cards lift straight up on hover — no rotation or zoom, so pictures stay sharp */
+.gc:hover,.gc:focus-visible{transform:translateY(-4px)}
+.art.photo svg{transition:filter .25s ease}
+.gc:hover .art.photo svg,.gc:focus-visible .art.photo svg{filter:saturate(1.12) brightness(1.06)}
+
+/* ===== phones held sideways (short landscape screens) ===== */
+@media (orientation:landscape) and (max-height:540px){
+  #app.ingame{padding:6px 52px 6px 8px}
+  #snd{flex-direction:column;gap:5px;right:max(6px,env(safe-area-inset-right,0px));top:calc(env(safe-area-inset-top,0px) + 6px)}
+  .chip{width:34px;height:34px;font-size:16px;box-shadow:2px 2px 0 var(--ink)}
+}
+/* ===== tablets ===== */
+@media (max-width:1240px) and (min-width:641px) and (min-height:541px){
+  #snd{flex-direction:row;gap:6px}.chip{width:38px;height:38px;font-size:18px}
+}
+@media (min-width:641px) and (max-width:900px) and (min-height:541px){#app{padding-top:54px}.ingame .logo{margin-top:-40px;margin-bottom:10px}}
