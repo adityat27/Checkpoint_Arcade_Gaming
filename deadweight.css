@@ -1,0 +1,85 @@
+/* Deadweight */
+html.dwon,html.dwon body{overflow:hidden;overscroll-behavior:none;height:100%}
+html.dwon #net{display:none}html.dwon #over{z-index:45}
+html.dwon #snd{flex-direction:row!important;gap:6px;z-index:40}
+html.dwon,html.dwon *{-webkit-tap-highlight-color:transparent}
+#dwgame{position:fixed;inset:0;z-index:25;background:#2c2a6e;-webkit-user-select:none;user-select:none}
+#dwstage{position:absolute;inset:0;overflow:hidden;touch-action:none}
+#dwcv{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab}
+/* ---- HUD: one comic panel style for everything ---- */
+.dwp{position:absolute;z-index:5;background:#fffdf5;border:3px solid var(--ink);border-radius:14px;box-shadow:4px 4px 0 #14111f99;color:var(--ink)}
+#dwinfo{left:calc(10px + env(safe-area-inset-left,0px));top:calc(10px + env(safe-area-inset-top,0px));padding:5px 12px 6px;min-width:150px;max-width:min(240px,46vw)}
+#dwinfo b{display:block;font:400 21px/1.05 Bangers,Impact,sans-serif;letter-spacing:.6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#7a4fd6}
+#dwinfo .dwrow{display:flex;align-items:baseline;gap:10px}
+#dwtime{font:400 28px/1 Bangers,Impact,sans-serif;letter-spacing:1px}
+#dwfalls{font:900 12px system-ui;background:#14111f;color:#ffe14d;border-radius:999px;padding:1px 8px;white-space:nowrap}
+/* route bar: a side view of the mountain */
+#dwroute{left:50%;translate:-50% 0;top:calc(10px + env(safe-area-inset-top,0px));width:min(460px,42vw);height:46px;padding:0;overflow:visible;
+ background:linear-gradient(#ffe9d6,#fffdf5)}
+#dwprof{position:absolute;left:8px;right:22px;top:4px;bottom:4px;width:calc(100% - 30px);height:calc(100% - 8px);overflow:visible}
+#dwroute .dwpins{position:absolute;left:8px;right:22px;top:4px;bottom:4px}
+#dwroute .ck{position:absolute;width:6px;height:14px;margin:-14px 0 0 -1px;border-left:2px solid #14111f;background:none}
+#dwroute .ck::after{content:'';position:absolute;left:0;top:0;width:7px;height:6px;background:#9aa0b5;border:1.5px solid #14111f;border-left:0}
+#dwroute .ck.on::after{background:#ff8a1f}
+#dwroute .dot{position:absolute;width:14px;height:14px;translate:-50% -60%;border-radius:50%;border:3px solid var(--ink);z-index:1;box-shadow:0 2px 0 #14111f66}
+#dwroute .flag{position:absolute;right:-2px;top:-12px;font-size:20px;filter:drop-shadow(1px 1px 0 #14111f)}
+/* menu button (opens the pause menu) */
+#dwpause{right:calc(150px + env(safe-area-inset-right,0px));top:calc(10px + env(safe-area-inset-top,0px));width:44px;height:44px;padding:0;display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer;background:#ffe14d}
+#dwpause i{width:6px;height:18px;border-radius:2px;background:var(--ink)}
+#dwpause:active{translate:2px 2px;box-shadow:2px 2px 0 #14111f99}
+/* desktop controls card, fades after a while */
+#dwkeys{right:calc(10px + env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));padding:8px 12px;display:flex;flex-direction:column;gap:3px;font:900 12px system-ui;transition:opacity 1s;pointer-events:none}
+#dwkeys.fade{opacity:0}
+#dwkeys kbd,#dwtip kbd{display:inline-block;min-width:22px;text-align:center;background:#14111f;color:#ffe14d;border-radius:6px;padding:1px 6px;font:900 11px system-ui;margin-right:4px}
+#dwbanner{position:absolute;z-index:6;left:50%;top:21%;translate:-50% 0;text-align:center;pointer-events:none;width:min(640px,92vw);transition:opacity .5s}
+#dwbanner b{display:block;font:400 clamp(30px,6vmin,56px)/1 Bangers,Impact,sans-serif;color:#ffe14d;-webkit-text-stroke:3px var(--ink);paint-order:stroke fill;text-shadow:4px 4px 0 var(--ink);letter-spacing:1px;animation:dwin .45s cubic-bezier(.3,1.6,.5,1)}
+#dwbanner span{display:inline-block;margin-top:10px;background:#fffdf5;color:var(--ink);border:3px solid var(--ink);box-shadow:4px 4px 0 #14111f99;border-radius:12px;padding:6px 12px;font:900 14px/1.35 system-ui}
+@keyframes dwin{from{transform:scale(.4) rotate(-6deg);opacity:0}}
+#dwtip{position:absolute;z-index:6;left:50%;translate:-50% 0;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:#14111fe6;color:#fff;border:2px solid #fff;border-radius:12px;padding:6px 14px;font:900 14px system-ui;pointer-events:none;max-width:min(620px,60vw);text-align:center;box-shadow:0 4px 0 #14111f66}
+#dwtip:empty{display:none}
+#dwmsg{position:absolute;inset:0;z-index:7;display:grid;place-items:center;pointer-events:none}
+#dwmsg span{font:400 clamp(60px,16vmin,150px)/1 Bangers,Impact,sans-serif;color:#ffe14d;-webkit-text-stroke:4px var(--ink);paint-order:stroke fill;text-shadow:6px 6px 0 var(--ink);animation:rpop .35s ease-out}
+#dwmsg .pnl{background:#fffdf5;color:var(--ink);border:3px solid var(--ink);box-shadow:5px 5px 0 #14111f99;border-radius:16px;padding:14px 20px;font:900 16px system-ui;max-width:90%;text-align:center}
+#dwflash{position:absolute;z-index:6;left:50%;top:36%;translate:-50% 0;background:#ff3e5a;color:#fff;border:3px solid var(--ink);box-shadow:4px 4px 0 #14111f99;border-radius:12px;padding:6px 14px;font:400 22px Bangers,Impact,sans-serif;letter-spacing:1px;pointer-events:none;opacity:0;transition:opacity .3s,transform .3s;transform:scale(.8)}
+#dwflash.on{opacity:1;transform:none}
+#dwswapb{position:absolute;z-index:6;left:calc(10px + env(safe-area-inset-left,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));font:400 20px Bangers,Impact,sans-serif;letter-spacing:1px;border:3px solid var(--ink);border-radius:12px;background:#fffdf5;padding:6px 12px;box-shadow:4px 4px 0 #14111f99;cursor:pointer;color:var(--ink)}
+#dwswapb small{font:900 10px system-ui;background:#14111f;color:#ffe14d;border-radius:5px;padding:1px 5px;vertical-align:2px;margin-left:4px}
+#dwswapb i{font-style:normal;display:inline-block;width:14px;height:14px;border-radius:50%;border:2px solid var(--ink);vertical-align:-1px;margin-right:6px}
+/* pause menu */
+#dwpm{position:absolute;inset:0;z-index:30;display:grid;place-items:center;background:#14111f99;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);padding:16px}
+#dwpm[hidden]{display:none}
+.dwpmc{background:#fffdf5;border:4px solid var(--ink);border-radius:18px;box-shadow:8px 8px 0 var(--ink);padding:16px 20px 18px;width:min(420px,100%);text-align:center;color:var(--ink);animation:dwin .3s cubic-bezier(.3,1.6,.5,1);max-height:100%;overflow:auto}
+.dwpmc h3{margin:0;font:400 46px/1 Bangers,Impact,sans-serif;letter-spacing:2px;color:#7a4fd6;-webkit-text-stroke:1.5px var(--ink);paint-order:stroke fill;text-shadow:3px 3px 0 var(--ink)}
+.dwpmc p{margin:6px 0 12px;font-weight:900;font-size:14px}
+.dwpmb{display:flex;flex-direction:column;gap:10px}.dwpmb .btn{font-size:22px;padding:6px 14px}
+.dwpmk{list-style:none;padding:10px 0 0;margin:12px 0 0;border-top:3px dashed #14111f33;font-size:13px;text-align:left;display:grid;gap:3px}.dwpmk b{display:inline-block;min-width:54px;color:#7a4fd6}
+/* touch controls */
+#dwpads{position:absolute;inset:0;z-index:4;pointer-events:none}
+#dwpads .joy{position:absolute;left:0;top:30%;bottom:0;width:45%;pointer-events:auto;touch-action:none}
+#dwpads .joyhint{position:absolute;left:calc(30px + env(safe-area-inset-left,0px));bottom:calc(40px + env(safe-area-inset-bottom,0px));width:110px;height:110px;border-radius:50%;border:3px dashed #ffffffcc;display:grid;place-items:center;transition:opacity .4s}
+#dwpads .joyhint i{width:46px;height:46px;border-radius:50%;background:#ffffff88;border:3px solid #14111f}
+#dwpads .joyhint span{position:absolute;bottom:-26px;white-space:nowrap;font:400 16px Bangers,Impact,sans-serif;letter-spacing:1px;color:#fff;-webkit-text-stroke:3px var(--ink);paint-order:stroke fill}
+#dwpads .joy.used .joyhint{opacity:0}
+#dwpads .knob{position:absolute;width:116px;height:116px;margin:-58px 0 0 -58px;border-radius:50%;border:4px solid #14111f;background:#ffffff40;display:none;box-shadow:0 0 0 3px #ffffffaa inset}
+#dwpads .knob i{position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;background:#ffe14d;border:4px solid #14111f;box-shadow:0 4px 0 #14111f88}
+#dwpads .btns{position:absolute;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;gap:12px;align-items:flex-end;pointer-events:none}
+#dwpads .ob{pointer-events:auto;touch-action:none;width:76px;height:76px;border-radius:50%;border:4px solid var(--ink);color:#fff;font:400 15px/1 Bangers,Impact,sans-serif;letter-spacing:1px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+ box-shadow:0 6px 0 var(--ink);-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;transition:transform .06s,box-shadow .06s}
+#dwpads .ob b{font:900 22px/1 system-ui;-webkit-text-stroke:0;color:#fff;text-shadow:0 2px 0 #14111f}
+#dwpads .ob.j{width:94px;height:94px;background:#2fe3a0}#dwpads .ob.j b{font-size:28px}
+#dwpads .ob.b{background:#ff8a1f}#dwpads .ob.s{width:60px;height:60px;background:#38c6ff;font-size:12px}#dwpads .ob.s b{font-size:18px}
+#dwpads .ob.act{transform:translateY(5px);box-shadow:0 1px 0 var(--ink);filter:brightness(1.15)}
+html.dwon.dwtouch #dwtip{bottom:auto;top:calc(66px + env(safe-area-inset-top,0px));font-size:12px;max-width:72vw}
+@media(max-height:520px){#dwinfo{padding:3px 10px 4px;min-width:0}#dwinfo b{font-size:16px}#dwtime{font-size:22px}#dwroute{height:38px}#dwbanner{top:14%}#dwbanner b{font-size:30px}#dwbanner span{font-size:12px}
+ #dwpause{width:38px;height:38px}#dwpads .ob{width:62px;height:62px;font-size:13px}#dwpads .ob.j{width:78px;height:78px}#dwpads .ob.s{width:50px;height:50px}#dwpads .joyhint{bottom:30px;width:90px;height:90px}
+ html.dwon.dwtouch #dwtip{top:calc(56px + env(safe-area-inset-top,0px))}}
+/* phones held upright: stats + menu on top, the route bar full width under them */
+@media(orientation:portrait) and (max-width:700px){
+ #dwinfo{min-width:0;max-width:calc(100vw - 230px)}
+ #dwroute{top:calc(70px + env(safe-area-inset-top,0px));width:calc(100vw - 20px);height:40px}
+ #dwbanner{top:20%}html.dwon.dwtouch #dwtip{top:calc(122px + env(safe-area-inset-top,0px))}
+ #dwpads .btns{flex-direction:column;align-items:flex-end}
+}
+/* card art animations */
+.dwh{animation:dwh 1.4s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 0}@keyframes dwh{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}
+.dwb{animation:dwb .6s ease-in-out infinite alternate}@keyframes dwb{to{transform:translateX(-2px)}}
