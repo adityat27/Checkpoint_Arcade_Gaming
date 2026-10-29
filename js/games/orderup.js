@@ -22,24 +22,50 @@ const ING={
   tomato:{n:'Tomato',chop:1,soup:1,col:'#ff4d4d'},
   onion:{n:'Onion',chop:1,soup:1,col:'#c77dba'},
   mushroom:{n:'Mushroom',chop:1,soup:1,col:'#c98b5a'},
+  carrot:{n:'Carrot',chop:1,soup:1,col:'#ff9a2e'},
   lettuce:{n:'Lettuce',chop:1},
+  cheese:{n:'Cheese',chop:1},
   bun:{n:'Bun'},
+  tortilla:{n:'Tortilla'},
   meat:{n:'Meat',chop:1,fry:1},
+  fish:{n:'Fish',chop:1,fry:1},
+  potato:{n:'Potato',chop:1,fry:1},
 };
-const CRATE={T:'tomato',O:'onion',M:'mushroom',L:'lettuce',B:'bun',P:'meat'};
+/* what a fried ingredient is called at each stage */
+const FRYN={meat:{raw:'meat',chopped:'raw patty',cooked:'patty',burnt:'burnt patty'},
+  fish:{raw:'fish',chopped:'fish fillet',cooked:'fried fish',burnt:'burnt fish'},
+  potato:{raw:'potato',chopped:'cut potato',cooked:'fries',burnt:'burnt fries'}};
+/* soups: 3 chopped ingredients in a pot. `mix` is the exact pot contents. */
+const SOUPS={
+  tomato:{n:'Tomato',mix:['tomato','tomato','tomato'],col:'#ff4d4d'},
+  onion:{n:'Onion',mix:['onion','onion','onion'],col:'#c77dba'},
+  mushroom:{n:'Mushroom',mix:['mushroom','mushroom','mushroom'],col:'#c98b5a'},
+  carrot:{n:'Carrot',mix:['carrot','carrot','carrot'],col:'#ff9a2e'},
+  veggie:{n:'Veggie',mix:['carrot','onion','tomato'],col:'#d9682c'},
+};
+const CRATE={T:'tomato',O:'onion',M:'mushroom',R:'carrot',L:'lettuce',Z:'cheese',B:'bun',Y:'tortilla',P:'meat',H:'fish',U:'potato'};
 const RECIPES={
-  tsoup:{n:'Tomato Soup',need:['soup:tomato'],pts:20,time:80},
-  osoup:{n:'Onion Soup',need:['soup:onion'],pts:20,time:80},
-  msoup:{n:'Mushroom Soup',need:['soup:mushroom'],pts:22,time:80},
-  salad:{n:'Garden Salad',need:['lettuce:chopped','tomato:chopped'],pts:16,time:60},
-  burger:{n:'Burger',need:['bun:raw','meat:cooked'],pts:22,time:75},
-  deluxe:{n:'Deluxe Burger',need:['bun:raw','lettuce:chopped','meat:cooked'],pts:30,time:85},
+  tsoup:{n:'Tomato Soup',need:['soup:tomato'],pts:20,time:80,col:'#ff4d4d'},
+  osoup:{n:'Onion Soup',need:['soup:onion'],pts:20,time:80,col:'#c77dba'},
+  msoup:{n:'Mushroom Soup',need:['soup:mushroom'],pts:22,time:80,col:'#c98b5a'},
+  csoup:{n:'Carrot Soup',need:['soup:carrot'],pts:20,time:80,col:'#ff9a2e'},
+  vsoup:{n:'Veggie Stew',need:['soup:veggie'],pts:28,time:90,col:'#d9682c'},
+  salad:{n:'Garden Salad',need:['lettuce:chopped','tomato:chopped'],pts:16,time:60,col:'#2fae4f'},
+  csalad:{n:'Chef Salad',need:['lettuce:chopped','tomato:chopped','cheese:chopped'],pts:24,time:70,col:'#7fcf3a'},
+  burger:{n:'Burger',need:['bun:raw','meat:cooked'],pts:22,time:75,col:'#e19a4a'},
+  deluxe:{n:'Deluxe Burger',need:['bun:raw','lettuce:chopped','meat:cooked'],pts:30,time:85,col:'#8b4a2b'},
+  cburger:{n:'Cheeseburger',need:['bun:raw','cheese:chopped','meat:cooked'],pts:30,time:85,col:'#ffc61a'},
+  fries:{n:'Fries',need:['potato:cooked'],pts:14,time:55,col:'#ffcf3f'},
+  fishchips:{n:'Fish & Chips',need:['fish:cooked','potato:cooked'],pts:30,time:85,col:'#5aa9e6'},
+  taco:{n:'Beef Taco',need:['tortilla:raw','meat:cooked','lettuce:chopped'],pts:28,time:80,col:'#f0b33c'},
+  fishtaco:{n:'Fish Taco',need:['tortilla:raw','fish:cooked','cheese:chopped'],pts:30,time:80,col:'#3fb6c9'},
 };
 /* Kitchen maps. One character per tile:
    .  floor            1 2  chef start (floor)     #  counter      |  pass counter (middle)
    W  wall             C  chopping board          K  stove + pot   F  stove + frying pan
    D  plate stack      X  bin                      S  serving window
-   T O M L B P  crates: tomato, onion, mushroom, lettuce, bun, meat            */
+   crates: T tomato  O onion  M mushroom  R carrot  L lettuce  Z cheese
+           B bun     Y tortilla  P meat  H fish  U potato                          */
 const LEVELS=[
   {n:'Soup Shack',desc:'Soups and salads. A gentle warm-up.',time:180,every:18,stars:[60,140,220],
    recipes:['tsoup','osoup','salad'],roles:['Prep · chop · serve','Cook · plate'],
@@ -59,6 +85,33 @@ const LEVELS=[
         'C.....|.....X',
         '#.....|.....#',
         '###X##|######']},
+  {n:'Garden Bistro',desc:'Carrot soup, veggie stew (carrot + onion + tomato) and a cheesy chef salad.',time:190,every:16,stars:[70,160,250],
+   recipes:['csoup','vsoup','csalad','salad'],roles:['Prep · chop · serve','Cook · plates'],
+   map:['#RTOL#Z|#K#K#K#',
+        '#......|......#',
+        'S......|......D',
+        'C..1...|...2..#',
+        '#......|......X',
+        'C......|......#',
+        '##X#C##|#######']},
+  {n:'Taco Truck',desc:'Tortillas, fried fish, cheese. Build the tacos and serve them hot.',time:190,every:16,stars:[70,170,260],
+   recipes:['taco','fishtaco','cburger'],roles:['Prep · chop','Fry · plate · serve'],
+   map:['#YPHL#C|#F#F#F#',
+        '#......|......#',
+        'Z......|......S',
+        '#..1...|...2..#',
+        'B......|......D',
+        'C......|......X',
+        '##X#C##|#######']},
+  {n:'Seaside Chippy',desc:'Fish & chips by the sea. Walls split the pass, so plan your hand-offs.',time:190,every:15,stars:[70,170,260],
+   recipes:['fries','fishchips','csoup'],roles:['Prep · chop','Fry · cook · serve'],
+   map:['#UHR#C|#F#F#K#',
+        '#.....W......#',
+        'C.....|......K',
+        '#..1..W...2..#',
+        'C.....|......S',
+        '#.....W......D',
+        '##X###|####X##']},
   {n:'Midnight Rush',desc:'Everything at once, and only two spots to pass food.',time:200,every:14,stars:[70,170,270],
    recipes:['tsoup','osoup','burger','deluxe'],roles:['Prep · chop · plates','Cook · fry · serve'],
    map:['#TOPB#C|#K#K#F#',
@@ -68,15 +121,37 @@ const LEVELS=[
         'C......|......#',
         '#......W......#',
         '##D#X##|##X####']},
+  {n:'Grand Diner',desc:'The whole menu. Ten crates, five stoves, one very busy night.',time:240,every:13,stars:[90,210,330],
+   recipes:['tsoup','vsoup','cburger','fishchips','taco'],roles:['Prep · chop · plates','Cook · fry · serve'],
+   map:['#TORBP#C|#K#K#FF#',
+        '#.......W.......#',
+        'H.......|.......S',
+        'U..1....W....2..F',
+        'Y.......|.......#',
+        'L.......W.......X',
+        'Z.......|.......#',
+        '#C#X#C#D|########']},
 ];
 const key=it=>it.k==='soup'?'soup:'+it.of:it.k+':'+it.s;
 const keyItem=k=>{const[a,b]=k.split(':');return a==='soup'?{k:'soup',of:b}:{k:a,s:b}};
 function iname(it){
   if(!it)return'';if(it.k==='plate')return it.c.length?dishName(it):'plate';
-  if(it.k==='soup')return ING[it.of].n.toLowerCase()+' soup';
-  if(it.k==='meat')return{raw:'meat',chopped:'raw patty',cooked:'patty',burnt:'burnt patty'}[it.s];
+  if(it.k==='soup')return(SOUPS[it.of]?SOUPS[it.of].n:'mystery').toLowerCase()+(it.of==='veggie'?' stew':' soup');
+  if(FRYN[it.k])return FRYN[it.k][it.s]||it.k;
   const n=ING[it.k].n.toLowerCase();return it.s==='chopped'?'chopped '+n:n;
 }
+const sortJ=a=>a.slice().sort().join();
+/* which soup a full pot makes (null if the mix isn't a soup) */
+function soupOf(c){const k=sortJ(c);for(const id in SOUPS)if(sortJ(SOUPS[id].mix)===k)return id;return null}
+/* soups this kitchen's menu asks for */
+function levelSoups(){return LEVELS[W.lvl].recipes.flatMap(r=>RECIPES[r].need).filter(k=>k.startsWith('soup:')).map(k=>k.slice(5))}
+/* can ingredient k go into a pot that already holds c? (it must still be able to become a soup on the menu) */
+function potAccepts(c,k){if(c.length>=3)return false;const want=c.concat(k);
+  return levelSoups().some(id=>{const m=SOUPS[id].mix.slice();return want.every(x=>{const j=m.indexOf(x);if(j<0)return false;m.splice(j,1);return true})})}
+/* colour of what's in the pot: the soup's colour once full, otherwise a blend of what's in it */
+function potCol(c){const id=c.length===3&&soupOf(c);if(id)return SOUPS[id].col;if(!c.length)return'#2b3040';
+  let r=0,g=0,b=0;c.forEach(k=>{const h=parseInt(ING[k].col.slice(1),16);r+=h>>16;g+=h>>8&255;b+=h&255});const n=c.length;return'#'+[r,g,b].map(v=>Math.round(v/n).toString(16).padStart(2,'0')).join('')}
+const soupCol=of=>SOUPS[of]?SOUPS[of].col:'#999';
 function dishName(p){const ks=p.c.map(key).sort().join();for(const r in RECIPES)if(RECIPES[r].need.slice().sort().join()===ks)return RECIPES[r].n.toLowerCase();return'dish'}
 
 /* ---------------- kitchen geometry ---------------- */
@@ -92,7 +167,7 @@ const tc=i=>({x:i%LV.Wd+.5,y:((i/LV.Wd)|0)+.5});
 /* ---------------- shared kitchen state (host is the authority) ---------------- */
 let W=null;
 const OU={ci:0,auth:false,sn:0,lastSn:0,fxSeen:-1,dirtyAt:0,lastSnap:0,me:null,rbuf:[],off:null,lastFast:0,keys:{},touch:{mx:0,my:0,chop:false},
-  chopHeld:false,chopSent:0,chopSeen:[0,0],hiT:0,gotSnap:false,gone:false,raf:0,simT:0,lastT:0,floats:[],prompt:'',target:-1,prevPh:'',remPos:null,dash:0,dcd:0,walkT:0};
+  chopHeld:false,chopSent:0,chopSeen:[0,0],chopAt:[null,null],hiT:0,gotSnap:false,gone:false,raf:0,simT:0,lastT:0,floats:[],prompt:'',target:-1,prevPh:'',remPos:null,dash:0,dcd:0,walkT:0};
 function makeWorld(lvl,hc){
   parseLevel(lvl);
   const w={lvl,ph:'lobby',hc:hc||0,rdy:[0,0],tl:LEVELS[lvl].time,score:0,served:0,failed:0,orders:[],oid:0,next:0,
@@ -124,18 +199,19 @@ function grabRule(ci,i){
       if(isPlate(c)&&!isPlate(h)&&canAdd(c,h))return{lbl:'Put '+iname(h)+' on the plate',apply:()=>{c.c.push(h);set(null);addFx('drop',i)}};
     }
     return null}
-  if(ty==='K'){const s=W.st[i];
-    if(h&&!isPlate(h)&&h.s==='chopped'&&ING[h.k].soup&&s.c.length<3&&(!s.c.length||s.c[0]===h.k)&&s.p===0)
+  if(ty==='K'){const s=W.st[i],ready=s.c.length===3&&s.p>=1&&s.p<2,soup=ready&&{k:'soup',of:soupOf(s.c)};
+    if(h&&!isPlate(h)&&h.s==='chopped'&&ING[h.k]&&ING[h.k].soup&&s.p===0&&potAccepts(s.c,h.k))
       return{lbl:`Add ${iname(h)} to pot (${s.c.length+1}/3)`,apply:()=>{s.c.push(h.k);set(null);addFx('plop',i)}};
-    if(isPlate(h)&&!h.c.length&&s.c.length===3&&s.p>=1&&s.p<2)
-      return{lbl:'Scoop the '+ING[s.c[0]].n.toLowerCase()+' soup',apply:()=>{h.c.push({k:'soup',of:s.c[0]});s.c=[];s.p=0;addFx('pick',i)}};
+    // scoop onto an empty plate, or onto a plate that this soup completes
+    if(ready&&soup.of&&isPlate(h)&&(!h.c.length||canAdd(h,soup)))
+      return{lbl:'Scoop the '+iname(soup),apply:()=>{h.c.push(soup);s.c=[];s.p=0;addFx('pick',i)}};
     if(!h&&s.p>=2)return{lbl:'Dump the burnt soup',apply:()=>{s.c=[];s.p=0;addFx('trash',i)}};
     return null}
-  if(ty==='F'){const s=W.st[i],pat={k:'meat',s:'cooked'},cooked=s.c.length&&s.p>=1&&s.p<2;
-    if(h&&h.k==='meat'&&h.s==='chopped'&&!s.c.length)return{lbl:'Fry the patty',apply:()=>{s.c=['meat'];s.p=0;set(null);addFx('sizzle',i)}};
-    if(!h&&cooked)return{lbl:'Take the patty',apply:()=>{set(pat);s.c=[];s.p=0;addFx('pick',i)}};
-    if(isPlate(h)&&cooked&&canAdd(h,pat))return{lbl:'Plate the patty',apply:()=>{h.c.push(pat);s.c=[];s.p=0;addFx('pick',i)}};
-    if(!h&&s.c.length&&s.p>=2)return{lbl:'Dump the burnt patty',apply:()=>{s.c=[];s.p=0;addFx('trash',i)}};
+  if(ty==='F'){const s=W.st[i],pat=s.c.length?{k:s.c[0],s:'cooked'}:null,cooked=s.c.length&&s.p>=1&&s.p<2;
+    if(h&&!isPlate(h)&&ING[h.k]&&ING[h.k].fry&&h.s==='chopped'&&!s.c.length)return{lbl:'Fry the '+iname(h),apply:()=>{s.c=[h.k];s.p=0;set(null);addFx('sizzle',i)}};
+    if(!h&&cooked)return{lbl:'Take the '+iname(pat),apply:()=>{set(pat);s.c=[];s.p=0;addFx('pick',i)}};
+    if(isPlate(h)&&cooked&&canAdd(h,pat))return{lbl:'Plate the '+iname(pat),apply:()=>{h.c.push(pat);s.c=[];s.p=0;addFx('pick',i)}};
+    if(!h&&s.c.length&&s.p>=2)return{lbl:'Dump the '+iname({k:s.c[0],s:'burnt'}),apply:()=>{s.c=[];s.p=0;addFx('trash',i)}};
     return null}
   if(ty==='D'){
     if(!h&&W.pc[i]>0)return{lbl:'Take a plate',apply:()=>{W.pc[i]--;set({k:'plate',c:[]});addFx('pick',i)}};
@@ -147,6 +223,26 @@ function grabRule(ci,i){
     return null}
   if(ty==='S'){if(isPlate(h)&&h.c.length)return{lbl:'Serve the '+dishName(h)+'!',apply:()=>serve(ci,i)};return null}
   return null;
+}
+/* a hint for the prompt when GRAB would do nothing here */
+function hintAt(ci,i){
+  const ty=LV.ty[i],h=W.h[ci];
+  if(ty==='K'){const s=W.st[i],ready=s.c.length===3&&s.p>=1&&s.p<2;
+    if(ready&&!h)return'Bring an empty plate to scoop the soup';
+    if(ready&&isPlate(h))return'Your plate needs to be empty to scoop soup';
+    if(ready&&h)return'Soup is ready! Grab a plate to scoop it';
+    if(s.c.length===3&&s.p<1)return'Cooking… '+Math.round(s.p*100)+'%';
+    if(h&&!isPlate(h)&&h.s==='raw'&&ING[h.k]&&ING[h.k].soup)return'Chop it first on a chopping board';
+    if(h&&!isPlate(h)&&h.s==='chopped'&&ING[h.k]&&ING[h.k].soup)return'That doesn\'t go in this soup';
+    if(h&&!isPlate(h)&&s.c.length===3)return'This pot is full';}
+  if(ty==='F'){const s=W.st[i];
+    if(h&&!isPlate(h)&&h.s==='raw'&&ING[h.k]&&ING[h.k].fry)return'Chop it first on a chopping board';
+    if(s.c.length&&s.p<1)return'Frying… '+Math.round(s.p*100)+'%';
+    if(s.c.length&&s.p<2&&isPlate(h))return'That doesn\'t fit on this plate';}
+  if(ty==='S'&&h&&!isPlate(h))return'Put it on a plate before serving';
+  if(ty==='S'&&isPlate(h)&&!h.c.length)return'The plate is empty';
+  if(CRATE[ty]&&h&&!isPlate(h))return'Your hands are full';
+  return'';
 }
 function canChop(ci,i){const it=W.t[i];return LV.ty[i]==='C'&&!W.h[ci]&&it&&!isPlate(it)&&ING[it.k]&&ING[it.k].chop&&it.s==='raw'}
 function stopChopAt(i){for(let c=0;c<2;c++)if(W.chop[c]===i)W.chop[c]=-1}
@@ -161,6 +257,7 @@ function serve(ci,i){
 /* ---------------- simulation ---------------- */
 function spawnOrder(){
   const L=LEVELS[W.lvl],pool=L.recipes.filter(r=>W.orders.filter(o=>o.r===r).length<2);
+  if(!pool.length)return;
   const r=pool[Math.random()*pool.length|0],T=RECIPES[r].time;
   W.orders.push({id:++W.oid,r,t:T,T});addFx('order',-1);
 }
@@ -198,20 +295,33 @@ function endRound(){
   const L=LEVELS[W.lvl],stars=L.stars.filter(s=>W.score>=s).length;
   W.ph='end';W.res={stars};W.chop=[-1,-1];addFx('end',-1);dirty();
 }
-function nearTile(c,i){const p=c===OU.ci?OU.me:OU.remPos;if(!p)return false;const t=tc(i);return Math.hypot(p.x-t.x,p.y-t.y)<1.6}
+/* Is chef c close enough to tile i? For my own chef that's my live position. For the partner
+   it's the position they sent with the action (or their newest streamed position), NOT the
+   smoothed-on-screen one: that runs ~¼ second behind, which used to make the host reject
+   grabs (like scooping soup) that the partner had made right after walking up. */
+function remNow(){const b=OU.rbuf;return b.length?b[b.length-1]:OU.remPos}
+function nearTile(c,i,at){
+  const t=tc(i),ok=p=>!!p&&isFinite(p.x)&&isFinite(p.y)&&Math.hypot(p.x-t.x,p.y-t.y)<1.75;
+  if(c===OU.ci)return ok(OU.me);
+  if(ok(at))return true;
+  const ch=OU.chopAt[c];if(ch&&performance.now()-ch.t<900&&ok(ch))return true;
+  return ok(remNow())||ok(OU.remPos);
+}
 
 /* ---------------- actions (host applies; partner sends) ---------------- */
-function act(ci,a,i,v){
+function act(ci,a,i,v,at){
   if(!W)return;
   if(a==='ready'){if(W.ph==='lobby'){W.rdy[ci===W.hc?0:1]=v?1:0;dirty();if(W.rdy[0]&&W.rdy[1]&&opp)startRound()}return}
   if(a==='lobby'){if(W.ph==='end'){const hc=W.hc,l=W.lvl;W=makeWorld(l,hc);dirty()}return}
   if(W.paused||W.rcd>0||W.ph!=='play')return;
-  if(a==='grab'){if(LV.ty[i]==null||!nearTile(ci,i))return;const r=grabRule(ci,i);if(r){r.apply();W.chop[ci]=-1;dirty()}}
-  else if(a==='chop1'){OU.chopSeen[ci]=performance.now();if(W.chop[ci]!==i&&canChop(ci,i)){stopChopAt(i);W.chop[ci]=i;dirty()}}
+  if(a==='grab'){if(LV.ty[i]==null||!nearTile(ci,i,at))return;const r=grabRule(ci,i);if(r){r.apply();W.chop[ci]=-1;dirty()}else dirty()}
+  else if(a==='chop1'){OU.chopSeen[ci]=performance.now();if(at&&ci!==OU.ci)OU.chopAt[ci]={x:at.x,y:at.y,t:performance.now()};
+    if(W.chop[ci]!==i&&canChop(ci,i)&&nearTile(ci,i,at)){stopChopAt(i);W.chop[ci]=i;dirty()}}
   else if(a==='chop0'){if(W.chop[ci]>=0){W.chop[ci]=-1;dirty()}}
 }
+const myPos=()=>OU.me?[Math.round(OU.me.x*1000)/1000,Math.round(OU.me.y*1000)/1000]:null;
 function doAct(a,i,v){
-  if(OU.auth)act(OU.ci,a,i,v);else NET.ev({e:'oa',a,i,v});
+  if(OU.auth)act(OU.ci,a,i,v);else NET.ev({e:'oa',a,i,v,p:myPos()});
 }
 function sendSnap(){
   OU.lastSnap=performance.now();OU.dirtyAt=0;
@@ -229,7 +339,9 @@ const html=`
  <li><b>Two chefs, one kitchen, online only.</b> Send your friend the invite link. You share the orders, the clock and the score.</li>
  <li>A counter splits the kitchen. One side has the ingredients and chopping boards, the other has the stoves and plates. <b>Put food on the middle counter to pass it across.</b></li>
  <li><b>Move:</b> W A S D or arrows · <b>Grab / place / serve:</b> Space or E · <b>Chop:</b> hold F · <b>Dash:</b> Shift. On a phone: drag on the left to move, buttons on the right.</li>
- <li><b>Soups:</b> 3 chopped tomatoes, onions or mushrooms in a pot, cook, scoop onto a plate. <b>Salad:</b> chopped lettuce + chopped tomato on a plate. <b>Burger:</b> bun + fried patty (chop meat, then fry). <b>Deluxe:</b> add chopped lettuce.</li>
+ <li><b>Soups:</b> 3 chopped veg in a pot (3 the same, or carrot + onion + tomato for veggie stew). When it's done, <b>walk up holding an empty plate</b> and grab to scoop it.</li>
+ <li><b>Pans:</b> chop meat, fish or potatoes, then fry them for patties, fried fish and fries. The order cards show every ingredient.</li>
+ <li><b>14 dishes over 7 kitchens:</b> soups, stew, salads, burgers, cheeseburgers, fries, fish &amp; chips, beef and fish tacos.</li>
  <li>Serve fast for tips. Missed orders and wrong dishes cost points. Don't let the pots burn!</li>
 </ul>
 <button class="btn m back" data-back>← All games</button></section>
@@ -280,21 +392,55 @@ function drawFood(c,it,x,y,r){
       if(s==='cooked'){c.strokeStyle='#c27a4a';c.lineWidth=r*.08;for(let k=-1;k<=1;k++){c.beginPath();c.moveTo(x-r*.4+k*r*.25,y-r*.25);c.lineTo(x-r*.1+k*r*.25,y+r*.25);c.stroke()}}
       if(s==='chopped'){c.fillStyle='#ffd0da';[[-.3,-.1],[.2,.1],[.35,-.15],[-.05,.15]].forEach(([a,b])=>{c.beginPath();c.arc(x+a*r,y+b*r,r*.06,0,7);c.fill()})}
       if(s==='burnt'){c.fillStyle='#55555577';c.beginPath();c.arc(x+r*.2,y-r*.7,r*.25,0,7);c.arc(x-r*.1,y-r*.95,r*.18,0,7);c.fill()}}
+  }else if(k==='carrot'){
+    if(s==='raw'){c.save();c.translate(x,y);c.rotate(-.6);c.beginPath();c.moveTo(-r*.28,-r*.5);c.quadraticCurveTo(0,-r*.62,r*.28,-r*.5);c.lineTo(r*.05,r*.85);c.quadraticCurveTo(0,r*.92,-r*.05,r*.85);c.closePath();c.fillStyle='#ff9a2e';c.fill();c.stroke();
+      c.strokeStyle='#d9701a';c.lineWidth=r*.06;for(let k=0;k<3;k++){c.beginPath();c.moveTo(-r*.18+k*.04*r,-r*.15+k*r*.28);c.lineTo(r*.02+k*.03*r,-r*.12+k*r*.28);c.stroke()}
+      ink(c,r);c.fillStyle='#2fae4f';[[-.25,-1],[0,-1.08],[.25,-1]].forEach(([a,b])=>{c.beginPath();c.ellipse(a*r,-r*.55+b*r*.3,r*.09,r*.28,a*1.4,0,7);c.fill();c.stroke()});c.restore()}
+    else[[-.36,.16],[.36,.16],[0,-.3]].forEach(([dx,dy])=>{blob(c,x+dx*r,y+dy*r,r*.38,'#ff9a2e');c.strokeStyle='#ffc27a';c.lineWidth=r*.07;c.beginPath();c.arc(x+dx*r,y+dy*r,r*.2,0,7);c.stroke();ink(c,r)});
+  }else if(k==='cheese'){
+    if(s==='raw'){c.beginPath();c.moveTo(x-r*.8,y+r*.45);c.lineTo(x+r*.8,y+r*.45);c.lineTo(x+r*.8,y-r*.1);c.lineTo(x-r*.8,y+r*.0);c.closePath();c.fillStyle='#ffd23f';c.fill();c.stroke();
+      c.beginPath();c.moveTo(x-r*.8,y);c.lineTo(x+r*.8,y-r*.1);c.lineTo(x+r*.2,y-r*.6);c.closePath();c.fillStyle='#ffe57a';c.fill();c.stroke();
+      c.fillStyle='#e0a800';[[-.4,.22],[.25,.25],[.5,.05]].forEach(([a,b])=>{c.beginPath();c.arc(x+a*r,y+b*r,r*.08,0,7);c.fill()})}
+    else{[[-.32,.14],[.32,.14],[0,-.26]].forEach(([dx,dy])=>{c.beginPath();c.rect(x+dx*r-r*.24,y+dy*r-r*.2,r*.48,r*.4);c.fillStyle='#ffd23f';c.fill();c.stroke()})}
+  }else if(k==='tortilla'){
+    ell(c,x,y+r*.05,r*.85,r*.6,'#f5d78e');c.fillStyle='#c99a45';[[-.4,-.1],[.1,-.25],[.45,.1],[-.1,.25],[.25,.3]].forEach(([a,b])=>{c.beginPath();c.ellipse(x+a*r,y+b*r,r*.07,r*.05,a,0,7);c.fill()});
+  }else if(k==='fish'){
+    const col={raw:'#7fa8c9',chopped:'#ffc1b0',cooked:'#e0a03a',burnt:'#2b2320'}[s];
+    if(s==='raw'){c.beginPath();c.moveTo(x-r*.7,y);c.quadraticCurveTo(x-r*.1,y-r*.6,x+r*.5,y);c.quadraticCurveTo(x-r*.1,y+r*.6,x-r*.7,y);c.closePath();c.fillStyle=col;c.fill();c.stroke();
+      c.beginPath();c.moveTo(x+r*.42,y);c.lineTo(x+r*.9,y-r*.38);c.lineTo(x+r*.9,y+r*.38);c.closePath();c.fill();c.stroke();
+      c.fillStyle='#fff';c.beginPath();c.arc(x-r*.42,y-r*.08,r*.1,0,7);c.fill();c.stroke();c.fillStyle=K;c.beginPath();c.arc(x-r*.42,y-r*.08,r*.04,0,7);c.fill();
+      c.strokeStyle='#5a83a6';c.lineWidth=r*.06;c.beginPath();c.arc(x-r*.05,y,r*.22,-1,1);c.stroke()}
+    else{c.beginPath();c.moveTo(x-r*.75,y-r*.1);c.quadraticCurveTo(x-r*.6,y-r*.5,x,y-r*.4);c.quadraticCurveTo(x+r*.7,y-r*.35,x+r*.75,y+r*.05);c.quadraticCurveTo(x+r*.6,y+r*.5,x,y+r*.4);c.quadraticCurveTo(x-r*.7,y+r*.35,x-r*.75,y-r*.1);c.closePath();c.fillStyle=col;c.fill();c.stroke();
+      if(s==='cooked'){c.fillStyle='#ffd27a';[[-.4,-.1],[0,-.15],[.35,0],[-.15,.15],[.2,.2]].forEach(([a,b])=>{c.beginPath();c.arc(x+a*r,y+b*r,r*.07,0,7);c.fill()})}
+      if(s==='chopped'){c.strokeStyle='#ff9d88';c.lineWidth=r*.07;for(let k=-1;k<=1;k++){c.beginPath();c.moveTo(x+k*r*.3-r*.08,y-r*.25);c.quadraticCurveTo(x+k*r*.3+r*.1,y,x+k*r*.3-r*.08,y+r*.25);c.stroke()}}}
+  }else if(k==='potato'){
+    if(s==='raw'){ell(c,x,y,r*.82,r*.6,'#c9975a');c.fillStyle='#8f6535';[[-.35,-.15],[.2,-.25],[.4,.15],[-.1,.2]].forEach(([a,b])=>{c.beginPath();c.arc(x+a*r,y+b*r,r*.06,0,7);c.fill()})}
+    else{const col={chopped:'#fff0b8',cooked:'#ffc93c',burnt:'#3a2a1e'}[s];
+      [[-.42,-.1,.25],[-.2,.05,-.1],[0,-.12,.15],[.22,.02,-.2],[.42,-.08,.1],[-.1,.25,.4],[.15,.28,-.35]].forEach(([a,b,ang])=>{c.save();c.translate(x+a*r,y+b*r);c.rotate(ang+Math.PI/2);c.beginPath();c.rect(-r*.48,-r*.08,r*.96,r*.16);c.fillStyle=col;c.fill();c.stroke();c.restore()})}
   }else if(k==='soup'){
-    ell(c,x,y,r*.8,r*.6,ING[it.of].col);c.fillStyle='#ffffff55';c.beginPath();c.ellipse(x-r*.25,y-r*.15,r*.22,r*.1,-.3,0,7);c.fill();
+    ell(c,x,y,r*.8,r*.6,soupCol(it.of));c.fillStyle='#ffffff55';c.beginPath();c.ellipse(x-r*.25,y-r*.15,r*.22,r*.1,-.3,0,7);c.fill();
   }
 }
 function drawItem(c,it,x,y,r){
   c.save();
   if(isPlate(it)){
     ink(c,r);ell(c,x,y+r*.2,r*1.05,r*.8,'#ffffff');c.strokeStyle='#d9d4e6';c.lineWidth=r*.08;c.beginPath();c.ellipse(x,y+r*.2,r*.72,r*.52,0,0,7);c.stroke();
-    const L=it.c,hasBun=L.some(q=>q.k==='bun'),hasMeat=L.some(q=>q.k==='meat');
-    if(hasBun&&hasMeat){
+    const L=it.c,hasBun=L.some(q=>q.k==='bun'),hasMeat=L.some(q=>q.k==='meat'),tort=L.some(q=>q.k==='tortilla');
+    const fill=L.find(q=>(q.k==='meat'||q.k==='fish')&&q.s==='cooked');
+    if(tort&&fill){
+      // taco: a folded shell with the filling peeking out
+      ink(c,r);c.beginPath();c.moveTo(x-r*.8,y+r*.25);c.quadraticCurveTo(x,y-r*1.05,x+r*.8,y+r*.25);c.closePath();c.fillStyle='#f5d78e';c.fill();c.stroke();
+      c.fillStyle=fill.k==='meat'?'#8b4a2b':'#e0a03a';c.beginPath();c.moveTo(x-r*.62,y+r*.2);c.quadraticCurveTo(x,y-r*.62,x+r*.62,y+r*.2);c.closePath();c.fill();c.stroke();
+      if(L.some(q=>q.k==='lettuce')){c.fillStyle='#6fd36a';for(let k=0;k<5;k++){c.beginPath();c.arc(x-r*.42+k*r*.21,y-r*.12-Math.sin(k/4*Math.PI)*r*.25,r*.12,0,7);c.fill();c.stroke()}}
+      if(L.some(q=>q.k==='cheese')){c.fillStyle='#ffd23f';for(let k=0;k<4;k++){c.beginPath();c.rect(x-r*.38+k*r*.24,y-r*.18-Math.sin(k/3*Math.PI)*r*.22,r*.14,r*.12);c.fill();c.stroke()}}
+      ink(c,r);c.beginPath();c.moveTo(x-r*.8,y+r*.25);c.quadraticCurveTo(x,y+r*.05,x+r*.8,y+r*.25);c.strokeStyle=K;c.stroke();
+    }else if(hasBun&&hasMeat){
       ink(c,r);ell(c,x,y+r*.35,r*.65,r*.2,'#f2c17f');drawFood(c,{k:'meat',s:'cooked'},x,y+r*.12,r*.75);
+      if(L.some(q=>q.k==='cheese')){c.fillStyle='#ffd23f';c.strokeStyle=K;c.lineWidth=r*.1;c.beginPath();c.moveTo(x-r*.62,y-r*.06);c.lineTo(x+r*.62,y-r*.06);c.lineTo(x+r*.4,y+r*.16);c.lineTo(x+r*.2,y+r*.02);c.lineTo(x-r*.1,y+r*.2);c.lineTo(x-r*.35,y+r*.02);c.closePath();c.fill();c.stroke()}
       if(L.some(q=>q.k==='lettuce')){c.fillStyle='#6fd36a';c.strokeStyle=K;c.lineWidth=r*.1;c.beginPath();for(let k=0;k<=8;k++)c.lineTo(x-r*.65+k*r*.1625,y-r*.12+(k%2?-1:1)*r*.07);c.lineTo(x+r*.5,y-r*.02);c.lineTo(x-r*.5,y-r*.02);c.closePath();c.fill();c.stroke()}
       ink(c,r);c.beginPath();c.moveTo(x-r*.68,y-r*.12);c.quadraticCurveTo(x-r*.68,y-r*.8,x,y-r*.8);c.quadraticCurveTo(x+r*.68,y-r*.8,x+r*.68,y-r*.12);c.closePath();c.fillStyle='#e8a75a';c.fill();c.stroke();
       c.fillStyle='#fff7df';[[-.3,-.45],[.05,-.6],[.3,-.4]].forEach(([a,b])=>{c.beginPath();c.ellipse(x+a*r,y+b*r,r*.07,r*.045,.4,0,7);c.fill()});
-    }else if(L.length===1&&L[0].k==='soup'){ink(c,r);ell(c,x,y+r*.1,r*.62,r*.42,ING[L[0].of].col);c.strokeStyle='#ffffffaa';c.lineWidth=r*.07;for(let k=-1;k<=1;k++){c.beginPath();c.moveTo(x+k*r*.25,y-r*.35);c.quadraticCurveTo(x+k*r*.25+r*.1,y-r*.55,x+k*r*.25,y-r*.75);c.stroke()}}
+    }else if(L.length===1&&L[0].k==='soup'){ink(c,r);ell(c,x,y+r*.1,r*.62,r*.42,soupCol(L[0].of));c.strokeStyle='#ffffffaa';c.lineWidth=r*.07;for(let k=-1;k<=1;k++){c.beginPath();c.moveTo(x+k*r*.25,y-r*.35);c.quadraticCurveTo(x+k*r*.25+r*.1,y-r*.55,x+k*r*.25,y-r*.75);c.stroke()}}
     else{const O=[[-.32,.05],[.32,.05],[0,-.25]];L.forEach((q,j)=>drawFood(c,q,x+O[j][0]*r,y+O[j][1]*r,r*.55))}
   }else drawFood(c,it,x,y,r);
   c.restore();
@@ -333,11 +479,11 @@ function drawTile(c,i,t){
     c.strokeStyle=on?(st.p>=2?'#555':'#ff7a00'):'#777';c.lineWidth=3;c.beginPath();c.arc(cx,cy,s*.3,0,7);c.stroke();
     ink(c,s*.3);
     if(ty==='K'){c.fillStyle='#b8c0d0';c.beginPath();c.arc(cx,cy-s*.02,s*.3,0,7);c.fill();c.stroke();
-      const fill=st.p>=2?'#3a2f2a':st.c.length?ING[st.c[0]].col:'#2b3040';c.fillStyle=fill;c.beginPath();c.arc(cx,cy-s*.02,s*.22,0,7);c.fill();
-      if(st.c.length&&st.p<1)for(let k=0;k<st.c.length;k++)drawFood(c,{k:st.c[0],s:'chopped'},cx+(k-1)*s*.14,cy-s*.04,s*.1);
+      const fill=st.p>=2?'#3a2f2a':potCol(st.c);c.fillStyle=fill;c.beginPath();c.arc(cx,cy-s*.02,s*.22,0,7);c.fill();
+      if(st.c.length&&st.p<1)for(let k=0;k<st.c.length;k++)drawFood(c,{k:st.c[k],s:'chopped'},cx+(k-1)*s*.14,cy-s*.04,s*.1);
       if(st.p>=1&&st.p<2){c.strokeStyle='#ffffffaa';c.lineWidth=2;for(let k=-1;k<=1;k++){const o=Math.sin(t*3+k)*s*.03;c.beginPath();c.moveTo(cx+k*s*.12,cy-s*.3);c.quadraticCurveTo(cx+k*s*.12+s*.06+o,cy-s*.42,cx+k*s*.12,cy-s*.55);c.stroke()}}}
     else{c.fillStyle='#2a2a33';c.beginPath();c.arc(cx-s*.03,cy,s*.27,0,7);c.fill();c.stroke();c.beginPath();c.moveTo(cx+s*.22,cy-s*.05);c.lineTo(cx+s*.46,cy-s*.18);c.lineWidth=s*.07;c.stroke();
-      if(st.c.length)drawFood(c,{k:'meat',s:st.p>=2?'burnt':st.p>=1?'cooked':'chopped'},cx-s*.03,cy,s*.2)}
+      if(st.c.length)drawFood(c,{k:st.c[0],s:st.p>=2?'burnt':st.p>=1?'cooked':'chopped'},cx-s*.03,cy,s*.2)}
     if(st.c.length&&(ty==='F'||st.c.length===3)){
       if(st.p<1)bar(c,cx,py-s*.08,s*.7,st.p,'#ff8a1f');
       else if(st.p<2){bar(c,cx,py-s*.08,s*.7,(st.p-1),st.p>1.6?'#ff3e5a':'#2fe3a0');
@@ -456,17 +602,39 @@ function food3(it){
     if(s==='raw'){A(mesh('box','#ff8fa3',.26,.08,.18,0,.05,0));A(mesh('box','#ffffff',.2,.082,.03,0,.05,.02,false))}
     else{const c={chopped:'#ff8fa3',cooked:'#8b4a2b',burnt:'#2b2320'}[s];A(mesh('cyl',c,.125,.045,.125,0,.03,0));
       if(s==='cooked')for(let i=-1;i<=1;i++)A(mesh('box','#5a2e18',.18,.01,.015,0,.055,i*.05,false))}
+  }else if(k==='carrot'){
+    if(s==='raw'){const b=mesh('cone','#ff9a2e',.07,.3,.07,0,.09,0);b.rotation.z=Math.PI/2;A(b);[-.3,0,.3].forEach(a=>{const l=mesh('cone','#2fae4f',.025,.12,.025,-.18,.1+Math.abs(a)*.05,a*.1);l.rotation.z=Math.PI/2+.4;A(l)})}
+    else[[-.08,.05],[.08,.04],[0,-.07]].forEach(([x,z],j)=>{A(mesh('cyl','#ff9a2e',.06,.03,.06,x,.02+j*.008,z));A(mesh('cyl','#ffc27a',.03,.032,.03,x,.021+j*.008,z,false))});
+  }else if(k==='cheese'){
+    if(s==='raw'){const w=new THREE.Mesh(new THREE.CylinderGeometry(.17,.17,.12,3,1,false,0,Math.PI*2/3),new THREE.MeshStandardMaterial({color:col3('#ffd23f'),roughness:.5}));w.position.y=.06;w.castShadow=true;A(w)}
+    else[[-.07,.05],[.07,.04],[0,-.06],[.02,.06]].forEach(([x,z],j)=>A(mesh('box','#ffd23f',.07,.05,.07,x,.025+(j%2)*.01,z)));
+  }else if(k==='tortilla'){A(mesh('cyl','#f5d78e',.17,.012,.17,0,.01,0));A(mesh('cyl','#f0ca72',.17,.012,.17,.01,.022,.01));
+  }else if(k==='fish'){
+    const c={raw:'#7fa8c9',chopped:'#ffc1b0',cooked:'#e0a03a',burnt:'#2b2320'}[s];
+    if(s==='raw'){A(mesh('sph',c,.18,.07,.08,0,.07,0));const t=mesh('cone',c,.07,.1,.03,.2,.07,0);t.rotation.z=Math.PI/2;A(t);A(mesh('sph','#ffffff',.018,.018,.018,-.13,.09,.05,false))}
+    else A(mesh('box',c,.24,.05,.13,0,.03,0));
+  }else if(k==='potato'){
+    if(s==='raw'){A(mesh('sph','#c9975a',.15,.1,.11,0,.09,0))}
+    else{const c={chopped:'#fff0b8',cooked:'#ffc93c',burnt:'#3a2a1e'}[s];for(let i=0;i<7;i++){const f=mesh('box',c,.03,.03,.18,Math.sin(i*2.3)*.06,.02+(i%3)*.025,Math.cos(i*1.9)*.04);f.rotation.y=i*.7;A(f)}}
   }
   return g;
 }
 function plate3(it){
   const g=new THREE.Group();g.add(mesh('cyl','#ffffff',.21,.03,.21,0,.015,0));const rim=mesh('tor','#f2f0f7',.2,.2,.08,0,.032,0);rim.rotation.x=Math.PI/2;g.add(rim);
-  const L=it.c,has=k=>L.some(q=>q.k===k);
-  if(has('bun')&&has('meat')){let y=.035;g.add(mesh('cyl','#f2c17f',.13,.035,.13,0,y+.017,0));y+=.035;
+  const L=it.c,has=k=>L.some(q=>q.k===k),fill=L.find(q=>(q.k==='meat'||q.k==='fish')&&q.s==='cooked');
+  if(has('tortilla')&&fill){
+    // taco: a half-cylinder shell standing on the plate, filling inside
+    const sh=new THREE.Mesh(new THREE.CylinderGeometry(.13,.13,.2,20,1,true,0,Math.PI),new THREE.MeshStandardMaterial({color:col3('#f5d78e'),roughness:.7,side:THREE.DoubleSide}));
+    sh.rotation.z=Math.PI/2;sh.rotation.y=Math.PI/2;sh.position.y=.16;sh.castShadow=true;g.add(sh);
+    g.add(mesh('box',fill.k==='meat'?'#8b4a2b':'#e0a03a',.17,.06,.08,0,.11,0));
+    if(has('lettuce'))for(let i=0;i<5;i++)g.add(mesh('sph','#6fd36a',.035,.03,.035,-.08+i*.04,.16+Math.sin(i)*.01,0));
+    if(has('cheese'))for(let i=0;i<4;i++)g.add(mesh('box','#ffd23f',.03,.03,.03,-.06+i*.04,.165,(i%2-.5)*.03));
+  }else if(has('bun')&&has('meat')){let y=.035;g.add(mesh('cyl','#f2c17f',.13,.035,.13,0,y+.017,0));y+=.035;
     g.add(mesh('cyl','#8b4a2b',.135,.045,.135,0,y+.022,0));y+=.045;
+    if(has('cheese')){const ch=mesh('box','#ffd23f',.25,.012,.25,0,y+.006,0);ch.rotation.y=.785;g.add(ch);y+=.012}
     if(has('lettuce')){g.add(mesh('cyl','#6fd36a',.15,.015,.15,0,y+.007,0));y+=.015}
     g.add(mesh('half','#e19a4a',.135,.1,.135,0,y,0));}
-  else if(L.length===1&&L[0].k==='soup'){g.add(mesh('cyl','#ffffff',.15,.08,.15,0,.07,0));const liq=mesh('cyl',ING[L[0].of].col,.13,.01,.13,0,.112,0,false);g.add(liq)}
+  else if(L.length===1&&L[0].k==='soup'){g.add(mesh('cyl','#ffffff',.15,.08,.15,0,.07,0));const liq=mesh('cyl',soupCol(L[0].of),.13,.01,.13,0,.112,0,false);g.add(liq)}
   else{const O=[[-.07,.04],[.07,.04],[0,-.07]];L.forEach((q,j)=>{const f=food3(q);f.scale.setScalar(.7);f.position.set(O[j][0],.03,O[j][1]);g.add(f)})}
   return g;
 }
@@ -618,9 +786,9 @@ function render3D(now,dt){
     st.ring.material.emissiveIntensity=on&&!burnt?.9+Math.sin(t*8)*.2:0;
     const sg=s.c.join()+'|'+(burnt?'b':done?'d':'r');
     if(st.sig!==sg){st.sig=sg;
-      if(pot){st.chunks.clear();const c=s.c.length?ING[s.c[0]].col:'#2b3040';st.liq.material.color.copy(col3(burnt?'#3a2f2a':c));st.liq.scale.set(.27,.01,.27);st.liq.position.y=s.c.length?.14+.04*s.c.length:.29;st.liq.visible=s.c.length>0;
+      if(pot){st.chunks.clear();const c=potCol(s.c);st.liq.material.color.copy(col3(burnt?'#3a2f2a':c));st.liq.scale.set(.27,.01,.27);st.liq.position.y=s.c.length?.14+.04*s.c.length:.29;st.liq.visible=s.c.length>0;
         if(!done&&!burnt)s.c.forEach((k,j)=>{const f=food3({k,s:'chopped'});f.scale.setScalar(.6);f.position.set(Math.sin(j*2.1)*.1,st.liq.position.y-.3,Math.cos(j*2.1)*.1);st.chunks.add(f)})}
-      else{st.food.clear();if(s.c.length)st.food.add(food3({k:'meat',s:burnt?'burnt':done?'cooked':'chopped'}))}}
+      else{st.food.clear();if(s.c.length)st.food.add(food3({k:s.c[0],s:burnt?'burnt':done?'cooked':'chopped'}))}}
     if(pot&&st.chunks.children.length)st.chunks.children.forEach((f,j)=>f.position.y=st.liq.position.y-.3+Math.sin(t*4+j)*.01);
     if(s.c.length&&(!pot||s.c.length===3)){
       if(s.p<1)setBar(st.bar,s.p,'#ff8a1f');else if(!burnt)setBar(st.bar,s.p-1,s.p>1.6?'#ff3e5a':'#2fe3a0');else st.bar.visible=false;
@@ -669,8 +837,8 @@ const fmt=s=>{s=Math.ceil(s);return Math.floor(s/60)+':'+String(s%60).padStart(2
 function orderCard(o){
   const R=RECIPES[o.r],plate={k:'plate',c:R.need.map(keyItem)};
   let ing='';R.need.forEach(k=>{const it=keyItem(k);
-    if(it.k==='soup')ing+=`<b>3×</b><img src="${icon({k:it.of,s:'chopped'},36)}"><img src="${POT_ICON}">`;
-    else if(it.k==='meat')ing+=`<img src="${icon({k:'meat',s:'chopped'},36)}"><img src="${PAN_ICON}">`;
+    if(it.k==='soup'){const m=SOUPS[it.of].mix;if(m.every(x=>x===m[0]))ing+=`<b>3×</b><img src="${icon({k:m[0],s:'chopped'},36)}">`;else m.forEach(x=>ing+=`<img src="${icon({k:x,s:'chopped'},36)}">`);ing+=`<img src="${POT_ICON}">`}
+    else if(it.s==='cooked'&&ING[it.k]&&ING[it.k].fry)ing+=`<img src="${icon({k:it.k,s:'chopped'},36)}"><img src="${PAN_ICON}">`;
     else ing+=`<img src="${icon(it,36)}">`});
   const d=document.createElement('div');d.className='ouord';d.dataset.id=o.id;
   d.innerHTML=`<img class="d" src="${icon(plate,88)}" alt=""><small>${R.n}</small><div class="ing">${ing}</div><div class="bar"><i></i></div>`;return d;
@@ -682,7 +850,7 @@ function hud(){
   const st=L.stars.filter(s=>W.score>=s).length,nx=L.stars[st],sh=`<b style="color:#f5b800;-webkit-text-stroke:.5px #14111f">${'★'.repeat(st)}</b><b style="color:#14111f30">${'★'.repeat(3-st)}</b>${nx?' next at '+nx:' max!'}`;
   const se=$('#oustar');if(se.dataset.h!==sh){se.dataset.h=sh;se.innerHTML=sh}
   const box=$('#ouorders'),have=new Map([...box.children].map(e=>[+e.dataset.id,e]));
-  W.orders.forEach(o=>{let e=have.get(o.id);if(!e){e=orderCard(o);e.style.setProperty('--tc',{tsoup:'#ff4d4d',osoup:'#c77dba',msoup:'#c98b5a',salad:'#2fae4f',burger:'#e19a4a',deluxe:'#8b4a2b'}[o.r]||'#ff8a1f');box.append(e)}have.delete(o.id);
+  W.orders.forEach(o=>{let e=have.get(o.id);if(!e){e=orderCard(o);e.style.setProperty('--tc',RECIPES[o.r].col||'#ff8a1f');box.append(e)}have.delete(o.id);
     const f=o.t/o.T,b=e.querySelector('.bar i');b.style.width=(f*100).toFixed(1)+'%';b.style.background=f>.5?'#2fe3a0':f>.25?'#ffb800':'#ff3e5a';e.classList.toggle('hot',f<.2)});
   have.forEach(e=>e.remove());
 }
@@ -783,7 +951,7 @@ function chopTick(now){
   if(!OU.chopHeld||!W||W.ph!=='play')return;const i=OU.target;
   if(i<0||!canChop(OU.ci,i)){return}
   if(OU.auth)act(OU.ci,'chop1',i);
-  else if(now-OU.chopSent>220){OU.chopSent=now;NET.ev({e:'oa',a:'chop1',i})}
+  else if(now-OU.chopSent>220){OU.chopSent=now;NET.ev({e:'oa',a:'chop1',i,p:myPos()})}
   if(now-(OU.chopSnd||0)>130){OU.chopSnd=now;sfx(260+Math.random()*80,.035,'square',.5)}
 }
 function promptUI(){
@@ -792,7 +960,7 @@ function promptUI(){
     const kb=!TOUCH_UI;
     if(r)txt+=(kb?'<kbd>Space</kbd>':'<kbd>GRAB</kbd>')+esc(r.lbl);
     if(ch)txt+=(txt?' &nbsp; ':'')+(kb?'<kbd>Hold F</kbd>':'<kbd>Hold CHOP</kbd>')+'Chop it';
-    if(!txt&&W.h[OU.ci])txt='Holding '+esc(iname(W.h[OU.ci]));
+    if(!txt){const hn=hintAt(OU.ci,OU.target);if(hn)txt=esc(hn);else if(W.h[OU.ci])txt='Holding '+esc(iname(W.h[OU.ci]))}
   }else if(W&&W.ph==='play'&&W.h[OU.ci])txt='Holding '+esc(iname(W.h[OU.ci]));
   else if(W&&W.ph==='lobby')txt=TOUCH_UI&&innerHeight>innerWidth?'Tip: turn your phone sideways for a bigger kitchen':'Walk around while you wait. Ready up when you are set!';
   if(OU.prompt!==txt){OU.prompt=txt;const pe=$('#ouprompt');pe.innerHTML=txt;pe.classList.toggle('none',!txt)}
@@ -873,7 +1041,7 @@ function event(d){
   if(!OU.auth)return;
   const gci=1-W.hc;
   if(d.e==='ohi'){if(W.paused){W.paused=false;if(W.ph==='play'||W.ph==='count')W.rcd=3}OU.rbuf=[];OU.off=null;dirty();sendSnap();return}
-  if(d.e==='oa')act(gci,d.a,+d.i,+d.v);
+  if(d.e==='oa'){const at=Array.isArray(d.p)&&d.p.length===2?{x:+d.p[0],y:+d.p[1]}:null;act(gci,d.a,+d.i,+d.v,at)}
 }
 function fast(d){
   if(phase!=='ouplay'||!Array.isArray(d.p)||+d.ci===OU.ci)return;
@@ -898,7 +1066,7 @@ function start(mode){
   phase='ouplay';show('ougame');$('#net').hidden=false;
   document.documentElement.classList.add('ouon');document.documentElement.classList.toggle('outouch',TOUCH_UI);
   if(!(window.OU_FLAT||/[?&]flat\b/.test(location.search)))init3D();$('#oucv').hidden=G3.ok;$('#ou3d').hidden=!G3.ok;G3.lvl=-1;
-  Object.assign(OU,{auth:HOST,sn:0,lastSn:0,fxSeen:-1,gotSnap:HOST,gone:false,rbuf:[],off:null,floats:[],prevPh:'',chopHeld:false,dash:0,dcd:0,goAt:0});
+  Object.assign(OU,{auth:HOST,sn:0,lastSn:0,fxSeen:-1,gotSnap:HOST,gone:false,rbuf:[],off:null,floats:[],prevPh:'',chopHeld:false,chopAt:[null,null],dash:0,dcd:0,goAt:0});
   OU.keys={};OU.touch={mx:0,my:0};
   $('#ouorders').innerHTML='';$('#oulobby').dataset.sig='';
   if(HOST){W=makeWorld(0,0);OU.ci=0;OU.fxSeen=0;dirty()}else{W=makeWorld(0,0);OU.ci=1;hello()}

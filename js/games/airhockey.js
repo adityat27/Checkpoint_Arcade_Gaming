@@ -15,9 +15,12 @@ const PH={maxPuck:3.0,      // fastest the puck can travel
   wallBounce:.86,           // how lively the rails are
   hitBounce:.78,            // restitution between mallet and puck
   malletTop:4.4,            // fastest a mallet can move
-  malletAcc:46};            // how quickly a mallet speeds up / stops (no teleporting)
+  malletAcc:46,             // how quickly a mallet speeds up / stops (no teleporting)
+  squirt:.55,               // speed a puck pinched against a rail squirts out at (at least)
+  slotPull:1.6,             // how hard a goal slot pulls in a puck that has drifted onto the goal line
+  unstick:1.6};             // seconds a puck may rest against a rail before it drifts back into play
 const T={cpuSpeed:3,mode:'cpu',me:0,run:false,raf:0,pk:null,ml:[null,null],tgt:[null,null],sc:[0,0],pause:0,serveTo:0,trail:[],fx:[],shake:0,lvl:1,
-  names:['',''],ptr:new Map(),keys:{},rbuf:[],lastSend:0,gk:0,ended:false,lastWall:0,lastHit:0,flash:0,waiting:false,cd:0,hold:0};
+  names:['',''],ptr:new Map(),keys:{},rbuf:[],lastSend:0,gk:0,ended:false,lastWall:0,lastHit:0,flash:0,waiting:false,cd:0,hold:0,still:0,cpuT:0};
 
 /* ---------- DOM ---------- */
 const html=`
@@ -37,13 +40,14 @@ const html=`
 </ul>
 <button class="btn m back" data-back>← All games</button></section>
 <section id="ahgame" hidden>
-<div class="card htop">
+<div id="ahstage"><canvas id="ahcv"></canvas><div id="ahmsg"></div>
+ <div class="card htop" id="ahhud">
   <div class="hpl ahpl"><b><span class="ahdot" style="background:#ff3e8a"></span><span id="ahn0"></span></b><span>You</span></div>
   <div class="hmid"><span id="ahsc"><i>0</i> – <em>0</em></span><span class="hcat">FIRST TO ${WIN}</span></div>
   <div class="hpl r ahpl"><b><span id="ahn1"></span><span class="ahdot" style="background:#2d7bff"></span></b><span id="ahsub1">Rival</span></div>
+ </div>
+ <div id="ahbtns"><button class="ahb" id="ahquit" aria-label="Exit to hub">✕ Exit</button><button class="ahb" id="ahfs" aria-label="Toggle full screen">⛶ Full screen</button></div>
 </div>
-<div id="ahstage"><canvas id="ahcv"></canvas><div id="ahmsg"></div></div>
-<div class="row"><button class="btn b sm" id="ahquit">Exit to hub</button></div>
 </section>`;
 $('#app').insertAdjacentHTML('beforeend',html);
 $('#ahmenu [data-back]').onclick=()=>{show('hub');SFX.back()};
@@ -51,14 +55,17 @@ const cv=$('#ahcv'),ctx2=cv.getContext('2d');
 ['contextmenu','selectstart','dragstart'].forEach(n=>$('#ahgame').addEventListener(n,e=>e.preventDefault()));
 
 /* ---------- view: my goal is always at the bottom (portrait) or left (landscape) ---------- */
-let V={w:0,h:0,s:1,ox:0,oy:0,horiz:false,dpr:1};
+let V={w:0,h:0,s:1,ox:0,oy:0,horiz:false,dpr:1,u:1};
 function layout(){
   const r=$('#ahstage').getBoundingClientRect(),dpr=Math.min(2,devicePixelRatio||1);
   if(!r.width)return;
   if(cv.width!==Math.round(r.width*dpr)||cv.height!==Math.round(r.height*dpr)){cv.width=Math.round(r.width*dpr);cv.height=Math.round(r.height*dpr)}
-  const horiz=r.width>r.height*1.05,pad=18;
-  const s=horiz?Math.min((r.width-pad*2)/L,(r.height-pad*2)/1):Math.min((r.width-pad*2)/1,(r.height-pad*2)/L);
-  V={w:r.width,h:r.height,s,horiz,dpr,ox:(r.width-(horiz?L:1)*s)/2,oy:(r.height-(horiz?1:L)*s)/2};
+  // the table fills the whole screen, apart from a strip at the top for the score bar
+  const hb=$('#ahhud').getBoundingClientRect(),top=Math.max(14,hb.bottom-r.top+8),pad=Math.max(12,Math.min(r.width,r.height)*.018);
+  const aw=r.width-pad*2,ah=r.height-top-pad,horiz=aw>ah*1.05;
+  const rimK=.05;   // leave room for the rail around the playing surface (10*u px each side ≈ 2.4% of s)
+  const s=horiz?Math.min(aw/(L+rimK),ah/(1+rimK)):Math.min(aw/(1+rimK),ah/(L+rimK));
+  V={w:r.width,h:r.height,s,horiz,dpr,u:Math.max(1,s/420),ox:(r.width-(horiz?L:1)*s)/2,oy:top+(ah-(horiz?1:L)*s)/2};
 }
 // table point -> my view; P1 (me=0) defends y=L
 function toView(x,y){if(T.me===1){x=1-x;y=L-y}return V.horiz?[V.ox+(L-y)*V.s,V.oy+x*V.s]:[V.ox+x*V.s,V.oy+y*V.s]}
@@ -95,6 +102,9 @@ function stepPhysics(dt){
   }
   if(T.pause>0)return;
   const run=iRun();
+  // a puck that drifts into a goal slot gets sucked in (like the slight dip on a real table)
+  // instead of stopping dead half-way across the goal line
+  if(Math.abs(pk.x-.5)<GH-PR*.3){if(pk.y<PR)pk.vy-=PH.slotPull*dt;else if(pk.y>L-PR)pk.vy+=PH.slotPull*dt}
   pk.x+=pk.vx*dt;pk.y+=pk.vy*dt;
   const f=1-PH.glide*dt;pk.vx*=f;pk.vy*=f;
   pk.spin=(pk.spin||0)*(1-dt)+0;
@@ -127,20 +137,37 @@ function stepPhysics(dt){
     const dx=pk.x-m.x,dy=pk.y-m.y,d=Math.hypot(dx,dy),R=PR+MR;
     if(d<R&&d>1e-6){
       const nx=dx/d,ny=dy/d;
-      pk.x=m.x+nx*R;pk.y=m.y+ny*R;
-      // puck squeezed against a rail: it can't move, so the mallet gets pushed back instead
-      const cx=clamp(pk.x,PR,1-PR),inMouth=Math.abs(pk.x-.5)<GH,cy=inMouth?pk.y:clamp(pk.y,PR,L-PR);
-      if(cx!==pk.x||cy!==pk.y){
-        // pinned against the rail: the puck stops dead and can only slide along the rail
-        const wx=Math.sign(cx-pk.x),wy=Math.sign(cy-pk.y);pk.x=cx;pk.y=cy;
-        const ddx=m.x-pk.x,ddy=m.y-pk.y,dd=Math.hypot(ddx,ddy)||1;m.x=pk.x+ddx/dd*R;m.y=pk.y+ddy/dd*R;clampMallet(p,m);
-        pk.vx=wx?0:m.vx*.4;pk.vy=wy?0:m.vy*.4;m.vx*=.2;m.vy*=.2;continue}
+      // bounce off the mallet first, then separate the two
       const rvx=pk.vx-m.vx,rvy=pk.vy-m.vy,vn=rvx*nx+rvy*ny;
       if(vn<0){pk.vx-=(1+PH.hitBounce)*vn*nx;pk.vy-=(1+PH.hitBounce)*vn*ny;pk.spin=(rvx*ny-rvy*nx)*8;hitFx(-vn)}
+      pk.x=m.x+nx*R;pk.y=m.y+ny*R;
+      // puck squeezed between the mallet and a rail (or a corner)
+      const inMouth=Math.abs(pk.x-.5)<GH,cx=clamp(pk.x,PR,1-PR),cy=inMouth?pk.y:clamp(pk.y,PR,L-PR);
+      if(cx!==pk.x||cy!==pk.y){
+        const wx=Math.sign(cx-pk.x),wy=Math.sign(cy-pk.y);pk.x=cx;pk.y=cy;   // wx/wy: rail normal, pointing into the table
+        // It used to stop dead here, which is how it got stuck on the edges and in corners.
+        // Now, like a real table, a pinched puck squirts out along the rail.
+        let tx=0,ty=0;
+        if(wx&&wy){if(Math.abs(nx)>=Math.abs(ny))ty=wy;else tx=wx}                     // corner: out along the rail it's not pushed into
+        else if(wx)ty=Math.abs(ny)>.12?Math.sign(ny):(Math.sign(L/2-pk.y)||1);           // side rail: slide along y
+        else tx=Math.abs(nx)>.12?Math.sign(nx):(Math.sign(.5-pk.x)||1);                  // end rail: slide along x
+        const push=Math.hypot(m.vx,m.vy),sq=clamp(PH.squirt+push*.85,PH.squirt,PH.maxPuck*.85);
+        if(wx&&pk.vx*wx<0)pk.vx=-pk.vx*PH.wallBounce;if(wy&&pk.vy*wy<0)pk.vy=-pk.vy*PH.wallBounce;   // never into the rail
+        if(tx)pk.vx=tx*Math.max(Math.abs(pk.vx),sq);if(ty)pk.vy=ty*Math.max(Math.abs(pk.vy),sq);
+        // the mallet is pushed back so the two no longer overlap
+        const ddx=m.x-pk.x,ddy=m.y-pk.y,dd=Math.hypot(ddx,ddy)||1;m.x=pk.x+ddx/dd*(R+.002);m.y=pk.y+ddy/dd*(R+.002);clampMallet(p,m);
+        m.vx*=.3;m.vy*=.3;wallHit();
+      }
     }
   }
   const sp=Math.hypot(pk.vx,pk.vy);if(sp>PH.maxPuck){pk.vx*=PH.maxPuck/sp;pk.vy*=PH.maxPuck/sp}
   pk.rot=(pk.rot||0)+(pk.spin||0)*dt;
+  // safety net: a puck resting against a rail or in a corner for a while drifts back into play
+  if(run&&pk.y>0&&pk.y<L){
+    const e=PR+.03,edge=pk.x<e||pk.x>1-e||pk.y<e||pk.y>L-e;
+    if(sp<.12&&edge)T.still+=dt;else T.still=0;
+    if(T.still>PH.unstick){T.still=0;const hy=pk.y>L/2?L*.75:L*.25,ddx=.5-pk.x,ddy=hy-pk.y,dd=Math.hypot(ddx,ddy)||1;pk.vx=ddx/dd*.45;pk.vy=ddy/dd*.45}
+  }
 }
 function wallHit(){const n=performance.now();if(n-T.lastWall>70){T.lastWall=n;const sp=Math.hypot(T.pk.vx,T.pk.vy);if(sp>.25)sfx(380+sp*90,.045,'triangle',Math.min(1,.4+sp*.25))}}
 function hitFx(power){const n=performance.now();if(n-T.lastHit<90)return;T.lastHit=n;
@@ -180,24 +207,39 @@ function hud(){const a=T.sc[T.me],b=T.sc[1-T.me];$('#ahsc').innerHTML=`<i>${a}</
 
 /* ---------- CPU opponent (player 1, top) ---------- */
 function cpuThink(dt){
-  const pk=T.pk,m=T.ml[1],lvl=T.lvl,home={x:.5,y:0.16};
+  const pk=T.pk,m=T.ml[1],lvl=T.lvl,home={x:.5,y:0.16},R=PR+MR;
   T.cpuSpeed=[1.9,2.8,3.8][lvl];
+  const inMine=pk.y<L/2,spd=Math.hypot(pk.vx,pk.vy);
+  // how long the puck has been loitering on my side without being hit away
+  if(inMine&&spd<1)T.cpuT+=dt;else T.cpuT=0;
   T.hold-=dt;if(T.hold>0)return;T.hold=[0.12,0.06,0.02][lvl];
   let tx,ty;
-  const inMine=pk.y<L/2,coming=pk.vy<0;
-  if(inMine&&(Math.abs(pk.vy)<1.6||!coming)&&pk.y>m.y-0.02){
-    // attack: get behind the puck and drive it toward the far goal
-    const ax=.5+(Math.random()-.5)*GH*[1.6,1,0.6][lvl],ay=L;
-    const dx=ax-pk.x,dy=ay-pk.y,d=Math.hypot(dx,dy);
-    const behind=Math.hypot(m.x-(pk.x-dx/d*0.09),m.y-(pk.y-dy/d*0.09))<0.05;
-    tx=behind?pk.x+dx/d*0.12:pk.x-dx/d*(PR+MR+0.01);ty=behind?pk.y+dy/d*0.12:pk.y-dy/d*(PR+MR+0.01);
+  const coming=pk.vy<-0.05&&spd>0.25;
+  if(inMine&&(!coming||spd<1.1)){
+    if(pk.y<MR+PR*.6){
+      // puck hugging my back rail: I can't get behind it, so come from the middle side and
+      // shove it out sideways (it squirts along the rail and back into play)
+      const sd=Math.sign(.5-pk.x)||1;tx=pk.x+sd*(R-.03);ty=pk.y+.02;
+    }else{
+      // attack: get behind the puck and drive it toward the far goal
+      if(!T.aim||T.aimT<=0){T.aim=.5+(Math.random()-.5)*GH*[1.6,1,0.6][lvl];T.aimT=1}
+      T.aimT-=dt;const dx=T.aim-pk.x,dy=L-pk.y,d=Math.hypot(dx,dy),ux=dx/d,uy=dy/d;
+      const bx=clamp(pk.x-ux*(R+.012),MR,1-MR),by=clamp(pk.y-uy*(R+.012),MR,L/2-MR);
+      const front=m.y>pk.y-.005;   // my mallet is between the puck and the far goal: go round it
+      if(front){let sd=Math.sign(m.x-pk.x)||(pk.x<.5?1:-1);const sx=pk.x+sd*(R+.045);if(sx>1-MR||sx<MR)sd=-sd;
+        tx=pk.x+sd*(R+.045);ty=m.y>pk.y+.02?pk.y:pk.y-.07;}
+      else if(Math.hypot(m.x-bx,m.y-by)>.035){tx=bx;ty=by}
+      else{tx=pk.x+ux*.14;ty=pk.y+uy*.14}
+      // loitering too long (odd angle, near a rail): just go straight through it
+      if(T.cpuT>2.2){tx=pk.x+(pk.x-m.x)*.5;ty=pk.y+(pk.y-m.y)*.5;if(T.cpuT>3.2)T.cpuT=0}
+    }
   }else if(coming){
     // defend: meet the puck on its path a little in front of the goal
     const yLine=[0.2,0.24,0.28][lvl],t=(pk.y-yLine)/Math.max(0.1,-pk.vy);
     let px=pk.x+pk.vx*t;for(let k=0;k<3;k++){if(px<PR)px=2*PR-px;if(px>1-PR)px=2*(1-PR)-px}
     tx=.5+(px-.5)*[0.6,0.8,0.95][lvl];ty=yLine;
   }else{tx=home.x+(pk.x-.5)*0.4;ty=home.y}
-  T.tgt[1]={x:tx+(Math.random()-.5)*[0.06,0.03,0.01][lvl],y:ty};
+  const t={x:tx+(Math.random()-.5)*[0.06,0.03,0.01][lvl],y:ty};clampMallet(1,t);T.tgt[1]=t;
 }
 
 /* ---------- input ---------- */
@@ -280,44 +322,46 @@ function draw(now){
   const P=(x,y)=>toView(x,y);
   // table
   const [x0,y0]=V.horiz?[V.ox,V.oy]:[V.ox,V.oy],tw=(V.horiz?L:1)*s,th=(V.horiz?1:L)*s;
-  const rr=s*0.08;
-  c.fillStyle='#14111f';roundRect(c,x0-10,y0-10,tw+20,th+20,rr+10);c.fill();
+  const rr=s*0.08,u=V.u,rim=10*u;
+  // rim with a soft glow under the table
+  c.save();c.shadowColor='#7a4dff';c.shadowBlur=30*u;c.fillStyle='#14111f';roundRect(c,x0-rim,y0-rim,tw+rim*2,th+rim*2,rr+rim);c.fill();c.restore();
+  c.fillStyle='#e8ecf6';roundRect(c,x0-rim*.55,y0-rim*.55,tw+rim*1.1,th+rim*1.1,rr+rim*.55);c.fill();
   const grd=c.createLinearGradient(x0,y0,x0+tw,y0+th);grd.addColorStop(0,'#1d2a6b');grd.addColorStop(1,'#2a1458');
   c.fillStyle=grd;roundRect(c,x0,y0,tw,th,rr);c.fill();
   // air holes
   c.fillStyle='#ffffff14';const hs=s*0.07;
-  for(let a=hs/2;a<tw;a+=hs)for(let b=hs/2;b<th;b+=hs){c.beginPath();c.arc(x0+a,y0+b,1.1,0,7);c.fill()}
+  for(let a=hs/2;a<tw;a+=hs)for(let b=hs/2;b<th;b+=hs){c.beginPath();c.arc(x0+a,y0+b,1.1*u,0,7);c.fill()}
   c.save();roundRect(c,x0,y0,tw,th,rr);c.clip();
   // centre line + circle
-  c.strokeStyle='#ff3e8a';c.lineWidth=3;c.shadowColor='#ff3e8a';c.shadowBlur=10;
+  c.strokeStyle='#ff3e8a';c.lineWidth=3*u;c.shadowColor='#ff3e8a';c.shadowBlur=10*u;
   const [a1,b1]=P(0,L/2),[a2,b2]=P(1,L/2);c.beginPath();c.moveTo(a1,b1);c.lineTo(a2,b2);c.stroke();
   const [cx,cy]=P(.5,L/2);c.beginPath();c.arc(cx,cy,s*0.15,0,7);c.stroke();
   c.strokeStyle='#38d6ff';c.shadowColor='#38d6ff';
   for(const end of[0,L]){const [gx,gy]=P(.5,end);c.beginPath();c.arc(gx,gy,s*0.24,0,7);c.stroke()}
   c.shadowBlur=0;
   c.restore();
-  c.strokeStyle='#ffffffcc';c.lineWidth=2.5;roundRect(c,x0,y0,tw,th,rr);c.stroke();
+  c.strokeStyle='#14111f';c.lineWidth=2.5*u;roundRect(c,x0,y0,tw,th,rr);c.stroke();
   // goals
   for(const end of[0,L]){const [g1x,g1y]=P(.5-GH,end),[g2x,g2y]=P(.5+GH,end);
     const own=(end===L)===(T.me===0),col=own?'#ff3e8a':'#2d7bff';c.lineCap='round';
-    c.strokeStyle='#05030f';c.lineWidth=16;c.beginPath();c.moveTo(g1x,g1y);c.lineTo(g2x,g2y);c.stroke();
-    c.strokeStyle=col;c.lineWidth=4;c.shadowColor=col;c.shadowBlur=12;c.stroke();c.shadowBlur=0}
+    c.strokeStyle='#05030f';c.lineWidth=16*u;c.beginPath();c.moveTo(g1x,g1y);c.lineTo(g2x,g2y);c.stroke();
+    c.strokeStyle=col;c.lineWidth=4*u;c.shadowColor=col;c.shadowBlur=12*u;c.stroke();c.shadowBlur=0}
   // puck trail
   const pk=T.pk;T.trail.push([pk.x,pk.y]);if(T.trail.length>10)T.trail.shift();
   T.trail.forEach(([x,y],i)=>{const [px,py]=P(x,y);c.fillStyle=`rgba(255,225,77,${i/40})`;c.beginPath();c.arc(px,py,PR*s*(0.4+i/18),0,7);c.fill()});
   // particles
-  T.fx=T.fx.filter(f=>(f.t+=1/60)<0.5);T.fx.forEach(f=>{f.x+=f.vx/60;f.y+=f.vy/60;const [px,py]=P(f.x,f.y);c.fillStyle=f.c||'#ffe14d';c.globalAlpha=1-f.t*2;c.beginPath();c.arc(px,py,3,0,7);c.fill()});c.globalAlpha=1;
+  T.fx=T.fx.filter(f=>(f.t+=1/60)<0.5);T.fx.forEach(f=>{f.x+=f.vx/60;f.y+=f.vy/60;const [px,py]=P(f.x,f.y);c.fillStyle=f.c||'#ffe14d';c.globalAlpha=1-f.t*2;c.beginPath();c.arc(px,py,3*u,0,7);c.fill()});c.globalAlpha=1;
   // mallets
   [0,1].forEach(p=>{const m=T.ml[p];if(!m)return;const [mx,my]=P(m.x,m.y),r=MR*s,col=p===0?'#ff3e8a':'#2d7bff';
-    c.fillStyle='#00000055';c.beginPath();c.arc(mx+3,my+4,r,0,7);c.fill();
-    c.fillStyle=col;c.strokeStyle='#14111f';c.lineWidth=3.5;c.beginPath();c.arc(mx,my,r,0,7);c.fill();c.stroke();
+    c.fillStyle='#00000055';c.beginPath();c.arc(mx+3*u,my+4*u,r,0,7);c.fill();
+    c.fillStyle=col;c.strokeStyle='#14111f';c.lineWidth=3.5*u;c.beginPath();c.arc(mx,my,r,0,7);c.fill();c.stroke();
     c.fillStyle='#ffffff55';c.beginPath();c.arc(mx,my,r*0.72,0,7);c.fill();
     c.fillStyle=col;c.beginPath();c.arc(mx,my,r*0.42,0,7);c.fill();c.stroke();
     c.fillStyle='#ffffffaa';c.beginPath();c.arc(mx-r*0.14,my-r*0.16,r*0.13,0,7);c.fill()});
   // puck
-  {const [px,py]=P(pk.x,pk.y),r=PR*s;c.shadowColor='#ffe14d';c.shadowBlur=14;c.fillStyle='#14111f';c.beginPath();c.arc(px,py,r,0,7);c.fill();c.shadowBlur=0;
-   c.strokeStyle='#ffe14d';c.lineWidth=3;c.beginPath();c.arc(px,py,r*0.68,0,7);c.stroke();
-   const a=(pk.rot||0);c.strokeStyle='#ffe14daa';c.lineWidth=2;c.beginPath();c.moveTo(px+Math.cos(a)*r*.25,py+Math.sin(a)*r*.25);c.lineTo(px+Math.cos(a)*r*.6,py+Math.sin(a)*r*.6);c.stroke()}
+  {const [px,py]=P(pk.x,pk.y),r=PR*s;c.shadowColor='#ffe14d';c.shadowBlur=14*u;c.fillStyle='#14111f';c.beginPath();c.arc(px,py,r,0,7);c.fill();c.shadowBlur=0;
+   c.strokeStyle='#ffe14d';c.lineWidth=3*u;c.beginPath();c.arc(px,py,r*0.68,0,7);c.stroke();
+   const a=(pk.rot||0);c.strokeStyle='#ffe14daa';c.lineWidth=2*u;c.beginPath();c.moveTo(px+Math.cos(a)*r*.25,py+Math.sin(a)*r*.25);c.lineTo(px+Math.cos(a)*r*.6,py+Math.sin(a)*r*.6);c.stroke()}
   c.restore();
   if(T.flash>0){c.fillStyle=`rgba(255,255,255,${T.flash*0.35})`;c.fillRect(0,0,V.w,V.h);T.flash=Math.max(0,T.flash-0.06)}
 }
@@ -340,16 +384,27 @@ function loop(now){
 
 /* ---------- start / stop ---------- */
 function newMatch(){
-  T.sc=[0,0];T.gk=0;T.ended=false;T.pause=0;T.rbuf=[];T.off=null;T.fx=[];T.cd=3.2;T.cdn=null;T.waiting=false;
+  T.sc=[0,0];T.gk=0;T.ended=false;T.pause=0;T.still=0;T.cpuT=0;T.rbuf=[];T.off=null;T.fx=[];T.cd=3.2;T.cdn=null;T.waiting=false;
   resetPositions(Math.random()<.5?0:1);
   // online: serve alternates each match (host first)
   if(T.mode==='online')T.pk.y=myG%2===0?L/2+0.24:L/2-0.24;
   T.run=true;hud();$('#over').hidden=true;showMsg('');
   if(!T.raf){last=performance.now();T.raf=requestAnimationFrame(loop)}
 }
+/* full screen: the game always covers the whole window; the browser's real full-screen mode
+   (no address bar) turns on when you start from a button, and the ⛶ button toggles it */
+const fsEl=()=>document.fullscreenElement||document.webkitFullscreenElement;
+const fsOK=()=>!!(document.fullscreenEnabled||document.webkitFullscreenEnabled);
+function enterFS(){if(!fsOK()||fsEl())return;const d=document.documentElement,f=d.requestFullscreen||d.webkitRequestFullscreen;
+  try{const r=f.call(d,{navigationUI:'hide'});T.fsMine=true;if(r&&r.catch)r.catch(()=>{T.fsMine=false})}catch(e){T.fsMine=false}}
+function exitFS(){if(!fsEl())return;const f=document.exitFullscreen||document.webkitExitFullscreen;try{const r=f.call(document);if(r&&r.catch)r.catch(()=>{})}catch(e){}}
+function fsLabel(){const b=$('#ahfs');b.hidden=!fsOK();b.textContent=fsEl()?'⤡ Exit full screen':'⛶ Full screen'}
+['fullscreenchange','webkitfullscreenchange'].forEach(n=>document.addEventListener(n,()=>{fsLabel();if(T.run)setTimeout(layout,60)}));
+$('#ahfs').onclick=()=>{fsEl()?exitFS():enterFS();SFX.ui()};
 function start(mode){
   me.n=($('#nm').value.trim()||'Hero').slice(0,12);
   if(mode!=='online'){leave();G='hockey';cpu=true}
+  document.documentElement.classList.add('ahon');if(mode!=='online')enterFS();fsLabel();
   T.mode=mode;T.lvl=+$('#ahdiff').value;T.me=mode==='online'&&!HOST?1:0;
   const other=mode==='cpu'?['Rookie Bot','Pro Bot','Steel Bot'][T.lvl]:mode==='local'?($('#ahp2name').value.trim()||'Player 2').slice(0,12):(on||'Rival');
   T.names=T.me===0?[me.n,other]:[other,me.n];
@@ -371,7 +426,7 @@ function rematch(){
   myG=opp.g>myG?opp.g:myG+1;pub();
   if(opp.g===myG)newMatch();else{T.waiting=true;T.run=true;T.pause=99;showMsg('REMATCH?','Waiting for '+on+' to accept…')}
 }
-function stop(){T.run=false;T.ptr.clear();cancelAnimationFrame(T.raf);T.raf=0}
+function stop(){T.run=false;T.ptr.clear();cancelAnimationFrame(T.raf);T.raf=0;document.documentElement.classList.remove('ahon');if(T.fsMine){T.fsMine=false;exitFS()}}
 
 $('#ahsolo').onclick=()=>start('cpu');
 $('#ahlocal').onclick=()=>start('local');
@@ -428,5 +483,5 @@ ART_GEN.hockey=(W,n)=>{
 
 regGame('hockey',{name:'Air Hockey',menu:'ahmenu',stage:'ahgame',cd:'#cd8',theme:'hockey',
   start,sync,event,fast,rematch,stop,hb:()=>({g:myG,sc:T.sc,k:T.gk})});
-window.AirHockey={T,stepPhysics,L};
+window.AirHockey={T,stepPhysics,cpuThink,L,PR,MR,PH};
 })();

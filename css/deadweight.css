@@ -80,6 +80,24 @@ html.dwon.dwtouch #dwtip{bottom:auto;top:calc(66px + env(safe-area-inset-top,0px
  #dwbanner{top:20%}html.dwon.dwtouch #dwtip{top:calc(122px + env(safe-area-inset-top,0px))}
  #dwpads .btns{flex-direction:column;align-items:flex-end}
 }
+/* mountain picker (menu) */
+.dwmaps{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:4px 0 12px}
+.dwmap{position:relative;text-align:left;border:3px solid var(--ink);border-radius:14px;padding:44px 10px 9px;background:#fffdf5;color:var(--ink);cursor:pointer;box-shadow:4px 4px 0 #14111f66;overflow:hidden;transition:transform .12s,box-shadow .12s;font:inherit}
+.dwmap::before{content:'';position:absolute;left:0;right:0;top:0;height:36px;background:linear-gradient(160deg,var(--a),var(--b));border-bottom:3px solid var(--ink)}
+.dwmap .ic{position:absolute;right:8px;top:4px;font-size:22px;filter:drop-shadow(1px 1px 0 #14111f)}
+.dwmap b{display:block;font:400 19px/1.05 Bangers,Impact,sans-serif;letter-spacing:.5px}
+.dwmap em{display:inline-block;font:900 10px system-ui;font-style:normal;background:#14111f;color:#ffe14d;border-radius:999px;padding:1px 7px;margin:3px 0 4px}
+.dwmap small{display:block;font:700 11px/1.3 system-ui;opacity:.8}
+.dwmap:hover{transform:translateY(-2px)}
+.dwmap.on{outline:4px solid #ffe14d;outline-offset:-1px;box-shadow:4px 4px 0 var(--ink);transform:translateY(-2px)}
+.dwmap.on::after{content:'✔';position:absolute;left:8px;top:6px;width:22px;height:22px;border-radius:50%;background:#2fe3a0;border:2px solid var(--ink);display:grid;place-items:center;font:900 12px system-ui}
+#dwmapn{display:block;font:900 10px system-ui;opacity:.65;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* soft vignette over the 3D view, tinted per mountain */
+#dwvig{position:absolute;inset:0;pointer-events:none;z-index:1;background:radial-gradient(120% 95% at 50% 45%,transparent 55%,rgba(20,10,40,.38) 100%)}
+#dwstage[data-theme=ember] #dwvig{background:radial-gradient(120% 95% at 50% 45%,transparent 50%,rgba(60,8,0,.5) 100%)}
+#dwstage[data-theme=snow] #dwvig{background:radial-gradient(120% 95% at 50% 45%,transparent 52%,rgba(4,10,40,.45) 100%)}
+#dwstage[data-theme=dawn] #dwvig{background:radial-gradient(120% 95% at 50% 45%,transparent 60%,rgba(40,60,110,.22) 100%)}
+#dwtip b{font-weight:900}
 /* card art animations */
 .dwh{animation:dwh 1.4s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 0}@keyframes dwh{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}
 .dwb{animation:dwb .6s ease-in-out infinite alternate}@keyframes dwb{to{transform:translateX(-2px)}}

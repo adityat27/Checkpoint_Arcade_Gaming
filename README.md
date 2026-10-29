@@ -30,8 +30,8 @@ js/games/               one file (or folder) per game
   boardroom.js          Board Room (bluffing auction)
   airhockey.js          Air Hockey
   orderup.js            Order Up! (3D co-op kitchen)
-  deadweight/core.js    Deadweight: course layout + climbing/rope physics (no drawing)
-  deadweight/game.js    Deadweight: 3D world, HUD, controls, online sync
+  deadweight/core.js    Deadweight: maps, the random course generator, climbing/rope physics, the solo bot (no drawing)
+  deadweight/game.js    Deadweight: themed 3D worlds, HUD, controls, online sync
 ```
 
 Each game file starts with its menu and game-screen HTML, then the game code, then its music theme and card art at the bottom.
@@ -46,9 +46,13 @@ Each game file starts with its menu and game-screen HTML, then the game code, th
 |---|---|
 | Change colours, fonts or buttons everywhere | `css/base.css` (`:root` variables at the top) |
 | Change Overdrive car handling | `OVT` near the top of the physics section in `js/games/overdrive/race.js` |
-| Change Air Hockey speed or bounce | `PH` at the top of `js/games/airhockey.js` |
-| Change Board Room deals, scandals or names | `LOTS` at the top of `js/games/boardroom.js` |
-| Change the Deadweight course | `COURSE` in `js/games/deadweight/core.js` (boxes, checkpoints, signs) |
+| Change Air Hockey speed or bounce | `PH` at the top of `js/games/airhockey.js` (also: how a puck pinned on a rail squirts out, and the anti-stuck timer) |
+| Change Board Room deals, scandals or names | `LOTS` (and `FLAVOR` for the card text) at the top of `js/games/boardroom.js` |
+| Add an Order Up! dish | `ING` (ingredients), `SOUPS` (pot mixes) and `RECIPES` near the top of `js/games/orderup.js` |
+| Add an Order Up! kitchen | `LEVELS` in `js/games/orderup.js` (each kitchen is a little text map; the key is in the comment above it) |
+| Add a Deadweight mountain | `MAPS` in `js/games/deadweight/core.js` (which obstacles it uses, how many, how hard) plus a look in `DW_THEMES` in `game.js` |
+| Add a Deadweight obstacle | a method on `Builder` in `js/games/deadweight/core.js` (it adds boxes and ends with `this.rest(...)`), then list it in a map's `pool` |
+| Change The Classic Deadweight route | `classicCourse()` in `js/games/deadweight/core.js` |
 | Change Deadweight jump, rope length or gravity | `CFG` in `js/games/deadweight/core.js` |
 | Change a game's music | `THEMES.<game>` at the bottom of that game's file |
 | Change a hub card picture | `ART_GEN.<game>` at the bottom of that game's file |
