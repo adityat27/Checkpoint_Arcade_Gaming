@@ -1,13 +1,15 @@
 # CHECKPOINT!! arcade
 
-A static site with no build step. Upload the whole folder (`index.html`, `css/`, `js/`) to Vercel or any static host and it works. To try it locally, open `index.html` in a browser, or run `npx serve .` in this folder.
+A static site with no build step. Upload the whole folder (`index.html`, `css/`, `js/`, `img/`) to Vercel or any static host and it works. To try it locally, open `index.html` in a browser, or run `npx serve .` in this folder.
 
 ## Where things live
 
 ```
-index.html              the page: hub cards, lobby, overlays, and the list of scripts (load order matters)
+index.html              the page: top bar + animated logo, hub skeleton, profile sheet, lobby, results popup, and the list of scripts (load order matters)
+img/cards/              each game's card picture (<id>.webp, tall) and featured/menu banner (<id>-wide.webp): real in-game 3D renders and screenshots
 css/
-  base.css              shared look: colours, buttons, cards, hub, menus, results overlay, phone layout
+  base.css              comic colours, .card / .btn inside the game screens
+  hub.css               the modern shell: top bar, logo animation, hub, holo cards, card-open animation, profile, game menus, lobby, results popup
   brawl.css             one stylesheet per game
   glaze.css  overdrive.css  cipher.css  hang.css  rps.css
   boardroom.css  airhockey.css  orderup.css  deadweight.css  slipstream.css
@@ -17,8 +19,9 @@ js/core/                shared systems (loaded first)
   state.js              shared game state (player, rival, room, phase…)
   ui.js                 screens: show(), regGame() plug-in registry, setOver() results overlay, rematch
   net.js                online play: MQTT rooms + WebRTC direct link (NET.ev / NET.sendFast), join(), leave()
-  art.js                hub card + menu banner pictures (ART_GEN / ART_SVG helpers)
-  main.js               hub wiring: profile, card clicks, invite links, sound buttons
+  art.js                the older drawn card pictures (ART_GEN / ART_SVG helpers); the hub now uses img/cards
+  main.js               profile (name, avatar), invite links, sound buttons
+  hub.js                the hub: game list (names, genres, colours, rarity), featured game, holo card tilt (mouse, finger, phone), filters, the card-swivel opening animation, menu banners. Loaded last
 js/games/               one file (or folder) per game
   brawl.js              Brawl
   glaze.js              Glaze Craze
@@ -47,7 +50,10 @@ Each game file starts with its menu and game-screen HTML, then the game code, th
 
 | I want to… | Edit |
 |---|---|
-| Change colours, fonts or buttons everywhere | `css/base.css` (`:root` variables at the top) |
+| Change the hub's colours, fonts or card look | `css/hub.css` (`:root` variables at the top) |
+| Change a game's card text, colour, rarity or filter tags | `INFO` at the top of `js/core/hub.js` |
+| Change a card or banner picture | replace `img/cards/<id>.webp` (600×840) or `img/cards/<id>-wide.webp` (1600×640) |
+| Change the comic colours used inside games | `css/base.css` (`:root` variables at the top) |
 | Change Overdrive car handling | `OVT` near the top of the physics section in `js/games/overdrive/race.js` |
 | Change Air Hockey speed or bounce | `PH` at the top of `js/games/airhockey.js` (also: how a puck pinned on a rail squirts out, and the anti-stuck timer) |
 | Change Board Room deals, scandals or names | `LOTS` (and `FLAVOR` for the card text) at the top of `js/games/boardroom.js` |
@@ -62,14 +68,13 @@ Each game file starts with its menu and game-screen HTML, then the game code, th
 | Reshape a Slipstream car, bus or truck | `SHAPES` in `js/games/slipstream/cars.js` (each row is one cross-section: position, widths, sill, shoulder line, roof) |
 | Add a Slipstream road (look) | `ROUTES` + `LOOK` at the top of `js/games/slipstream/game.js` (sky, fog, colours, what is on each side: `sea`, `hill`, `mesa`, `valley`) |
 | Change a game's music | `THEMES.<game>` at the bottom of that game's file |
-| Change a hub card picture | `ART_GEN.<game>` at the bottom of that game's file |
 | Change the online servers | `BR` (broker list) at the top of `js/core/net.js` |
 
 ## Adding a new game
 
 1. Create `js/games/mygame.js` and `css/mygame.css`, then add both to `index.html` (the script goes after `main.js`).
 2. In the script, call `mountScreens(html)` with a menu `<section>` and a game `<section>` (both `hidden`).
-3. Add a hub card in `index.html`: `<button class="gc" data-g="mygame">…</button>`.
+3. Add the game to `INFO` in `js/core/hub.js` (and `ONLINE`, its online button), plus its two pictures in `img/cards/`.
 4. Register it:
    ```js
    regGame('mygame',{name:'My Game',menu:'mymenu',stage:'mygame-stage',cd:'#cdX',theme:'mygame',

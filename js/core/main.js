@@ -1,22 +1,16 @@
-/* Startup: fills in the hub (name, avatar picker), paints the card art, wires the hub
-   cards, invite links and the music/sound buttons. Loaded after the built-in games, before the plug-in games. */
+/* Startup: fills in the profile (name, avatar picker), paints the menu art, wires
+   invite links and the music/sound buttons. The hub itself (cards, featured game) is js/core/hub.js. Loaded after the built-in games, before the plug-in games. */
 try{const c=+localStorage.bbch;if(c>=0&&c<H.length)me.ch=c}catch(e){}
-const pava=()=>{$('#pava').innerHTML=hero(me.ch,'idle')+`<b>${H[me.ch].n}</b>`};
+const pava=()=>{$('#pava').innerHTML=hero(me.ch,'idle','46 -6 108 118');if(window.HUB)HUB.syncChip()};
 $('#picks').innerHTML=H.map((h,i)=>`<button class="pick" data-i="${i}" aria-label="${h.n}">${hero(i,'idle','46 -6 108 118')}<b>${h.n}</b></button>`).join('');
 $('#picks').onclick=e=>{const b=e.target.closest('.pick');if(!b)return;me.ch=+b.dataset.i;try{localStorage.bbch=me.ch}catch(x){}document.querySelectorAll('.pick').forEach(x=>x.classList.toggle('on',x==b));pava();SFX.sel()};
 document.querySelectorAll('.pick')[me.ch].classList.add('on');pava();
 $('#bk').onclick=leave;$('#mn').onclick=leave;$('#rm').onclick=rematch;
 $('#cp').onclick=async()=>{const t=`Join my CHECKPOINT!! match: ${link()}`;try{await navigator.clipboard.writeText(t);$('#lm').textContent='Link copied! Send it to your friend.'}catch(e){$('#lm').textContent='Copy the link above and send it to your friend.'}};
-let nm0='';try{nm0=localStorage.bbnm||''}catch(e){}$('#nm').value=nm0||'Hero'+Math.floor(10+Math.random()*90);$('#nm').onchange=()=>{try{localStorage.bbnm=$('#nm').value.trim().slice(0,12)}catch(e){}};
+let nm0='';try{nm0=localStorage.bbnm||''}catch(e){}$('#nm').value=nm0||'Hero'+Math.floor(10+Math.random()*90);$('#nm').onchange=()=>{try{localStorage.bbnm=$('#nm').value.trim().slice(0,12)}catch(e){}};$('#nm').oninput=()=>{if(window.HUB)HUB.syncChip()};
 $('#cd').value=(location.hash.replace(/[^a-zA-Z0-9]/g,'').slice(0,6)||Math.random().toString(36).slice(2,7)).toUpperCase();
-$('#a1').innerHTML=hero(0,'kick')+hero(5,'guard');
 document.querySelectorAll('[data-art]').forEach(paintArt);
 
-document.querySelectorAll('.gc').forEach(b=>b.onclick=()=>{
-  G=b.dataset.g;
-  show(MENU_MAP[G]||'menu');
-  SFX.sel();
-});
 document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>{show('hub');SFX.back()});
 $('#cd2').value=$('#cd3').value=$('#cd4').value=$('#cd5').value=$('#cd6').value=$('#cd').value;
 
