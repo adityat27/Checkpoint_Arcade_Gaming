@@ -499,7 +499,7 @@ function drawTile(c,i,t){
   if(ty==='S'){c.save();c.beginPath();c.rect(px,py,s,s-lip);c.clip();for(let k=-2;k<6;k++){c.fillStyle=k%2?'#ff3e5a':'#fff';c.beginPath();c.moveTo(px+k*s*.25,py);c.lineTo(px+(k+1)*s*.25,py);c.lineTo(px+(k+1)*s*.25-s*.25,py+s);c.lineTo(px+k*s*.25-s*.25,py+s);c.fill()}c.restore();
     c.strokeStyle=K;c.lineWidth=2;c.strokeRect(px+1,py+1,s-2,s-lip-1);
     c.fillStyle='#ffd23f';ink(c,s*.3);c.beginPath();c.arc(cx,cy+s*.08,s*.18,Math.PI,0);c.closePath();c.fill();c.stroke();c.beginPath();c.arc(cx,cy-s*.12,s*.04,0,7);c.fillStyle=K;c.fill();
-    c.fillStyle='#fff';c.strokeStyle=K;c.lineWidth=3;c.font=`400 ${s*.24}px Bangers,Impact,sans-serif`;c.textAlign='center';c.strokeText('SERVE',cx,py+s*.3);c.fillText('SERVE',cx,py+s*.3);return}
+    c.fillStyle='#fff';c.strokeStyle=K;c.lineWidth=3;c.font=`700 ${s*.24}px Space Grotesk,Inter,system-ui,sans-serif`;c.textAlign='center';c.strokeText('SERVE',cx,py+s*.3);c.fillText('SERVE',cx,py+s*.3);return}
 }
 function drawTileItem(c,i,t){
   const it=W.t[i];if(!it)return;const x=i%LV.Wd,y=(i/LV.Wd)|0,[px,py]=P(x,y),s=V.s,cx=px+s/2,cy=py+s*.4;
@@ -551,7 +551,7 @@ function draw(now){
   }
   // floating score texts
   OU.floats=OU.floats.filter(f=>(f.a+=1/60)<1.4);
-  OU.floats.forEach(f=>{const[px,py]=f.i>=0?P(f.i%LV.Wd+.5,((f.i/LV.Wd)|0)):[V.w/2,V.oy+s];c.globalAlpha=Math.min(1,(1.4-f.a)*2);c.font=`400 ${s*.5}px Bangers,Impact,sans-serif`;c.textAlign='center';c.lineWidth=5;c.strokeStyle=K;
+  OU.floats.forEach(f=>{const[px,py]=f.i>=0?P(f.i%LV.Wd+.5,((f.i/LV.Wd)|0)):[V.w/2,V.oy+s];c.globalAlpha=Math.min(1,(1.4-f.a)*2);c.font=`700 ${s*.5}px Space Grotesk,Inter,system-ui,sans-serif`;c.textAlign='center';c.lineWidth=5;c.strokeStyle=K;
     const yy=py-f.a*s*1.1;c.strokeText(f.txt,px,yy);c.fillStyle=f.col;c.fillText(f.txt,px,yy);c.globalAlpha=1});
 }
 
@@ -692,7 +692,7 @@ function build3D(){
       aw.scale.set(1.05,.08,1.05);aw.position.set(x,top+.95,z);aw.castShadow=true;sc.add(aw);
       [[-.45,-.45],[.45,-.45],[-.45,.45],[.45,.45]].forEach(([dx,dz])=>sc.add(mesh('cyl','#ffffff',.035,.95,.035,x+dx,top+.47,z+dz)));
       sc.add(mesh('half',new T.MeshStandardMaterial({color:col3('#ffd23f'),metalness:.6,roughness:.3}),.14,.12,.14,x+.2,top,z+.2));sc.add(mesh('sph','#14111f',.025,.025,.025,x+.2,top+.13,z+.2));
-      const sign=sprite(canvasTex(256,96,(c,w,h)=>{c.fillStyle='#ffe14d';c.strokeStyle='#14111f';c.lineWidth=8;c.beginPath();c.roundRect?c.roundRect(6,6,w-12,h-12,22):c.rect(6,6,w-12,h-12);c.fill();c.stroke();c.fillStyle='#14111f';c.font='400 64px Bangers,Impact,sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText('SERVE',w/2,h/2+3)}),.95,.36);
+      const sign=sprite(canvasTex(256,96,(c,w,h)=>{c.fillStyle='#ffe14d';c.strokeStyle='#14111f';c.lineWidth=8;c.beginPath();c.roundRect?c.roundRect(6,6,w-12,h-12,22):c.rect(6,6,w-12,h-12);c.fill();c.stroke();c.fillStyle='#14111f';c.font='700 64px  Space Grotesk,Inter,system-ui,sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText('SERVE',w/2,h/2+3)}),.95,.36);
       sign.position.set(x,top+1.32,z);sc.add(sign)}
     if(ty==='C'||ty==='#'||ty==='|'){G3.slots[i]=Object.assign(G3.slots[i]||{},{sig:'',obj:null,bar:bar3()});const b=G3.slots[i].bar;b.position.set(x,top+.85,z);sc.add(D(b))}
   });
@@ -847,7 +847,7 @@ function hud(){
   if(!W)return;const L=LEVELS[W.lvl];
   const kn=L.n+' · '+(OU.ci===0?'left':'right')+' side';if($('#oukitn').textContent!==kn)$('#oukitn').textContent=kn;
   const se_=$('#ouscore');if(se_.textContent!==String(W.score)){if(+se_.textContent<W.score){se_.classList.remove('bump');void se_.offsetWidth;se_.classList.add('bump')}se_.textContent=W.score}const tl=$('#outime');tl.textContent=fmt(W.tl);tl.classList.toggle('low',W.ph==='play'&&W.tl<=20);
-  const st=L.stars.filter(s=>W.score>=s).length,nx=L.stars[st],sh=`<b style="color:#f5b800;-webkit-text-stroke:.5px #14111f">${'★'.repeat(st)}</b><b style="color:#14111f30">${'★'.repeat(3-st)}</b>${nx?' next at '+nx:' max!'}`;
+  const st=L.stars.filter(s=>W.score>=s).length,nx=L.stars[st],sh=`<b style="color:#f5b800;-webkit-text-stroke:0">${'★'.repeat(st)}</b><b style="color:#14111f30">${'★'.repeat(3-st)}</b>${nx?' next at '+nx:' max!'}`;
   const se=$('#oustar');if(se.dataset.h!==sh){se.dataset.h=sh;se.innerHTML=sh}
   const box=$('#ouorders'),have=new Map([...box.children].map(e=>[+e.dataset.id,e]));
   W.orders.forEach(o=>{let e=have.get(o.id);if(!e){e=orderCard(o);e.style.setProperty('--tc',RECIPES[o.r].col||'#ff8a1f');box.append(e)}have.delete(o.id);

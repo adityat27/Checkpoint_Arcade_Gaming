@@ -1255,7 +1255,7 @@ function race(W,n){
    <path d="M-104 -10L-102 -28Q-100 -33 -90 -34L-60 -36 -36 -50Q-30 -54 -20 -54L18 -54Q30 -54 40 -46L60 -33 92 -29Q106 -27 108 -18L108 -10Q108 -5 101 -5L-98 -5Q-104 -5 -104 -10Z" fill="url(#cb${u})" ${ink(3.5)}/>
    <path d="M-32 -38L-18 -49 14 -49Q24 -49 32 -43L44 -35Z" fill="#7fe8ff" ${ink(3)}/><path d="M4 -49V-36" ${ink(3)}/><path d="M-14 -46L-6 -46 -18 -38 -24 -38Z" fill="#fff" opacity=".8"/>
    <path d="M-100 -22L104 -18" stroke="#ffe14d" stroke-width="5"/><path d="M-100 -22L104 -18" stroke="${K}" stroke-width="1" opacity=".3"/>
-   <circle cx="-8" cy="-24" r="9" fill="#fff" ${ink(2.5)}/><text x="-8" y="-19.5" text-anchor="middle" font-family="Bangers,Impact,sans-serif" font-size="13" fill="${K}">1</text>
+   <circle cx="-8" cy="-24" r="9" fill="#fff" ${ink(2.5)}/><text x="-8" y="-19.5" text-anchor="middle" font-family="Space Grotesk,Inter,system-ui,sans-serif" font-size="13" fill="${K}">1</text>
    <path d="M96 -27L107 -25 107 -20 98 -21Z" fill="#fff6c2" ${ink(2)}/><path d="M-103 -27L-98 -28 -98 -22 -103 -22Z" fill="#ff3b4d" ${ink(1.5)}/>
    <path d="M-40 -44L-60 -36" stroke="#fff" stroke-width="2.5" opacity=".7" stroke-linecap="round"/>
    ${wheel(-64)}${wheel(66)}

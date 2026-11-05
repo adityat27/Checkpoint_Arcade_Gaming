@@ -6,13 +6,13 @@ A static site with no build step. Upload the whole folder (`index.html`, `css/`,
 
 ```
 index.html              the page: top bar + animated logo, hub skeleton, profile sheet, lobby, results popup, and the list of scripts (load order matters)
-img/cards/              each game's card picture (<id>.webp, tall) and featured/menu banner (<id>-wide.webp): real in-game 3D renders and screenshots
+img/cards/              each game's card picture (<id>.webp, tall) and featured/menu banner (<id>-wide.webp): poster art made from each game's own 3D models and drawings
 css/
-  base.css              comic colours, .card / .btn inside the game screens
+  base.css              shared pieces on the game screens: .card panels, .btn buttons, inputs, room-code box (Inter / Space Grotesk)
   hub.css               the modern shell: top bar, logo animation, hub, holo cards, card-open animation, profile, game menus, lobby, results popup
   brawl.css             one stylesheet per game
   glaze.css  overdrive.css  cipher.css  hang.css  rps.css
-  boardroom.css  airhockey.css  orderup.css  deadweight.css  slipstream.css
+  boardroom.css  airhockey.css  orderup.css  deadweight.css  slipstream.css  maze.css
 js/core/                shared systems (loaded first)
   utils.js              $, wait, rng, esc, TOUCH_UI, need3D() / needNet() library loaders
   audio.js              music themes (THEMES) + sound effects (SFX.name())
@@ -38,6 +38,7 @@ js/games/               one file (or folder) per game
   slipstream/core.js    Slipstream: the endless road, lane traffic, driving physics, scoring, test bot (no drawing)
   slipstream/cars.js    Slipstream: the car, bus and truck models, built in code from body cross-sections
   slipstream/game.js    Slipstream: 3D roads (coast / ridge / night), camera, HUD, touch pads, engine sound, online race
+  maze.js               Maze Munch: random symmetric mazes, monsters, fruit, bots, five modes (solo, co-op, versus, hunter, free-for-all), online
 ```
 
 Each game file starts with its menu and game-screen HTML, then the game code, then its music theme and card art at the bottom.
@@ -53,7 +54,9 @@ Each game file starts with its menu and game-screen HTML, then the game code, th
 | Change the hub's colours, fonts or card look | `css/hub.css` (`:root` variables at the top) |
 | Change a game's card text, colour, rarity or filter tags | `INFO` at the top of `js/core/hub.js` |
 | Change a card or banner picture | replace `img/cards/<id>.webp` (600×840) or `img/cards/<id>-wide.webp` (1600×640) |
-| Change the comic colours used inside games | `css/base.css` (`:root` variables at the top) |
+| Change the colours, buttons or panels used inside games | `css/base.css` (`:root` variables at the top) |
+| Change Maze Munch points, speeds or monster difficulty | `PTS`, `DIFF` and `runSpeed` / `monSpeed` in `js/games/maze.js` |
+| Change the maze shape rules | `buildMaze()` in `js/games/maze.js` |
 | Change Overdrive car handling | `OVT` near the top of the physics section in `js/games/overdrive/race.js` |
 | Change Air Hockey speed or bounce | `PH` at the top of `js/games/airhockey.js` (also: how a puck pinned on a rail squirts out, and the anti-stuck timer) |
 | Change Board Room deals, scandals or names | `LOTS` (and `FLAVOR` for the card text) at the top of `js/games/boardroom.js` |

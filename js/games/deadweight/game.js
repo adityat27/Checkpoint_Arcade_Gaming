@@ -281,7 +281,7 @@ class DWWorld{
     // signs
     C.signs.forEach(s=>{const g=new T.Group();g.position.set(s.x,s.y,s.z);g.add(this.mesh(this.G.box,'#6b4226',.1,1.1,.1,0,.55,0));
       const tex=canvasTex(512,256,(c,w,h)=>{c.fillStyle='#d9a066';c.fillRect(0,0,w,h);c.strokeStyle='#6b4226';c.lineWidth=16;c.strokeRect(8,8,w-16,h-16);c.fillStyle='#2b1a10';c.textAlign='center';c.textBaseline='middle';
-        const n=s.lines.length;s.lines.forEach((l,k)=>{c.font=(k===0&&n<3?'400 70px':'400 52px')+' Bangers,Impact,sans-serif';c.fillText(l,w/2,h/2+(k-(n-1)/2)*(n<3?78:66))})});
+        const n=s.lines.length;s.lines.forEach((l,k)=>{c.font=(k===0&&n<3?'700 64px':'700 46px')+' Space Grotesk,Inter,system-ui,sans-serif';c.fillText(l,w/2,h/2+(k-(n-1)/2)*(n<3?78:66))})});
       const board=this.mesh(new T.BoxGeometry(2,1,.08),[this.m('#b97a44'),this.m('#b97a44'),this.m('#b97a44'),this.m('#b97a44'),new T.MeshStandardMaterial({map:tex}),this.m('#b97a44')],1,1,1,0,1.45,0);g.add(board);sc.add(g)});
   }
   climberRig(i){

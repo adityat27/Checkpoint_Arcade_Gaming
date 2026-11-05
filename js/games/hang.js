@@ -145,7 +145,7 @@ $('#hgo').onclick=()=>join('hang');
 ART_GEN.hang=(()=>{const {K,ink,rays,dots}=ART;
 function hang(W,n){
   const cx=W/2,u='_h'+n;
-  const tile=(x,y,r,l,bg,fg='#14111f')=>`<g transform="translate(${x} ${y}) rotate(${r})"><rect x="-13" y="-13" width="26" height="26" rx="5" fill="${bg}" ${ink(2.5)}/><text y="7.5" text-anchor="middle" font-family="Bangers,Impact,sans-serif" font-size="21" fill="${fg}">${l}</text></g>`;
+  const tile=(x,y,r,l,bg,fg='#14111f')=>`<g transform="translate(${x} ${y}) rotate(${r})"><rect x="-13" y="-13" width="26" height="26" rx="5" fill="${bg}" ${ink(2.5)}/><text y="7.5" text-anchor="middle" font-family="Space Grotesk,Inter,system-ui,sans-serif" font-size="21" fill="${fg}">${l}</text></g>`;
   let cl='';[[cx-190,22,1],[cx+250,34,1.1],[cx-290,40,.9],[cx-60,12,.7]].forEach(([x,y,s])=>cl+=`<g transform="translate(${x} ${y}) scale(${s})" fill="#fff" ${ink(2.5)}><path d="M-22 6Q-24 -6 -12 -6Q-8 -16 4 -12Q14 -18 20 -6Q30 -4 26 6Z"/></g>`);
   return `<svg viewBox="0 0 ${W} 130" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs>
   <linearGradient id="hs${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#54c6ff"/><stop offset="1" stop-color="#c9f0ff"/></linearGradient>${dots('hd'+u,'#fff',.35)}</defs>
@@ -171,7 +171,7 @@ function hang(W,n){
     <path d="M15 12q4 3 2 8" stroke="#2d7bff" stroke-width="3" fill="none" stroke-linecap="round"/>
    </g>
   </g>
-  <g font-family="Bangers,Impact,sans-serif" font-size="15" fill="#fff" text-anchor="middle">
+  <g font-family="Space Grotesk,Inter,system-ui,sans-serif" font-size="15" fill="#fff" text-anchor="middle">
    <text x="${cx-74}" y="125">H</text><text x="${cx-42}" y="125">_</text><text x="${cx-10}" y="125">N</text><text x="${cx+22}" y="125">_</text><text x="${cx+54}" y="125">_</text>
   </g>
   <g class="htile">${tile(cx-78,36,-10,'A','#2fe3a0')}${tile(cx-48,70,8,'X','#ff8a8a')}${tile(cx+80,58,10,'?','#ffe14d')}</g>
