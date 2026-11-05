@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f5f6f9">
 <title>CHECKPOINT!!</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@700;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/hub.css">
 <link rel="stylesheet" href="css/brawl.css">
 <link rel="stylesheet" href="css/glaze.css">
 <link rel="stylesheet" href="css/overdrive.css">
@@ -17,36 +20,63 @@
 <link rel="stylesheet" href="css/deadweight.css">
 <link rel="stylesheet" href="css/slipstream.css">
 </head><body>
-<!-- The hub. Each game adds its own menu + game screens to #app (see js/games/). -->
+<!-- The hub. Each game adds its own menu + game screens to #app (see js/games/). The game cards are built by js/core/hub.js. -->
 <div id="app">
-<h1 class="logo" id="home-logo" title="Back to the CHECKPOINT!! hub">CHECKPOINT<span>!!</span></h1>
+<header class="topbar">
+  <button class="brand" id="home-logo" type="button" aria-label="CHECKPOINT, back to all games">
+    <svg class="mark" viewBox="0 0 44 44" aria-hidden="true">
+      <circle class="mk-ring" cx="22" cy="22" r="21"/>
+      <rect class="mk-bg" x="2" y="2" width="40" height="40" rx="12"/>
+      <path class="mk-pole" d="M13.5 10.5V33.5"/>
+      <circle class="mk-knob" cx="13.5" cy="9.8" r="2.2"/>
+      <g class="mk-c"><rect class="a" x="14.5" y="11" width="5" height="15"/><rect class="w" x="14.5" y="11" width="5" height="5"/><rect class="w" x="14.5" y="21" width="5" height="5"/></g>
+      <g class="mk-c"><rect class="a" x="19.5" y="11" width="5" height="15"/><rect class="w" x="19.5" y="16" width="5" height="5"/></g>
+      <g class="mk-c"><rect class="a" x="24.5" y="11" width="5" height="15"/><rect class="w" x="24.5" y="11" width="5" height="5"/><rect class="w" x="24.5" y="21" width="5" height="5"/></g>
+      <g class="mk-c"><rect class="a" x="29.5" y="11" width="5" height="15"/><rect class="w" x="29.5" y="16" width="5" height="5"/></g>
+    </svg>
+    <span class="wm" aria-hidden="true"><span class="wm-t" id="wmt">CHECKPOINT</span><span class="wm-x"><i></i><i></i></span></span>
+  </button>
+  <div class="tb-r">
+    <button class="pchip" id="pchip" type="button" aria-label="Edit your profile"><span class="av" id="pchav"></span><span class="pn"><span id="pchn">Hero</span><small>Edit profile</small></span></button>
+    <div id="snd">
+      <button class="chip" id="bt" title="Light or dark theme" aria-label="Switch light or dark theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></button>
+      <button class="chip" id="bm" title="Music on/off" aria-label="Music on or off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></button>
+      <button class="chip" id="bs" title="Sound effects on/off" aria-label="Sound effects on or off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></button>
+    </div>
+  </div>
+</header>
 
 <section id="hub">
-<div class="card prof">
-  <div class="pava" id="pava"></div>
-  <div class="pmain">
-    <label class="nml">Your Name<input id="nm" maxlength="12" autocomplete="off"></label>
+<div class="inv2" id="ibx" hidden><b id="it"></b><button class="hb ink" id="ib">Join now</button></div>
+<p class="note" id="hmsg"></p>
+<section class="feat" id="feat" aria-label="Featured game">
+  <div class="feat-bg" id="ftbg"></div>
+  <div class="feat-body" id="ftbody">
+    <div class="feat-tags"><span class="pill" id="ftg"></span><span class="pill new" id="ftnew" hidden>New</span></div>
+    <h1 id="ftn"></h1>
+    <p id="ftd"></p>
+    <div class="feat-meta" id="ftm"></div>
+    <div class="feat-cta">
+      <button class="hb pri" id="ftplay" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></svg>Play</button>
+      <button class="hb sec" id="ftonline" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></svg><span>Online<span class="hm"> with a friend</span></span></button>
+    </div>
+  </div>
+  <div class="feat-dots" id="ftdots" role="group" aria-label="Featured games"></div>
+</section>
+<div class="ghead"><h2>All games <span id="gcount"></span></h2><div class="filters" id="filters" role="group" aria-label="Filter games"></div></div>
+<div class="games" id="games"></div>
+</section>
+
+<!-- your profile (opened from the chip in the top bar) -->
+<div class="sheetov" id="profile" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="pttl">
+    <div class="sh-head"><h2 id="pttl">Your profile</h2><button class="xbtn" id="pclose" type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="prof2"><div class="pava" id="pava"></div><label class="nml">Your name<input id="nm" maxlength="12" autocomplete="off"></label></div>
     <p class="lb">Pick your avatar</p>
     <div class="picks" id="picks"></div>
+    <button class="hb ink" id="pdone" type="button">Done</button>
   </div>
 </div>
-<div class="card inv2" id="ibx" hidden><b id="it"></b><button class="btn hot" id="ib">Join now!</button></div>
-<p class="note" id="hmsg" style="text-align:center"></p>
-<h2 class="hh">Pick a game!</h2>
-<div class="games">
-<button class="gc" data-g="brawl" data-badge="FIGHTING · 1-2P"><span class="art a" id="a1"></span><b>Bam! Brawl</b></button>
-<button class="gc" data-g="donut" data-badge="3D BAKERY · 1-2P"><span class="art min b" data-art="m_donut"></span><b>Glaze Craze</b></button>
-<button class="gc" data-g="race" data-badge="3D RACING · 1-2P"><span class="art scene" data-art="race"></span><b>Overdrive</b></button>
-<button class="gc" data-g="puzzle" data-badge="PUZZLES · 1-2P"><span class="art full dark" data-art="puzzle"></span><b>Cipher Sync</b></button>
-<button class="gc" data-g="hang" data-badge="WORDS · 1-2P"><span class="art scene" data-art="hang"></span><b>Hang Tight</b></button>
-<button class="gc" data-g="rps" data-badge="QUICK DUEL · 1-2P"><span class="art scene" data-art="rps"></span><b>Rock Paper Scissors</b></button>
-<button class="gc" data-g="board" data-badge="STRATEGY · 1-2P"><span class="art scene" data-art="board"></span><b>Board Room</b></button>
-<button class="gc" data-g="hockey" data-badge="ARCADE · 1-2P"><span class="art scene" data-art="hockey"></span><b>Air Hockey</b></button>
-<button class="gc" data-g="order" data-badge="CO-OP COOKING · 2P ONLINE"><span class="art scene" data-art="order"></span><b>Order Up!</b></button>
-<button class="gc" data-g="deadweight" data-badge="3D CO-OP CLIMB · 1-2P"><span class="art scene" data-art="deadweight"></span><b>Deadweight</b></button>
-<button class="gc" data-g="slip" data-badge="3D HIGHWAY · 1-2P"><span class="art scene" data-art="slip"></span><b>Slipstream</b></button>
-</div>
-</section>
 
 <!-- ONLINE LOBBY (shared by every game) -->
 <section id="lobby" class="card" hidden style="text-align:center">
@@ -58,11 +88,6 @@
 </div>
 
 <div id="net" hidden>○ connecting...</div>
-<div id="snd">
-  <button class="chip" id="bt" title="Switch Light / Dark Arcade Theme" aria-label="Switch Theme">🌓</button>
-  <button class="chip" id="bm" title="Music on/off" aria-label="Music on or off">🎵</button>
-  <button class="chip" id="bs" title="Sound effects on/off" aria-label="Sound effects on or off">🔊</button>
-</div>
 <div id="over" hidden><div class="card"><h2 id="ot">YOU WIN!</h2><p id="os"></p><div class="row"><button class="btn m" id="rm">Rematch!</button><button class="btn b" id="mn">Menu</button></div></div></div>
 
 
@@ -89,4 +114,5 @@
 <script src="js/games/slipstream/core.js"></script>
 <script src="js/games/slipstream/cars.js"></script>
 <script src="js/games/slipstream/game.js"></script>
+<script src="js/core/hub.js"></script>
 </body></html>
