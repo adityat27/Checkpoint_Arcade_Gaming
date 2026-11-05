@@ -670,7 +670,7 @@ function rivalPose(now){
 }
 function rivalKey(){const c=(opp&&opp.x&&opp.x.car)||['gt',4];return c.join('/')+(on||'')}
 function nameTag(n){const cv=document.createElement('canvas');cv.width=256;cv.height=64;const c=cv.getContext('2d');c.fillStyle='rgba(20,17,31,.85)';const w=Math.min(250,44+String(n).slice(0,12).length*19);
-  c.beginPath();c.roundRect?c.roundRect(128-w/2,8,w,48,14):c.rect(128-w/2,8,w,48);c.fill();c.fillStyle='#ffe14d';c.font='bold 30px Bangers,Impact,sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText(String(n).slice(0,12).toUpperCase(),128,33);
+  c.beginPath();c.roundRect?c.roundRect(128-w/2,8,w,48,14):c.rect(128-w/2,8,w,48);c.fill();c.fillStyle='#ffe14d';c.font='700 30px  Space Grotesk,Inter,system-ui,sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText(String(n).slice(0,12).toUpperCase(),128,33);
   const t=new THREE.CanvasTexture(cv);t.encoding=THREE.sRGBEncoding;const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,depthTest:false,transparent:true}));s.scale.set(3.2,.8,1);s.position.set(0,2.6,0);s.renderOrder=5;return s}
 function checkOnline(force){
   if(G_.mode!=='online'||G_.state==='done'||G_.state==='count'||G_.state==='idle')return;

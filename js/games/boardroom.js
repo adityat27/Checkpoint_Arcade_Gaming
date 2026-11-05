@@ -457,7 +457,7 @@ ART_GEN.board=(W,n)=>{
   // a deal card under the gavel, two bids face up, cash in the air (kept clear of the top-right badge)
   const cx=W/2,K='#14111f',u='_bb'+n,k=Math.min(1,(W-10)/240);
   const card=(x,y,w,h,rot,inner,fill='#fff')=>`<g transform="translate(${x} ${y}) rotate(${rot})"><rect x="${-w/2+3}" y="${-h/2+4}" width="${w}" height="${h}" rx="8" fill="${K}"/><rect x="${-w/2}" y="${-h/2}" width="${w}" height="${h}" rx="8" fill="${fill}" stroke="${K}" stroke-width="3"/>${inner}</g>`;
-  const bid=(x,y,rot,num,col,cls)=>`<g class="${cls}">${card(x,y,40,56,rot,`<rect x="-17" y="-25" width="34" height="11" rx="4" fill="${col}"/><text y="16" text-anchor="middle" font-family="Bangers,Impact,sans-serif" font-size="30" fill="${col}" stroke="${K}" stroke-width="1.5" paint-order="stroke">${num}</text>`)}</g>`;
+  const bid=(x,y,rot,num,col,cls)=>`<g class="${cls}">${card(x,y,40,56,rot,`<rect x="-17" y="-25" width="34" height="11" rx="4" fill="${col}"/><text y="16" text-anchor="middle" font-family="Space Grotesk,Inter,system-ui,sans-serif" font-size="30" fill="${col}" stroke="${K}" stroke-width="1.5" paint-order="stroke">${num}</text>`)}</g>`;
   const bill=(x,y,r,c)=>`<g transform="translate(${x} ${y}) rotate(${r})"><rect x="-11" y="-6" width="22" height="12" rx="2" fill="${c}" stroke="${K}" stroke-width="2"/><circle r="3.2" fill="none" stroke="${K}" stroke-width="1.5"/></g>`;
   const gx=cx-40,gy=40,hx=gx-34,hy=gy-34;   // gavel head next to the card, handle up and to the left
   return `<svg viewBox="0 0 ${W} 130" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs>${ART.dots('bd'+u,'#fff',.22)}
@@ -467,8 +467,8 @@ ART_GEN.board=(W,n)=>{
   <g transform="translate(${cx} 72) scale(${k}) translate(${-cx} -72)">
    <g class="bbqm">${bill(cx-108,52,-20,'#9cf2c4')}${bill(cx+104,58,18,'#9cf2c4')}${bill(cx-86,96,8,'#9cf2c4')}</g>
    ${bid(cx-66,88,-10,'12','#ff3e8a','bbq1')}${bid(cx+66,88,10,'9','#2d7bff','bbq2')}
-   <g class="bbqd">${card(cx,74,62,84,-2,`<rect x="-27" y="-38" width="54" height="15" rx="5" fill="#2fe3a0" stroke="${K}" stroke-width="2"/><text y="-26.5" text-anchor="middle" font-family="Bangers,Impact,sans-serif" font-size="12" fill="${K}">DEAL</text>
-     <text y="7" text-anchor="middle" font-size="25">🚀</text><text y="31" text-anchor="middle" font-family="Bangers,Impact,sans-serif" font-size="20" fill="#2fe3a0" stroke="${K}" stroke-width="1.3" paint-order="stroke">+$9M</text>`)}</g>
+   <g class="bbqd">${card(cx,74,62,84,-2,`<rect x="-27" y="-38" width="54" height="15" rx="5" fill="#2fe3a0" stroke="${K}" stroke-width="2"/><text y="-26.5" text-anchor="middle" font-family="Space Grotesk,Inter,system-ui,sans-serif" font-size="12" fill="${K}">DEAL</text>
+     <text y="7" text-anchor="middle" font-size="25">🚀</text><text y="31" text-anchor="middle" font-family="Space Grotesk,Inter,system-ui,sans-serif" font-size="20" fill="#2fe3a0" stroke="${K}" stroke-width="1.3" paint-order="stroke">+$9M</text>`)}</g>
    <g class="bbqg" style="transform-origin:${hx}px ${hy}px"><g transform="translate(${gx} ${gy}) rotate(135)">
      <rect x="-3.5" y="8" width="7" height="44" rx="3" fill="#8a4b22" stroke="${K}" stroke-width="2.5"/>
      <rect x="-19" y="-10" width="38" height="20" rx="6" fill="#b8682e" stroke="${K}" stroke-width="3"/><rect x="-21" y="-8" width="6" height="16" rx="2.5" fill="#ffe14d" stroke="${K}" stroke-width="2"/><rect x="15" y="-8" width="6" height="16" rx="2.5" fill="#ffe14d" stroke="${K}" stroke-width="2"/></g>

@@ -1,11 +1,11 @@
 /* Hang Tight */
 .htop,.qtop{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;padding:8px 14px;margin-bottom:10px}
 .hpl,.qpl{display:flex;flex-direction:column;min-width:0;border-radius:10px;padding:2px 8px;transition:background .2s}
-.hpl b,.qpl b{font:400 22px Bangers,Impact,sans-serif;letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hpl b,.qpl b{font:700 19.36px Space Grotesk,Inter,system-ui,sans-serif;letter-spacing:.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hpl span{font-size:14px}.hpl.r,.qpl.r{text-align:right;align-items:flex-end}
 .hpl.turn{background:#fff3a8;box-shadow:inset 0 0 0 3px var(--org)}
 .hmid,.qmid{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center}
-#hrd,#qrd{font-size:24px;color:var(--pink);-webkit-text-stroke:1px var(--ink);paint-order:stroke fill}
+#hrd,#qrd{font-size:24px;color:var(--pink);-webkit-text-stroke:0;paint-order:stroke fill}
 .hcat{background:var(--ink);color:#ffe14d;font-size:12.5px;padding:2px 10px;border-radius:999px;white-space:nowrap}
 #hgame.solo .hpl.r{opacity:.75}
 .hmain{display:grid;grid-template-columns:minmax(150px,240px) 1fr;gap:16px;align-items:center;padding:12px 16px;background:linear-gradient(#fffdf4,#fff3d6)}
@@ -21,22 +21,22 @@
 .hrole{margin:0;font-size:15px;text-align:center;min-height:1.3em}
 .hword{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px}
 .hwd{display:flex;gap:6px}
-.hl{width:clamp(28px,5.4vw,46px);height:clamp(38px,7vw,56px);border-bottom:5px solid var(--ink);display:grid;place-items:end center;font:400 clamp(26px,5vw,42px)/1 Bangers,Impact,sans-serif;padding-bottom:3px;color:var(--ink)}
+.hl{width:clamp(28px,5.4vw,46px);height:clamp(38px,7vw,56px);border-bottom:4px solid rgba(29,32,48,.8);border-radius:2px;display:grid;place-items:end center;font:700 calc(clamp(26px,5vw,42px) * .88)/1 Space Grotesk,Inter,system-ui,sans-serif;padding-bottom:3px;color:var(--ink)}
 .hl.got{animation:hlpop .4s cubic-bezier(.3,1.7,.5,1);color:#0b7a4b}
 .hl.miss{color:#e10045}.hl.peek{color:#b9a9d8}
 @keyframes hlpop{from{transform:translateY(-18px) scale(1.4)}}
 .hwait{font-size:44px;animation:pulse .6s infinite alternate}
 .hlives{display:flex;gap:4px;font-size:22px}.hlives i{font-style:normal;color:#ff3e4f;transition:.3s}.hlives i.x{filter:grayscale(.4);opacity:.6}
-.hmsg{margin:0;min-height:1.4em;font:400 22px Bangers,Impact,sans-serif;letter-spacing:.6px}
+.hmsg{margin:0;min-height:1.4em;font:700 19.36px Space Grotesk,Inter,system-ui,sans-serif;letter-spacing:.6px}
 .hmsg.good{color:#0b7a4b}.hmsg.bad{color:#e10045}
 .hset{display:flex;flex-direction:column;gap:8px;width:100%;max-width:360px}
 .hsrow{display:flex;gap:8px}.hsrow input,.hsrow select{flex:1;min-width:0}
-#hwin{font:400 26px Bangers,Impact,sans-serif;letter-spacing:3px;text-transform:uppercase}
+#hwin{font:700 22.88px Space Grotesk,Inter,system-ui,sans-serif;letter-spacing:3px;text-transform:uppercase}
 .hkeys{display:flex;flex-direction:column;align-items:center;gap:6px;margin:12px 0 4px}
 .hkr{display:flex;gap:5px;justify-content:center;width:100%}
-.hk{flex:0 1 46px;height:50px;min-width:0;border:3px solid var(--ink);border-radius:10px;background:#fff;box-shadow:0 4px 0 var(--ink);font:400 24px Bangers,Impact,sans-serif;color:var(--ink);cursor:pointer;transition:transform .08s,box-shadow .08s}
-.hk:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
-.hk.ok{background:#2fe3a0;color:#fff;-webkit-text-stroke:1px var(--ink)}.hk.no{background:#ffd0d6;color:#e10045;opacity:.75}
+.hk{flex:0 1 46px;height:50px;min-width:0;border:1px solid var(--g-line);border-radius:10px;background:#fff;box-shadow:0 8px 18px -10px rgba(10,12,30,.45);font:700 21.12px Space Grotesk,Inter,system-ui,sans-serif;color:var(--ink);cursor:pointer;transition:transform .08s,box-shadow .08s}
+.hk:active:not(:disabled){transform:translateY(3px);box-shadow:0 2px 6px -2px rgba(10,12,30,.35)}
+.hk.ok{background:#2fe3a0;color:#fff;-webkit-text-stroke:0}.hk.no{background:#ffd0d6;color:#e10045;opacity:.75}
 .hk:disabled{cursor:default}.hkeys.off .hk:not(.ok):not(.no){opacity:.45}
 .hbtns{justify-content:center}.hbtns .btn{flex:0 1 auto;min-width:120px}
 @media(max-width:620px){.hmain{grid-template-columns:110px 1fr;gap:8px;padding:10px}.hk{height:44px;font-size:20px;border-width:2px;border-radius:8px}.hkr{gap:3px}.hpl b,.qpl b{font-size:17px}#hrd,#qrd{font-size:19px}}

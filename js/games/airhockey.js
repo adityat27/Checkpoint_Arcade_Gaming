@@ -456,7 +456,7 @@ ART_GEN.hockey=(W,n)=>{
   <g fill="#ff3e8a">${Array.from({length:Math.ceil(W/40)},(_,i)=>`<rect x="${i*40+6}" y="0" width="3" height="130" opacity="${(.1+(i%3)*.07).toFixed(2)}"/>`).join('')}</g>
   <g transform="translate(${cx} 0) scale(${k}) translate(${-cx} 0)">
    <rect x="${cx-34}" y="6" width="68" height="22" rx="5" fill="#05030f" stroke="#ff3e8a" stroke-width="2.5"/>
-   <text x="${cx}" y="23" text-anchor="middle" font-family="Bangers,Impact,sans-serif" font-size="18" fill="#ff5c8a" letter-spacing="2">6 : 5</text>
+   <text x="${cx}" y="23" text-anchor="middle" font-family="Space Grotesk,Inter,system-ui,sans-serif" font-size="18" fill="#ff5c8a" letter-spacing="2">6 : 5</text>
    <path d="${quad([-6,-4],[106,-4],[106,104],[-6,104])}" fill="#14111f"/>
    <path d="${quad([-3,-2],[103,-2],[103,102],[-3,102])}" fill="#e8ecf6" stroke="${K}" stroke-width="3"/>
    <path d="${quad([0,0],[100,0],[100,100],[0,100])}" fill="url(#at${u})" stroke="${K}" stroke-width="2"/>

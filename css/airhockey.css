@@ -8,18 +8,18 @@ html.ahon #net{z-index:40;left:auto;right:calc(10px + env(safe-area-inset-right,
 #ahstage{position:absolute;inset:0;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 #ahcv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:none}
 #ahmsg{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;text-align:center;z-index:4}
-#ahmsg span{font:400 clamp(44px,13vmin,150px)/1 Bangers,Impact,sans-serif;color:#fff;-webkit-text-stroke:4px var(--ink);paint-order:stroke fill;text-shadow:6px 6px 0 var(--ink);animation:rpop .35s ease-out}
-#ahmsg span.g{color:#ffe14d}#ahmsg small{display:block;font:900 clamp(15px,2.2vmin,22px) 'Comic Neue',sans-serif;color:#fff;-webkit-text-stroke:0;text-shadow:0 2px 0 #000;margin-top:6px}
+#ahmsg span{font:700 calc(clamp(44px,13vmin,150px) * .88)/1 Space Grotesk,Inter,system-ui,sans-serif;color:#fff;-webkit-text-stroke:0;paint-order:stroke fill;text-shadow:0 12px 26px -14px rgba(10,12,30,.5);animation:rpop .35s ease-out}
+#ahmsg span.g{color:#ffe14d}#ahmsg small{display:block;font:600 clamp(15px,2.2vmin,22px) Inter,system-ui,sans-serif;color:#fff;-webkit-text-stroke:0;text-shadow:0 2px 0 #000;margin-top:6px}
 /* score bar floats at the top centre */
 #ahhud{position:absolute;z-index:5;top:calc(8px + env(safe-area-inset-top,0px));left:50%;translate:-50% 0;margin:0;width:min(560px,calc(100vw - 340px));min-width:260px;
-  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);padding:4px 14px;pointer-events:none;box-shadow:4px 4px 0 #14111f99}
-.ahpl b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;font:400 22px Bangers,Impact,sans-serif;letter-spacing:.5px}.ahpl span{font-size:13px}
-#ahsc{font:400 clamp(30px,5vmin,46px)/1 Bangers,Impact,sans-serif;letter-spacing:2px;-webkit-text-stroke:1.5px var(--ink);paint-order:stroke fill;color:#fff}
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);padding:4px 14px;pointer-events:none;box-shadow:0 12px 26px -14px rgba(10,12,30,.5)}
+.ahpl b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;font:700 19.36px Space Grotesk,Inter,system-ui,sans-serif;letter-spacing:.5px}.ahpl span{font-size:13px}
+#ahsc{font:700 calc(clamp(30px,5vmin,46px) * .88)/1 Space Grotesk,Inter,system-ui,sans-serif;letter-spacing:2px;-webkit-text-stroke:0;paint-order:stroke fill;color:#fff}
 #ahsc i{font-style:normal;color:var(--pink)}#ahsc em{font-style:normal;color:#2d7bff}
-.ahdot{display:inline-block;width:14px;height:14px;border-radius:50%;border:3px solid var(--ink);vertical-align:-2px;margin:0 6px}
+.ahdot{display:inline-block;width:14px;height:14px;border-radius:50%;border:1px solid var(--g-line);vertical-align:-2px;margin:0 6px}
 #ahbtns{position:absolute;z-index:6;top:calc(10px + env(safe-area-inset-top,0px));left:calc(10px + env(safe-area-inset-left,0px));display:flex;gap:6px}
-.ahb{font:900 13px 'Comic Neue',system-ui,sans-serif;border:3px solid var(--ink);border-radius:12px;background:#fff;color:#14111f;padding:6px 12px;cursor:pointer;box-shadow:3px 3px 0 #14111f99}
-.ahb:hover{background:#ffe14d}.ahb:active{translate:2px 2px;box-shadow:1px 1px 0 #14111f99}
+.ahb{font:600 13px Inter,system-ui,sans-serif;border:1px solid var(--g-line);border-radius:12px;background:#fff;color:#14111f;padding:6px 12px;cursor:pointer;box-shadow:0 12px 26px -14px rgba(10,12,30,.5)}
+.ahb:hover{background:#ffe14d}.ahb:active{translate:2px 2px;box-shadow:0 2px 6px -2px rgba(10,12,30,.35)}
 #ahquit{background:#ffe0e5}
 @media (max-width:700px){#ahhud{width:auto;left:auto;right:calc(8px + env(safe-area-inset-right,0px));translate:none;top:calc(52px + env(safe-area-inset-top,0px));min-width:0;max-width:calc(100vw - 16px)}
  .ahpl b{font-size:17px}.ahpl span{display:none}#ahsc{font-size:30px}

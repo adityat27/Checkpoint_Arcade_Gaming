@@ -93,7 +93,7 @@ body{background:var(--h-bg);transition:background-color .7s ease}
 .feat-body{position:relative;padding:44px 48px;max-width:620px;transition:opacity .28s ease,transform .28s ease}
 .feat-body.swap{opacity:0;transform:translateY(6px)}
 .feat-tags{display:flex;gap:8px;flex-wrap:wrap}
-.pill{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:999px;background:rgba(255,255,255,.14);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font:600 12px/1 var(--h-font);letter-spacing:.08em;text-transform:uppercase;color:#fff}
+.pill{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:999px;background:rgba(20,22,30,.46);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);font:600 12px/1 var(--h-font);letter-spacing:.08em;text-transform:uppercase;color:#fff}
 .pill.new{background:var(--acc)}
 .pill svg{width:14px;height:14px}
 .feat h1{font:700 clamp(44px,6.2vw,80px)/.96 var(--h-disp);letter-spacing:-.035em;margin:16px 0 14px;color:#fff;text-shadow:0 2px 30px rgba(0,0,0,.35)}
@@ -105,7 +105,7 @@ body{background:var(--h-bg);transition:background-color .7s ease}
 .hb svg{width:18px;height:18px;flex:none}
 .hb:hover{transform:translateY(-1px)}.hb:active{transform:scale(.98)}
 .hb.pri{background:#fff;color:#15161a;box-shadow:0 10px 30px -12px rgba(0,0,0,.6)}
-.hb.sec{background:rgba(255,255,255,.14);color:#fff;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.hb.sec{background:rgba(20,22,30,.5);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
 .hb.ink{background:var(--h-ink);color:var(--h-card)}
 .feat-dots{position:absolute;right:28px;bottom:28px;display:flex;gap:6px}
 .feat-dots button{width:8px;height:8px;padding:0;border:0;border-radius:99px;background:rgba(255,255,255,.4);cursor:pointer;transition:width .35s var(--ease),background .35s}
@@ -119,21 +119,19 @@ body{background:var(--h-bg);transition:background-color .7s ease}
 .filters button[aria-pressed="true"]{background:var(--h-ink);color:var(--h-card);border-color:var(--h-ink)}
 
 /* ---------- the trading cards ---------- */
-.games{display:grid;grid-template-columns:repeat(auto-fill,minmax(186px,1fr));gap:24px 22px;perspective:1400px}
-.gc{position:relative;display:flex;padding:0;border:0;background:none;cursor:pointer;font:inherit;color:var(--h-ink);text-align:left;border-radius:22px;-webkit-tap-highlight-color:transparent;touch-action:pan-y}
+.games{display:grid;grid-template-columns:repeat(auto-fill,minmax(186px,1fr));gap:24px 22px}
+.gc{position:relative;display:flex;padding:0;border:0;background:none;cursor:pointer;font:inherit;color:var(--h-ink);text-align:left;border-radius:22px;-webkit-tap-highlight-color:transparent;touch-action:pan-y;contain:layout style}
 .gc:focus-visible{outline:none}
-.gc:focus-visible .gc-in{box-shadow:var(--h-sh-hi),0 0 0 3px var(--acc)}
-.gc-in{flex:1;width:100%;position:relative;display:flex;flex-direction:column;gap:10px;padding:8px 8px 14px;border-radius:22px;background:var(--h-card);overflow:hidden;box-shadow:var(--h-sh);
-  transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(0);transition:transform .6s var(--ease),box-shadow .35s ease;will-change:transform}
-.gc.sel .gc-in{box-shadow:var(--h-sh),0 0 0 3px var(--acc)}
-.gc.tilt .gc-in{transform:translateY(-8px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) scale(1.035);transition:transform .09s linear,box-shadow .35s ease;box-shadow:var(--h-sh-hi)}
-.gc.sel.tilt .gc-in{box-shadow:var(--h-sh-hi),0 0 0 3px var(--acc)}
-.gc-art{position:relative;display:block;border-radius:15px;overflow:hidden;aspect-ratio:5/7;background:#14151b}
-.gc-art img{position:absolute;inset:-4%;width:108%;height:108%;object-fit:cover;display:block;transform:translate3d(calc(var(--nx,0)*-14px),calc(var(--ny,0)*-14px),0) scale(1);transition:transform .6s var(--ease)}
-.gc.tilt .gc-art img{transition:transform .09s linear;transform:translate3d(calc(var(--nx,0)*-14px),calc(var(--ny,0)*-14px),0) scale(1.04)}
+.gc:focus-visible .gc-in{box-shadow:var(--h-sh),0 0 0 3px var(--acc)}
+/* the card body: hub.js moves it with a spring (inline transform), so no CSS transition here */
+.gc-in{flex:1;width:100%;position:relative;display:flex;flex-direction:column;gap:10px;padding:8px 8px 14px;border-radius:22px;background:var(--h-card);box-shadow:var(--h-sh);transform:translateZ(0);backface-visibility:hidden}
+.gc.sel .gc-in{box-shadow:var(--h-sh),0 0 0 2px var(--acc)}
+/* the lifted shadow is its own layer that only fades (no box-shadow repaint while moving) */
+.gc-sh{position:absolute;inset:0;border-radius:inherit;box-shadow:var(--h-sh-hi);opacity:0;pointer-events:none;z-index:-1}
+.gc-art{position:relative;display:block;border-radius:15px;overflow:hidden;aspect-ratio:5/7;background:#14151b;transform:translateZ(0)}
+.gc-art img{position:absolute;inset:-4%;width:108%;height:108%;object-fit:cover;display:block;will-change:transform}
 .gc-tag{position:absolute;top:16px;display:inline-flex;align-items:center;gap:4px;height:23px;padding:0 9px;border-radius:999px;font:700 10.5px/1 var(--h-font);letter-spacing:.07em;text-transform:uppercase;z-index:4}
 .gc-tag svg{width:10px;height:10px}
-.gc-tag.rar{right:16px;background:rgba(255,255,255,.92);color:#15161a}
 .gc-tag.nw{left:16px;background:var(--gacc,var(--acc));color:#fff}
 .gc-plate{display:flex;flex-direction:column;gap:4px;padding:0 5px}
 .gc-genre{font:600 11px/1 var(--h-font);letter-spacing:.08em;text-transform:uppercase;color:var(--h-sub)}
@@ -141,33 +139,20 @@ body{background:var(--h-bg);transition:background-color .7s ease}
 .gc-stats{display:flex;flex-wrap:wrap;gap:5px;padding:0 5px}
 .gc-stats span{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 8px;border-radius:999px;background:var(--h-chip);font:600 11.5px/1 var(--h-font);color:var(--h-sub)}
 .gc-stats svg{width:12px;height:12px}
-/* holo foil + glare: big layers that slide (transform only, so they stay smooth) */
-.foil,.glare{position:absolute;inset:0;border-radius:inherit;pointer-events:none;overflow:hidden;z-index:3}
-.foil{mix-blend-mode:color-dodge;opacity:0;transition:opacity .35s ease}
-.foil::before{content:"";position:absolute;inset:-60%;background:linear-gradient(115deg,transparent 30%,rgba(255,62,138,.55) 38%,rgba(255,225,77,.6) 44%,rgba(47,227,160,.6) 50%,rgba(56,214,255,.6) 56%,rgba(178,140,255,.55) 62%,transparent 70%);transform:translate3d(calc(var(--nx,0)*-46%),calc(var(--ny,0)*-30%),0)}
-.glare{mix-blend-mode:overlay;opacity:0;transition:opacity .35s ease}
-.glare::before{content:"";position:absolute;width:150%;height:150%;left:-25%;top:-25%;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.95) 0%,rgba(255,255,255,.25) 22%,rgba(255,255,255,0) 46%);transform:translate3d(calc(var(--nx,0)*66%),calc(var(--ny,0)*66%),0)}
-.gc.tilt .glare{opacity:.9}
-.r-holo .foil{opacity:.5}
-.r-holo .foil::before{animation:holoIdle 4.8s ease-in-out infinite alternate}
-@keyframes holoIdle{from{transform:translate3d(28%,8%,0)}to{transform:translate3d(-28%,-8%,0)}}
-.r-holo.tilt .foil{opacity:.95}.r-holo.tilt .foil::before{animation:none}
-.r-foil.tilt .foil{opacity:.8}
-.r-std.tilt .foil{opacity:.28}
-/* a light sweep across rare cards now and then */
-.r-holo .gc-art::after{content:"";position:absolute;inset:-20%;background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.45) 50%,transparent 58%);transform:translate3d(-80%,0,0);animation:sweep 6s ease-in-out infinite;pointer-events:none}
-.r-holo:nth-child(2) .gc-art::after{animation-delay:2s}.r-holo:nth-child(3) .gc-art::after{animation-delay:4s}
-@keyframes sweep{0%,72%{transform:translate3d(-80%,0,0)}100%{transform:translate3d(80%,0,0)}}
-/* phone tilt: the whole grid follows the phone */
-.games.motion .gc .gc-in{transition:transform .12s linear}
-.games.motion .glare{opacity:.55}
-.games.motion .r-foil .foil{opacity:.45}
+/* holo foil + glare: plain see-through layers that only slide and fade (no blend modes) */
+.foil,.glare{position:absolute;pointer-events:none;z-index:3;opacity:0;will-change:transform,opacity}
+.foil{inset:-60%;background:linear-gradient(115deg,transparent 34%,rgba(255,92,160,.34) 40%,rgba(255,226,110,.38) 45%,rgba(90,240,180,.36) 50%,rgba(90,214,255,.38) 55%,rgba(190,150,255,.34) 60%,transparent 66%)}
+.glare{width:150%;height:150%;left:-25%;top:-25%;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.42) 0%,rgba(255,255,255,.12) 24%,rgba(255,255,255,0) 48%)}
+/* a light sweep across the top cards now and then (transform only) */
+.r-holo .gc-art::after{content:"";position:absolute;inset:-20%;background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.32) 50%,transparent 58%);transform:translate3d(-80%,0,0);animation:sweep 7s ease-in-out infinite;pointer-events:none;z-index:2;will-change:transform}
+.r-holo:nth-child(2) .gc-art::after{animation-delay:2.3s}.r-holo:nth-child(3) .gc-art::after{animation-delay:4.6s}
+@keyframes sweep{0%,74%{transform:translate3d(-80%,0,0)}100%{transform:translate3d(80%,0,0)}}
 
 /* entrance + filtering */
-.games.enter .gc{animation:cardIn .55s var(--ease) both;animation-delay:calc(var(--i)*35ms)}
-@keyframes cardIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-.gc.flipback .gc-in{animation:flipBack .7s var(--ease) both}
-@keyframes flipBack{from{transform:rotateY(-180deg) scale(1.08)}to{transform:none}}
+.games.enter .gc{animation:cardIn .6s var(--ease) both;animation-delay:calc(var(--i)*28ms)}
+@keyframes cardIn{from{opacity:0;transform:translate3d(0,22px,0) scale(.97)}to{opacity:1;transform:none}}
+.gc.flipback .gc-in{animation:flipBack .75s var(--ease) both}
+@keyframes flipBack{from{transform:perspective(900px) rotateY(-180deg) scale(1.06)}to{transform:perspective(900px) rotateY(0) scale(1)}}
 .gc.gone{display:none}
 
 /* phones: tilt prompt */
@@ -177,19 +162,20 @@ body{background:var(--h-bg);transition:background-color .7s ease}
 .tiltask .y{background:var(--h-ink);color:var(--h-card)}.tiltask .n{background:var(--h-chip);color:var(--h-ink)}
 
 /* ---------- opening a game: the card flies up and swivels ---------- */
-.flipfx{position:fixed;z-index:60;pointer-events:none;perspective:1500px}
+.flipfx{position:fixed;z-index:60;pointer-events:none;perspective:1500px;contain:layout}
 .flipfx-in{position:relative;width:100%;height:100%;transform-style:preserve-3d;will-change:transform}
 .flipfx .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:22px;overflow:hidden}
-.flipfx .face.front .gc-in{height:100%;box-shadow:none;transform:none!important;will-change:auto;transition:none}
+.flipfx .face.front .gc-in{height:100%;box-shadow:none;transform:none!important}
+.flipfx .face.front .gc-sh,.flipfx .face.front .foil,.flipfx .face.front .glare{display:none}
 .flipfx .face.front{background:var(--h-card);transform:rotateY(0deg)}
 .flipfx .face.back{transform:rotateY(180deg);background:#0b0c10;display:grid;place-items:center;box-shadow:var(--h-sh-hi)}
 .flipfx .back img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
-.flipfx .back::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,var(--gacc) 0%,transparent 70%);opacity:.55;mix-blend-mode:screen}
+.flipfx .back::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--gacc) 60%,transparent) 0%,transparent 70%)}
 .flipfx .back::after{content:"";position:absolute;inset:8px;border-radius:16px;border:1.5px solid rgba(255,255,255,.35)}
 .flipfx .back .bk{position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;color:#fff;text-align:center;padding:16px}
 .flipfx .back .bk svg{width:64px;height:64px}
 .flipfx .back .bk b{font:700 22px/1.1 var(--h-disp);letter-spacing:-.01em;text-shadow:0 2px 16px rgba(0,0,0,.5)}
-.flipdim{position:fixed;inset:0;z-index:59;background:rgba(8,9,14,.55);opacity:0;pointer-events:none}
+.flipdim{position:fixed;inset:0;z-index:59;background:#0b0c10;opacity:0;pointer-events:none;will-change:opacity}
 
 /* ---------- profile sheet ---------- */
 .sheetov{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:16px;background:rgba(8,9,14,.5);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:fadeIn .25s ease both}
@@ -256,7 +242,7 @@ body{background:var(--h-bg);transition:background-color .7s ease}
 #lobby .note{color:var(--h-sub);font:500 14px var(--h-font)}
 
 /* ---------- results popup ---------- */
-#over{position:fixed;inset:0;background:rgba(8,9,14,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:grid;place-items:center;padding:16px;z-index:20;animation:fadeIn .3s ease both}
+#over{position:fixed;inset:0;background:rgba(8,9,14,.66);display:grid;place-items:center;padding:16px;z-index:20;animation:fadeIn .3s ease both}
 #over .card{text-align:center;max-width:440px;width:100%;background:var(--h-card);color:var(--h-ink);border:0;border-radius:28px;box-shadow:0 40px 80px -30px rgba(0,0,0,.6);padding:28px;font-family:var(--h-font);animation:sheetIn .45s var(--ease) both}
 #over h2{font:700 46px/1 var(--h-disp);letter-spacing:-.03em;margin:0 0 10px;color:var(--h-ink);-webkit-text-stroke:0;text-shadow:none}
 #over p{color:var(--h-sub);font:500 15px/1.5 var(--h-font);margin:0 0 20px}
@@ -323,3 +309,10 @@ body{background:var(--h-bg);transition:background-color .7s ease}
 .gmenu .oukit b{font:700 16px var(--h-disp)!important;-webkit-text-stroke:0!important}
 .gmenu #rgarage{border-radius:20px;overflow:hidden}
 .gmenu .lb,.gmenu h4{font:600 13px var(--h-font);color:var(--h-sub);letter-spacing:0}
+
+/* ---------- screen changes: every screen fades through (hub.js) ---------- */
+.scr-in{animation:scrIn .42s var(--ease) both}
+.scr-fade{animation:scrFade .32s ease-out both}
+@keyframes scrIn{from{opacity:0;transform:translate3d(0,14px,0)}to{opacity:1;transform:none}}
+@keyframes scrFade{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.scr-in,.scr-fade{animation:none}}

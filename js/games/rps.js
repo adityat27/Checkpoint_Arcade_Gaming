@@ -129,6 +129,6 @@ function rps(W,n){
   <g transform="translate(${cx} ${cy}) scale(${k})">
     ${badge(-74,'R','#2d7bff',90,false,'qb1')}${badge(74,'S','#ff3e5a',-90,true,'qb3')}
     <g class="qvs"><path d="${burst(36,22,10)}" fill="#ffe14d" ${ink(4)}/>
-    <text y="10" text-anchor="middle" font-family="Bangers,Impact,sans-serif" font-size="30" fill="#ffffff" stroke="#14111f" stroke-width="5" paint-order="stroke" letter-spacing="1">VS</text></g>
+    <text y="10" text-anchor="middle" font-family="Space Grotesk,Inter,system-ui,sans-serif" font-size="30" fill="#ffffff" stroke="#14111f" stroke-width="5" paint-order="stroke" letter-spacing="1">VS</text></g>
   </g></svg>`}
 return rps})();
