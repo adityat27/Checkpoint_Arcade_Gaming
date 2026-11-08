@@ -145,62 +145,84 @@ if(typeof TOUCH_UI!='undefined'&&TOUCH_UI&&window.DeviceOrientationEvent&&!reduc
     p.querySelector('.n').onclick=()=>{store('cpTilt','no');p.remove()}},1800);
 }
 
-/* ---------- opening a game ----------
-   The card lifts and swivels to its back, the back grows to fill the screen, the game's menu
-   is swapped in underneath while the screen is covered, then the cover fades away.
-   Everything moving is a compositor transform/opacity, and the heavy screen swap only
-   happens while nothing is moving, so it never stutters. */
-const MARK=$('#home-logo .mark').outerHTML;
+/* ---------- opening a game: the card's picture becomes the menu's banner ----------
+   One continuous move. The hub fades back, then a copy of the card picture glides and
+   reshapes into the menu's banner (crossfading from the tall card art to the wide shot)
+   while the rest of the menu rises in behind it. Going back plays the same move in
+   reverse, into the card you came from, at the scroll position you left. */
 const decoded=src=>{const im=new Image();im.decoding='async';im.src=src;return (im.decode?im.decode():Promise.resolve()).catch(()=>{})};
 const frames=n=>new Promise(r=>{const f=()=>--n<=0?r():requestAnimationFrame(f);requestAnimationFrame(f)});
-let covered=false;
+const EASE=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2,OUT=t=>1-Math.pow(1-t,4);
+const rectOf=el=>{const r=el.getBoundingClientRect();return{x:r.left,y:r.top,w:r.width,h:r.height}};
+const onScreen=r=>r&&r.w>0&&r.y+r.h>0&&r.y<innerHeight;
+let covered=false,hubScroll=0;
 function launch(id,online){G=id;const m=MENU_MAP[id]||'menu';show(m);SFX.sel();if(online){const b=$(ONLINE[id]);if(b)b.click()}}
+const heroOf=id=>{const m=$('#'+(MENU_MAP[id]||'menu'));return m&&(m.querySelector('.mhero')||m)};
+// the moving picture: tall card art and wide banner art stacked, crossfaded by progress
+function morphEl(id,r){const el=document.createElement('div');el.className='xfx';
+  el.innerHTML=`<img class="t" src="img/cards/${id}.webp" alt=""><img class="w" src="img/cards/${id}-wide.webp" alt="">`;
+  Object.assign(el.style,{left:r.x+'px',top:r.y+'px',width:r.w+'px',height:r.h+'px'});document.body.appendChild(el);return el}
+function morph(el,a,b,ra,rb,fa,dur){
+  const t=el.querySelector('.t'),w=el.querySelector('.w');
+  return new Promise(res=>{const t0=performance.now();const step=now=>{const p=Math.min(1,(now-t0)/dur),e=EASE(p),L=(x,y)=>x+(y-x)*e;
+    el.style.left=L(a.x,b.x)+'px';el.style.top=L(a.y,b.y)+'px';el.style.width=L(a.w,b.w)+'px';el.style.height=L(a.h,b.h)+'px';
+    el.style.borderRadius=ra.map((v,i)=>L(v,rb[i]).toFixed(1)+'px').join(' ');
+    const k=Math.min(1,Math.max(0,(fa?e:1-e)*1.6-.3));w.style.opacity=k;t.style.opacity=1-k;
+    if(p<1)requestAnimationFrame(step);else res()};requestAnimationFrame(step)})}
+// the menu's content rises in, a few rows at a time
+function riseIn(menu,skipHero){const kids=[...menu.children].filter(k=>!(skipHero&&k.classList.contains('mhero'))&&!k.hidden).slice(0,9);
+  kids.forEach((k,i)=>k.animate([{opacity:0,transform:'translate3d(0,14px,0)'},{opacity:1,transform:'none'}],{duration:420,delay:60+i*35,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'}))}
 function openGame(id,online){
   if(opening||!BY[id])return;
+  hubScroll=scrollY;
   if(reduce()){select(id,true);return launch(id,online)}
-  opening=true;const card=cardOf(id),vw=innerWidth,vh=innerHeight;
-  let r=card&&!card.classList.contains('gone')?card.getBoundingClientRect():null;
-  if(!r||r.bottom<40||r.top>vh-40){const w=Math.min(230,vw*.5),h=w*(card?card.offsetHeight/card.offsetWidth:1.6);r={left:vw/2-w/2,top:vh/2-h/2,width:w,height:h}}
-  const g=BY[id],wide=`img/cards/${id}-wide.webp`,ready=decoded(wide);
-  const fx=document.createElement('div'),dim=document.createElement('div');
-  fx.className='flipfx';dim.className='flipdim';
-  Object.assign(fx.style,{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px'});
-  fx.innerHTML=`<div class="flipfx-in"><div class="face front"></div><div class="face back" style="--gacc:${g.acc}"><img src="${wide}" alt=""><div class="bk">${MARK}<b>${g.name}</b></div></div></div>`;
-  if(card)freeze(card);
-  const front=(card?card.querySelector('.gc-in'):grid.querySelector('.gc-in')).cloneNode(true);fx.querySelector('.front').appendChild(front);
-  document.body.append(dim,fx);if(card)card.style.visibility='hidden';
-  const inner=fx.firstChild,dx=vw/2-(r.left+r.width/2),dy=vh/2-(r.top+r.height/2),s1=Math.min(1.7,vh*.6/r.height,vw*.76/r.width),
-    sC=Math.max(vw/r.width,vh/r.height)*1.25,T=(x,y,s,ry)=>`translate3d(${x}px,${y}px,0) scale(${s}) rotateY(${ry}deg)`;
-  dim.animate([{opacity:0},{opacity:.6}],{duration:520,easing:'ease-out',fill:'forwards'});
-  const a1=inner.animate([{transform:T(0,0,1,0)},{transform:T(dx*.5,dy*.5-24,(1+s1)/2*1.05,90),offset:.5},{transform:T(dx,dy,s1,180)}],
-    {duration:680,easing:'cubic-bezier(.55,.05,.25,1)',fill:'forwards'});
-  const done=()=>{covered=false;fx.remove();dim.remove();if(card)card.style.visibility='';opening=false;lastOpened=id};
-  a1.finished.then(()=>{
-    // grow the back of the card until it covers everything
-    dim.animate([{opacity:.6},{opacity:1}],{duration:380,easing:'ease-in',fill:'forwards'});
-    const bk=fx.querySelector('.bk');if(bk)bk.animate([{opacity:1},{opacity:0}],{duration:220,easing:'ease-in',fill:'forwards'});
-    return inner.animate([{transform:T(dx,dy,s1,180)},{transform:T(dx,dy,sC,180)}],{duration:420,easing:'cubic-bezier(.6,0,.75,.35)',fill:'forwards'}).finished})
-  .then(()=>ready).then(()=>{
-    // screen is covered: swap in the menu now, let it lay out and paint, then reveal it
-    covered=true;select(id,true);launch(id,online);covered=false;return frames(2)})
-  .then(()=>{const m=$('#'+(MENU_MAP[id]||'menu'));if(m&&!m.hidden)m.animate([{opacity:0,transform:'scale(1.035)'},{opacity:1,transform:'none'}],{duration:520,easing:'cubic-bezier(.2,.9,.2,1)'});
-    dim.animate([{opacity:1},{opacity:0}],{duration:460,easing:'ease-out',fill:'forwards'});
-    return fx.animate([{opacity:1},{opacity:0}],{duration:360,easing:'ease-out',fill:'forwards'}).finished})
-  .then(done,e=>{console.error('openGame',e);done()});
+  opening=true;const card=cardOf(id),art=card&&!card.classList.contains('gone')&&card.querySelector('.gc-art');
+  let r0=art?rectOf(art):null;if(!onScreen(r0)){const w=Math.min(220,innerWidth*.45);r0={x:innerWidth/2-w/2,y:innerHeight/2-w*.7,w,h:w*1.4}}
+  if(card)freeze(card);untilt(tc);
+  const done=()=>{opening=false;covered=false;lastOpened=id;if(card)card.style.visibility=''};
+  Promise.all([decoded(`img/cards/${id}-wide.webp`),decoded(`img/cards/${id}.webp`)]).then(async()=>{
+    const fx=morphEl(id,r0);if(card)card.style.visibility='hidden';
+    fx.animate([{transform:'scale(1)',boxShadow:'0 0 0 rgba(0,0,0,0)'},{transform:'scale(1.03)',boxShadow:'0 30px 60px -20px rgba(0,0,0,.45)'}],{duration:200,easing:'ease-out',fill:'forwards'});
+    await $('#hub').animate([{opacity:1,transform:'none'},{opacity:0,transform:'scale(.985)'}],{duration:200,easing:'cubic-bezier(.4,0,1,1)'}).finished;
+    // swap screens while the picture is up: the menu is laid out, its banner hidden under the picture
+    covered=true;select(id,true);launch(id,online);scrollTo(0,0);
+    const menu=$('#'+(MENU_MAP[id]||'menu')),hero=heroOf(id);if(!menu||menu.hidden){fx.remove();return done()}
+    hero.style.opacity='0';menu.animate([{opacity:0},{opacity:1}],{duration:300,easing:'ease-out'});riseIn(menu,true);
+    const r1=rectOf(hero),rad=parseFloat(getComputedStyle(menu).borderTopLeftRadius)||0;
+    fx.getAnimations().forEach(a=>a.cancel());
+    await morph(fx,r0,r1,[18,18,18,18],[rad,rad,0,0],true,520);
+    hero.style.opacity='';await frames(1);
+    await fx.animate([{opacity:1},{opacity:0}],{duration:160,easing:'ease-out'}).finished;fx.remove();done();
+  }).catch(e=>{console.error('openGame',e);document.querySelectorAll('.xfx').forEach(x=>x.remove());done()});
+}
+// back to the hub from a game's menu: the banner shrinks back into its card
+function closeToCard(was){
+  const id=lastOpened,menu=$('#'+was),hero=menu&&menu.querySelector('.mhero');
+  const r1=hero&&rectOf(hero),card=id&&cardOf(id),art=card&&card.querySelector('.gc-art');
+  scrollTo(0,hubScroll);
+  if(!onScreen(r1)||!art||card.classList.contains('gone')){$('#hub').animate([{opacity:0},{opacity:1}],{duration:320,easing:'ease-out'});return}
+  const r0=rectOf(art);if(!onScreen(r0)){$('#hub').animate([{opacity:0},{opacity:1}],{duration:320,easing:'ease-out'});return}
+  opening=true;const rad=parseFloat(getComputedStyle(menu).borderTopLeftRadius)||0,fx=morphEl(id,r1);card.style.visibility='hidden';
+  fx.querySelector('.t').style.opacity=0;
+  $('#hub').animate([{opacity:0},{opacity:1}],{duration:380,delay:80,easing:'ease-out',fill:'backwards'});
+  morph(fx,r1,r0,[rad,rad,0,0],[18,18,18,18],false,460).then(()=>{card.style.visibility='';fx.remove();opening=false});
 }
 
 /* ---------- every other screen change fades through ----------
-   The old screen goes at once, the new one rises in (opacity + a few px, compositor only).
-   Game stages only fade (no transform), so fixed overlays inside them stay put. */
+   The new screen rises in (opacity + a few px, compositor only). Game stages only fade
+   (no transform), so fixed overlays inside them stay put. */
 const STAGES=new Set(['game','dgame','rgame','pgame','hgame','qgame']);
 const _show=show;
-show=function(id){const was=screen;screen=id;_show(id);if(id!='hub')document.querySelectorAll('.tiltask').forEach(e=>e.remove());
-  if(id==was||covered||reduce())return;
+show=function(id){const was=screen;
+  if(was=='hub'&&id!='hub'&&!covered)hubScroll=scrollY;
+  screen=id;_show(id);if(id!='hub')document.querySelectorAll('.tiltask').forEach(e=>e.remove());
+  if(id==was||covered)return;
+  if(id=='hub'){if(reduce())scrollTo(0,hubScroll);else if(Object.values(MENU_MAP).includes(was))closeToCard(was);else{scrollTo(0,hubScroll);$('#hub').animate([{opacity:0},{opacity:1}],{duration:320,easing:'ease-out'})}return}
+  if(reduce())return;
   const el=$('#'+id);if(!el)return;
   const plug=Object.values(GAMES).find(g=>g.stage===id),stage=STAGES.has(id)||!!plug;
   el.classList.remove('scr-in','scr-fade');void el.offsetWidth;const c=stage?'scr-fade':'scr-in';el.classList.add(c);
-  clearTimeout(el._scrT);el._scrT=setTimeout(()=>el.classList.remove(c),520);
-  if(id=='hub'&&was!='hub'){replay();const c2=lastOpened&&cardOf(lastOpened);if(c2){c2.classList.add('flipback');setTimeout(()=>c2.classList.remove('flipback'),850)}}};
+  clearTimeout(el._scrT);el._scrT=setTimeout(()=>el.classList.remove(c),560)};
 
 /* ---------- menus: the game's 3D shot as the banner, and a quick way back ---------- */
 document.querySelectorAll('.gmenu .mart[data-art]').forEach(el=>{const id=el.dataset.art;if(!BY[id])return;

@@ -8,9 +8,12 @@
 
    Road      the endless road: its bends and hills come from a seed, and it is
              worked out as you go (from the distance), so it never runs out.
-   Traffic   lane-holding traffic. Every lane has its own speed, so cars in one
-             lane never bump into each other. Where each car is depends only on
-             the seed and the race clock, so two online players see the same cars.
+   Traffic   lane traffic. Every lane has its own speed, so cars in one lane
+             never bump into each other. Some cars in the slow lanes pull out to
+             overtake: they signal, move across and speed up to the fast lane's
+             pace, but only when the fast lane has room. Where each car is
+             depends only on the seed and the race clock, so two online players
+             see exactly the same cars.
    Driver    your car: throttle, brake, steering, nitro, walls, score.
    Bot       a simple self-driving player, used by the tests.
    ========================================================================= */
@@ -28,16 +31,18 @@ const CFG={
   curveDrift:.16,               // how much a bend pushes you to the outside
   hitShrink:.84,                // hit boxes are a little smaller than the cars (fair to the player)
   nearGap:1.1,                  // pass closer than this (m) = NEAR MISS
-  rampDist:9000                 // traffic reaches full density after about this many metres
+  rampDist:9000,                // traffic reaches full density after about this many metres
+  chg:{p:[.08,.22],dur:3.2,sig:1.8,room:7}   // lane changes: chance (easy..full traffic), seconds to move across, seconds of signalling first, spare room (m)
 };
 // player cars: top speed (m/s), acceleration, steering, width
 const STYLES={
-  gt:   {n:'Vento GT',   sub:'Low fastback coupé',     top:66,acc:9.6, steer:1.0, w:1.9, l:4.55},
-  hatch:{n:'Pocket R',   sub:'Hot hatch · nimble',     top:58,acc:11.2,steer:1.16,w:1.76,l:3.95},
-  suv:  {n:'Ridgeline X',sub:'Big SUV · strong motor', top:61,acc:9.0, steer:.94, w:1.96,l:4.8}
+  gt:    {n:'Vento GT',     sub:'V8 fastback coupé',          top:67,acc:10.2,steer:1.04,w:1.92,l:4.81,hp:480,kg:1750,zs:4.3},
+  hatch: {n:'Metro X',      sub:'Compact SUV · nimble',       top:57,acc:11.4,steer:1.18,w:1.8, l:4.0, hp:120,kg:1250,zs:9.8},
+  suv:   {n:'Ridgeback 4x4',sub:'Big SUV · tough and tall',   top:60,acc:9.0, steer:.92, w:1.86,l:4.8, hp:201,kg:2180,zs:10.5},
+  saloon:{n:'Vanta CS',     sub:'Super saloon · 4 doors',     top:70,acc:10.7,steer:.98, w:1.9, l:4.98,hp:627,kg:1825,zs:3.0}
 };
 // traffic: length / width (m), drawn in cars.js
-const VT={sedan:{l:4.5,w:1.82},hatch:{l:3.9,w:1.72},suv:{l:4.8,w:1.95},van:{l:5.2,w:2.0},bus:{l:11.6,w:2.55},truck:{l:9.8,w:2.5}};
+const VT={sedan:{l:4.45,w:1.75},hatch:{l:3.85,w:1.73},suv:{l:4.3,w:1.79},van:{l:4.75,w:1.83},bus:{l:11.6,w:2.55},truck:{l:9.8,w:2.5}};
 const VT_SMALL=[['sedan',38],['hatch',26],['suv',22],['van',14]];
 
 /* ---------- seeded randomness ---------- */
@@ -76,9 +81,9 @@ class Road{
 /* ---------- traffic ---------- */
 class Traffic{
   constructor(seed){
-    this.seed=seed;
+    this.seed=seed;this.movers=[];
     this.lanes=CFG.laneX.map((x,i)=>{const r=rng(hash(seed,1000+i)),v=CFG.laneV[i];
-      return{i,x,v,r,list:[],k:0,
+      return{i,x,v,r,list:[],k:0,to:i===0?1:i===3?2:-1,
         // first car: a clear run-up at the start in our lanes, oncoming traffic a bit further out
         next:i<2?75+r()*55+i*25:330+r()*160,
         // roughly where a player will meet this car, compared to where it started
@@ -92,27 +97,68 @@ class Traffic{
       let type;
       if(u()<big)type=u()<.45?'bus':'truck';
       else{let p=u()*100;type='sedan';for(const[t,w]of VT_SMALL){if(p<w){type=t;break}p-=w}}
-      const T=VT[type],z0=L.next+T.l/2;
-      L.list.push({id:L.i*1e6+L.k++,lane:L.i,type,l:T.l,w:T.w,z0,col:Math.floor(u()*12)});
+      const T=VT[type],z0=L.next+T.l/2,c={id:L.i*1e6+L.k++,lane:L.i,type,l:T.l,w:T.w,z0,col:Math.floor(u()*12)};
+      // a car in a slow lane may plan to pull out and overtake (decided now, checked once its neighbours exist)
+      const cu=u(),cw=u();
+      if(L.to>=0&&type!=='bus'&&type!=='truck'&&cu<lerp(CFG.chg.p[0],CFG.chg.p[1],df)){
+        // time it starts moving: roughly when a player doing ~40 m/s is 40-300 m behind it
+        const close=40-L.v,lead=onc?150+cw*150:40+cw*110,tc=(z0-lead)/close;
+        if(tc>6)c.plan={tc};
+      }
+      L.list.push(c);
+      const n=L.list.length;if(n>=2)this.check(L,n-2);
       // gap to the next car (bumper to bumper): shrinks as you get further down the road
       const min=onc?46:20,mean=onc?lerp(330,96,df):lerp(150,46,df);
       const g=min+Math.min(3*mean,-(mean-min)*Math.log(1-u()*.999));
       L.next=z0+T.l/2+g;
     }
   }
-  // cars in lane L whose centre is between zmin and zmax at race time t
+  // where a lane-changing car is at time t: {z, x, v, xv, s (0..1 across), sig}
+  chgPos(c,t){
+    const m=c.chg,A=this.lanes[c.lane],B=this.lanes[m.to],D=CFG.chg.dur,vA=A.v,vB=B.v;
+    const sig=t>=m.tc-CFG.chg.sig&&t<m.tc+D*.85;
+    if(t<m.tc)return{z:c.z0+vA*t,x:A.x,v:vA,xv:0,s:0,sig};
+    const U=Math.min(1,(t-m.tc)/D),sm=U*U*(3-2*U),zc=c.z0+vA*m.tc;
+    if(U<1)return{z:zc+vA*(t-m.tc)+(vB-vA)*D*(U*U*U-U*U*U*U/2),x:lerp(A.x,B.x,sm),v:lerp(vA,vB,sm),xv:(B.x-A.x)*6*U*(1-U)/D,s:sm,sig};
+    return{z:zc+vA*D+(vB-vA)*D/2+vB*(t-m.tc-D),x:B.x,v:vB,xv:0,s:1,sig:false};
+  }
+  // decide whether car k in lane L really changes lanes: the cars around it (in both lanes) must leave room.
+  // Uses only the seed's cars, never the order things were looked at, so every device agrees.
+  check(L,k){
+    const c=L.list[k];if(!c.plan||c.chg||c.noChg)return;
+    const B=this.lanes[L.to],m={tc:c.plan.tc,to:L.to},room=CFG.chg.room,D=CFG.chg.dur,prev=L.list[k-1],next=L.list[k+1];
+    // neighbours in the same lane that also plan to move at about the same time: neither does (symmetric rule)
+    if((prev&&prev.plan&&Math.abs(prev.plan.tc-m.tc)<14)||(next&&next.plan&&Math.abs(next.plan.tc-m.tc)<14)){c.noChg=1;return}
+    c.chg=m;
+    // the car ahead in the slow lane: we speed up toward it while still half in that lane
+    if(next){const pa=this.chgPos(c,m.tc+D*.6).z,na=next.z0+L.v*(m.tc+D*.6);if(Math.abs(na-pa)<(c.l+next.l)/2+room+4){c.chg=null;c.noChg=1;return}}
+    // the fast lane: nothing near where we join, at the start, middle and end of the move
+    const ts=[m.tc+D*.35,m.tc+D*.7,m.tc+D,m.tc+D+2],zs=ts.map(t=>this.chgPos(c,t).z);
+    const z0min=Math.min(...zs.map((z,i)=>z-B.v*ts[i]))-40,z0max=Math.max(...zs.map((z,i)=>z-B.v*ts[i]))+40;
+    this.grow(B,z0max+20);
+    for(const o of B.list){if(o.z0<z0min)continue;if(o.z0>z0max)break;
+      for(let i=0;i<ts.length;i++){const zo=o.z0+B.v*ts[i];if(Math.abs(zo-zs[i])<(c.l+o.l)/2+room){c.chg=null;c.noChg=1;return}}}
+    this.movers.push(c);
+  }
+  // cars whose centre is between zmin and zmax at race time t
   query(t,zmin,zmax,out){
     out=out||[];
     for(const L of this.lanes){
       const sh=L.v*t;this.grow(L,zmax-sh+20);
       const lo=zmin-sh-14,hi=zmax-sh+14,a=L.list;
       let i0=0,i1=a.length;while(i0<i1){const m=(i0+i1)>>1;if(a[m].z0<lo)i0=m+1;else i1=m}
-      for(let i=i0;i<a.length&&a[i].z0<=hi;i++){const c=a[i],z=c.z0+sh;if(z>=zmin&&z<=zmax)out.push({c,z,x:L.x,v:L.v})}
+      for(let i=i0;i<a.length&&a[i].z0<=hi;i++){const c=a[i];
+        if(c.plan&&!c.chg&&!c.noChg&&i+1<a.length)this.check(L,i);   // (normally already decided while growing)
+        if(c.chg&&t>=c.chg.tc-CFG.chg.sig)continue;   // reported with the movers below
+        const z=c.z0+sh;if(z>=zmin&&z<=zmax)out.push({c,z,x:L.x,v:L.v,lane:L.i,xv:0,sig:0})}
     }
+    for(const c of this.movers){if(t<c.chg.tc-CFG.chg.sig)continue;const p=this.chgPos(c,t);
+      if(p.z>=zmin&&p.z<=zmax)out.push({c,z:p.z,x:p.x,v:p.v,lane:p.s<.5?c.lane:c.chg.to,xv:p.xv,sig:p.sig?1:0})}
     return out;
   }
   // forget cars that are far behind everyone
-  trim(t,zmin){for(const L of this.lanes){const lo=zmin-L.v*t-60;let k=0;while(k<L.list.length&&L.list[k].z0<lo)k++;if(k>200)L.list.splice(0,k)}}
+  trim(t,zmin){for(const L of this.lanes){const lo=zmin-L.v*t-60;let k=0;while(k<L.list.length&&L.list[k].z0<lo)k++;if(k>200)L.list.splice(0,k)}
+    if(this.movers.length>60)this.movers=this.movers.filter(c=>this.chgPos(c,t).z>zmin-1500)}
 }
 
 /* ---------- your car ---------- */
@@ -195,7 +241,7 @@ class Bot{
     // per lane: the nearest car ahead (gap, its speed) and whether something is right alongside
     const info=CFG.laneX.map((lx,i)=>({i,lx,v:CFG.laneV[i],gap:1e9,ov:CFG.laneV[i],side:false}));
     for(const o of cars){
-      const I=info[o.c.lane],dz=o.z-D.d,reach=(o.c.l+L)/2,close=v-o.v;
+      const I=info[o.lane],dz=o.z-D.d,reach=(o.c.l+L)/2,close=v-o.v;
       // "alongside" = it would be beside us during a lane change (~0.6 s)
       if(Math.abs(dz)<reach+2+Math.abs(close)*.6)I.side=true;
       const g=dz-reach;
