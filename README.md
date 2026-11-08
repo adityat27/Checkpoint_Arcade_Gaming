@@ -35,9 +35,9 @@ js/games/               one file (or folder) per game
   orderup.js            Order Up! (3D co-op kitchen)
   deadweight/core.js    Deadweight: maps, the random course generator, climbing/rope physics, the solo bot (no drawing)
   deadweight/game.js    Deadweight: themed 3D worlds, HUD, controls, online sync
-  slipstream/core.js    Slipstream: the endless road, lane traffic, driving physics, scoring, test bot (no drawing)
-  slipstream/cars.js    Slipstream: the car, bus and truck models, built in code from body cross-sections
-  slipstream/game.js    Slipstream: 3D roads (coast / ridge / night), camera, HUD, touch pads, engine sound, online race
+  slipstream/core.js    Slipstream: the endless road, lane traffic (with signalled lane changes), driving physics, scoring, test bot (no drawing)
+  slipstream/cars.js    Slipstream: the 4 player cars and the traffic, built in code from body cross-sections plus details projected onto the body
+  slipstream/game.js    Slipstream: the garage showroom menu, 3D roads (coast / ridge / night), lighting and shadows, camera, HUD, touch pads, engine sound, online race
   maze.js               Maze Munch: random symmetric mazes, monsters, fruit, bots, five modes (solo, co-op, versus, hunter, free-for-all), online
 ```
 
@@ -66,9 +66,9 @@ Each game file starts with its menu and game-screen HTML, then the game code, th
 | Add a Deadweight obstacle | a method on `Builder` in `js/games/deadweight/core.js` (it adds boxes and ends with `this.rest(...)`), then list it in a map's `pool` |
 | Change The Classic Deadweight route | `classicCourse()` in `js/games/deadweight/core.js` |
 | Change Deadweight jump, rope length or gravity | `CFG` in `js/games/deadweight/core.js` |
-| Change Slipstream traffic speed, density or near-miss distance | `CFG` at the top of `js/games/slipstream/core.js` (`laneV` lane speeds, `rampDist` how fast it gets busy, `nearGap`); car gaps and bus/truck odds are in `Traffic.grow()` |
-| Change a Slipstream car's speed or handling | `STYLES` in `js/games/slipstream/core.js` |
-| Reshape a Slipstream car, bus or truck | `SHAPES` in `js/games/slipstream/cars.js` (each row is one cross-section: position, widths, sill, shoulder line, roof) |
+| Change Slipstream traffic speed, density or near-miss distance | `CFG` at the top of `js/games/slipstream/core.js` (`laneV` lane speeds, `rampDist` how fast it gets busy, `nearGap`, `chg` how often slow cars pull out to overtake); car gaps and bus/truck odds are in `Traffic.grow()` |
+| Change a Slipstream car's speed, handling or garage specs | `STYLES` in `js/games/slipstream/core.js` (keys `gt`, `hatch`, `suv`, `saloon`) |
+| Reshape a Slipstream car, bus or truck | `SHAPES` in `js/games/slipstream/cars.js` (each row is one cross-section: position, widths, sill, belt line, roof). Lights, grilles and trim are in the `dress…()` functions, as 2D outlines projected onto the body |
 | Add a Slipstream road (look) | `ROUTES` + `LOOK` at the top of `js/games/slipstream/game.js` (sky, fog, colours, what is on each side: `sea`, `hill`, `mesa`, `valley`) |
 | Change a game's music | `THEMES.<game>` at the bottom of that game's file |
 | Change the online servers | `BR` (broker list) at the top of `js/core/net.js` |

@@ -13,7 +13,9 @@
   --h-sh-hi:0 34px 50px -24px rgba(18,20,28,.55);
   --h-font:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;
   --h-disp:'Space Grotesk',Inter,system-ui,sans-serif;
-  --ease:cubic-bezier(.2,.9,.2,1)
+  --ease:cubic-bezier(.2,.9,.2,1);
+  /* motion tokens: every transition uses these durations and curves */
+  --t-fast:.14s;--t-base:.24s;--t-slow:.42s;--e-out:cubic-bezier(.2,.8,.2,1);--e-in:cubic-bezier(.4,0,1,1)
 }
 @supports (background:color-mix(in oklab,red,blue)){:root{--h-bg:color-mix(in oklab,var(--acc) 7%,var(--h-base))}}
 @media(prefers-color-scheme:dark){
@@ -36,12 +38,13 @@ body{background:var(--h-bg);transition:background-color .7s ease}
 .mark .mk-bg{fill:var(--h-ink)}
 .mark .mk-pole{stroke:var(--h-card);stroke-width:2.4;stroke-linecap:round}
 .mark .mk-knob{fill:var(--acc);transition:fill .6s}
-.mark .mk-c{transform-box:fill-box;transform-origin:0% 50%;animation:mkWave 1.6s ease-in-out infinite}
+.mark .mk-c{transform-box:fill-box;transform-origin:0% 50%;animation:mkWave 1.6s ease-in-out 3}
+.brand:hover .mark .mk-c{animation-iteration-count:infinite}
 .mark .mk-c rect.a{fill:var(--acc);transition:fill .6s}
 .mark .mk-c rect.w{fill:var(--h-card)}
 .mark .mk-c:nth-child(2){animation-delay:-.16s}.mark .mk-c:nth-child(3){animation-delay:-.32s}.mark .mk-c:nth-child(4){animation-delay:-.48s}
 @keyframes mkWave{0%,100%{transform:translateY(-.9px) skewY(-5deg)}50%{transform:translateY(.9px) skewY(5deg)}}
-.mark .mk-ring{fill:none;stroke:var(--acc);stroke-width:1.6;opacity:0;transform-box:fill-box;transform-origin:50% 50%;animation:mkRing 4.8s ease-out infinite}
+.mark .mk-ring{fill:none;stroke:var(--acc);stroke-width:1.6;opacity:0;transform-box:fill-box;transform-origin:50% 50%;animation:mkRing 12s ease-out infinite}
 @keyframes mkRing{0%,70%{opacity:0;transform:scale(1)}74%{opacity:.7}100%{opacity:0;transform:scale(1.35)}}
 .wm{display:inline-flex;align-items:flex-start;gap:3px;line-height:1}
 .wm-t{position:relative;font:700 26px/1 var(--h-disp);letter-spacing:.02em;white-space:nowrap;color:var(--h-ink)}
@@ -49,11 +52,12 @@ body{background:var(--h-bg);transition:background-color .7s ease}
 .wm-t::after{content:"CHECKPOINT";position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(100deg,transparent 0 42%,var(--acc) 46%,#fff 50%,var(--acc) 54%,transparent 58% 100%);
   background-size:300% 100%;background-position:150% 0;-webkit-background-clip:text;background-clip:text;color:transparent;
-  animation:wmSheen 4.8s linear infinite 1.2s}
+  animation:wmSheen 14s linear infinite 1.2s}
 @keyframes wmIn{from{opacity:0;transform:translateY(70%) rotateX(80deg)}to{opacity:1;transform:none}}
 @keyframes wmSheen{0%{background-position:150% 0}55%,100%{background-position:-50% 0}}
 .wm-x{display:inline-flex;gap:2px;margin-top:1px}
-.wm-x i{display:block;width:5px;height:20px;border-radius:3px;background:linear-gradient(var(--acc) 0 66%,transparent 66% 78%,var(--acc) 78%);transition:background .6s;animation:wmBang 2.4s var(--ease) infinite;transform-origin:50% 100%}
+.wm-x i{display:block;width:5px;height:20px;border-radius:3px;background:linear-gradient(var(--acc) 0 66%,transparent 66% 78%,var(--acc) 78%);transition:background .6s;animation:wmBang 2.4s var(--ease) 2;transform-origin:50% 100%}
+.brand:hover .wm-x i{animation-iteration-count:infinite}
 .wm-x i:nth-child(2){animation-delay:.12s}
 @keyframes wmBang{0%,62%,100%{transform:none}70%{transform:translateY(-4px) scaleY(1.06)}80%{transform:translateY(0) scaleY(.94)}88%{transform:none}}
 .brand:hover .mark .mk-c{animation-duration:.8s}
@@ -144,9 +148,9 @@ body{background:var(--h-bg);transition:background-color .7s ease}
 .foil{inset:-60%;background:linear-gradient(115deg,transparent 34%,rgba(255,92,160,.34) 40%,rgba(255,226,110,.38) 45%,rgba(90,240,180,.36) 50%,rgba(90,214,255,.38) 55%,rgba(190,150,255,.34) 60%,transparent 66%)}
 .glare{width:150%;height:150%;left:-25%;top:-25%;background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.42) 0%,rgba(255,255,255,.12) 24%,rgba(255,255,255,0) 48%)}
 /* a light sweep across the top cards now and then (transform only) */
-.r-holo .gc-art::after{content:"";position:absolute;inset:-20%;background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.32) 50%,transparent 58%);transform:translate3d(-80%,0,0);animation:sweep 7s ease-in-out infinite;pointer-events:none;z-index:2;will-change:transform}
-.r-holo:nth-child(2) .gc-art::after{animation-delay:2.3s}.r-holo:nth-child(3) .gc-art::after{animation-delay:4.6s}
-@keyframes sweep{0%,74%{transform:translate3d(-80%,0,0)}100%{transform:translate3d(80%,0,0)}}
+.r-holo .gc-art::after{content:"";position:absolute;inset:-20%;background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.32) 50%,transparent 58%);transform:translate3d(-80%,0,0);pointer-events:none;z-index:2;will-change:transform}
+.r-holo:is(:hover,:focus-visible) .gc-art::after{animation:sweep 1.6s var(--e-out) 1}
+@keyframes sweep{from{transform:translate3d(-80%,0,0)}to{transform:translate3d(80%,0,0)}}
 
 /* entrance + filtering */
 .games.enter .gc{animation:cardIn .6s var(--ease) both;animation-delay:calc(var(--i)*28ms)}
@@ -316,3 +320,22 @@ body{background:var(--h-bg);transition:background-color .7s ease}
 @keyframes scrIn{from{opacity:0;transform:translate3d(0,14px,0)}to{opacity:1;transform:none}}
 @keyframes scrFade{from{opacity:0}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){.scr-in,.scr-fade{animation:none}}
+
+/* ---------- the card-to-banner move (hub.js) ---------- */
+.xfx{position:fixed;z-index:60;pointer-events:none;overflow:hidden;border-radius:18px;background:#0b0c10;contain:layout paint;will-change:left,top,width,height}
+.xfx img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.xfx .w{opacity:0}
+/* calmer menus: one consistent entrance */
+.gmenu.enter,#lobby.enter{animation:menuIn var(--t-slow) var(--e-out) both}
+.scr-in{animation:scrIn var(--t-slow) var(--e-out) both}
+.scr-fade{animation:scrFade .3s var(--e-out) both}
+/* results popup: the card settles, then its parts follow */
+#over .card{animation:overIn .5s var(--e-out) both}
+#over .card>*{animation:overKid .45s var(--e-out) both}
+#over .card>:nth-child(2){animation-delay:.08s}#over .card>:nth-child(3){animation-delay:.16s}
+@keyframes overIn{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes overKid{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+/* hover and press feel the same everywhere */
+.hb,.chip,.pchip,.filters button{transition:transform var(--t-base) var(--e-out),background-color var(--t-base),box-shadow var(--t-base)}
+.hb:active,.chip:active,.pchip:active,.filters button:active{transform:scale(.97)}
+@media(prefers-reduced-motion:reduce){#over .card,#over .card>*{animation:none}}
