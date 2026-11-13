@@ -15,6 +15,10 @@ css/
   boardroom.css  airhockey.css  orderup.css  deadweight.css  slipstream.css  maze.css
 js/core/                shared systems (loaded first)
   utils.js              $, wait, rng, esc, TOUCH_UI, need3D() / needNet() library loaders
+  gfx.js                graphics engine shared by the 3D racing games: post-processing (bloom, sun glare,
+                        light shafts, speed blur, film grade), sun-tinted haze, colour management helpers,
+                        the Graphics setting (Auto / High / Medium / Low) and auto quality. Add ?fps to the
+                        address for a frame-rate counter, ?gfx=low|medium|high to force a level
   audio.js              music themes (THEMES) + sound effects (SFX.name())
   state.js              shared game state (player, rival, room, phase…)
   ui.js                 screens: show(), regGame() plug-in registry, setOver() results overlay, rematch
@@ -25,8 +29,9 @@ js/core/                shared systems (loaded first)
 js/games/               one file (or folder) per game
   brawl.js              Brawl
   glaze.js              Glaze Craze
-  overdrive/cars.js     Overdrive: the 5 car models
-  overdrive/race.js     Overdrive: tracks, driving physics, online racing
+  overdrive/cars.js     Overdrive: the livery colours (and the old low-poly models, kept as a fallback)
+  overdrive/race.js     Overdrive: tracks, driving physics, online racing; its 5 race cars are built by
+                        slipstream/cars.js (shared car engine) and rendered through core/gfx.js
   cipher.js             Cipher Sync
   hang.js               Hang Tight
   rps.js                Rock Paper Scissors
@@ -36,8 +41,12 @@ js/games/               one file (or folder) per game
   deadweight/core.js    Deadweight: maps, the random course generator, climbing/rope physics, the solo bot (no drawing)
   deadweight/game.js    Deadweight: themed 3D worlds, HUD, controls, online sync
   slipstream/core.js    Slipstream: the endless road, lane traffic (with signalled lane changes), driving physics, scoring, test bot (no drawing)
-  slipstream/cars.js    Slipstream: the 4 player cars and the traffic, built in code from body cross-sections plus details projected onto the body
-  slipstream/game.js    Slipstream: the garage showroom menu, 3D roads (coast / ridge / night), lighting and shadows, camera, HUD, touch pads, engine sound, online race
+  slipstream/cars.js    the shared car engine: Slipstream's 4 player cars (Vento GT, Nova R, Ridgeback RS, Vanta CS),
+                        the traffic, and Overdrive's 5 race cars, built in code from body cross-sections plus
+                        details projected onto the body
+  slipstream/game.js    Slipstream: the garage showroom menu, 3D roads (coast / ridge / night), lighting, shadows,
+                        wet-road reflections, the spring-mounted camera rig and suspension, HUD, touch pads,
+                        engine sound, online race
   maze.js               Maze Munch: random symmetric mazes, monsters, fruit, bots, five modes (solo, co-op, versus, hunter, free-for-all), online
 ```
 

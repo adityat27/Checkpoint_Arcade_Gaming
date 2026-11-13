@@ -47,22 +47,22 @@ const SHAPES={
       [-.2,.95,.885,.19,.99,1.39,.6,'c'],[-.55,.955,.89,.19,.995,1.38,.6,'p'],[-.6,.955,.89,.19,.995,1.375,.6,'c'],
       [-.92,.965,.9,.19,1.0,1.345,.6,'r'],[-1.72,.965,.9,.2,1.02,1.08,.63,'t'],[-2.16,.955,.89,.22,1.025,1.075,.65,'t'],
       [-2.34,.91,.83,.25,.99,1.045,.61,'t'],[-2.405,.82,.72,.3,.92,.96,.52,'t']]},
-  // compact SUV (Nexon-like): short, tall, coupé-sloped roof, cladding, two-tone roof
-  hatch:{len:3.995,wheel:{r:.335,f:1.2,b:-1.298,tw:.215,rim:'twin',rimCol:'diamond'},
-    crease:.66,shoulder:.03,flare:.01,roof:'contrast',pillars:'black',belt:'black',clad:1,doors:2,rails:1,
-    k:[[1.9975,.66,.58,.36,.73,.78,.46,'h'],[1.965,.8,.74,.31,.8,.85,.58,'h'],[1.86,.86,.82,.29,.855,.9,.65,'h'],[1.55,.89,.855,.285,.9,.945,.69,'h'],
-      [1.2,.9,.865,.29,.94,.985,.71,'h'],[.8,.9,.865,.3,.98,1.015,.72,'w'],[.42,.895,.86,.3,1.0,1.33,.69,'w'],
-      [.04,.895,.86,.3,1.01,1.585,.655,'c'],[-.42,.895,.86,.3,1.02,1.6,.655,'p'],[-.5,.895,.86,.3,1.02,1.6,.655,'c'],
-      [-1.24,.9,.865,.3,1.045,1.55,.64,'p'],[-1.33,.9,.865,.3,1.05,1.54,.64,'c'],[-1.48,.9,.865,.3,1.055,1.52,.635,'r'],
-      [-1.8,.89,.85,.32,1.06,1.42,.6,'t'],[-1.95,.85,.8,.36,1.04,1.3,.56,'t'],[-1.9975,.78,.72,.4,.98,1.18,.5,'t']]},
-  // body-on-frame SUV (Fortuner-like): tall bonnet, upright glass, chrome, side steps
-  suv:{len:4.795,wheel:{r:.388,f:1.47,b:-1.275,tw:.265,rim:'six',rimCol:'machined'},
-    crease:.6,shoulder:.032,flare:.014,roof:'paint',pillars:'black',belt:'chrome',clad:1,archClad:1,doors:2,rails:1,steps:1,
-    k:[[2.3975,.76,.72,.47,.98,1.02,.54,'h'],[2.365,.87,.83,.43,1.035,1.065,.65,'h'],[2.22,.92,.875,.41,1.085,1.115,.71,'h'],[1.47,.93,.885,.42,1.125,1.16,.75,'h'],
-      [.82,.93,.885,.43,1.15,1.185,.77,'w'],[.42,.925,.88,.43,1.17,1.5,.75,'w'],[.02,.925,.88,.43,1.18,1.79,.73,'c'],
-      [-.42,.925,.88,.43,1.185,1.8,.73,'p'],[-.5,.925,.88,.43,1.185,1.8,.73,'c'],[-1.42,.93,.885,.43,1.19,1.795,.73,'p'],
-      [-1.56,.93,.885,.43,1.19,1.79,.73,'c'],[-1.97,.93,.885,.44,1.19,1.77,.725,'r'],[-2.24,.92,.875,.46,1.18,1.66,.7,'t'],
-      [-2.36,.88,.84,.5,1.14,1.5,.64,'t'],[-2.3975,.8,.76,.56,1.08,1.3,.56,'t']]},
+  // mid-engine hypercar: knife-edge nose, cab-forward bubble canopy, louvred engine cover, wide hips, fixed wing
+  hatch:{len:4.62,wheel:{r:.356,f:1.43,b:-1.36,tw:.3,rim:'aero10',rimCol:'black',caliper:'red'},
+    crease:.6,shoulder:.045,flare:.022,flareR:.045,archGap:.06,roof:'carbon',pillars:'black',belt:'black',doors:1,
+    k:[[2.31,.56,.46,.22,.33,.36,.36,'h'],[2.28,.78,.68,.14,.4,.44,.54,'h'],[2.19,.92,.83,.115,.5,.55,.63,'h'],[1.98,.99,.91,.115,.65,.7,.67,'h'],
+      [1.5,1.0,.93,.13,.8,.85,.66,'h'],[1.06,.985,.92,.14,.82,.84,.64,'w'],[.56,.975,.91,.15,.8,.99,.58,'w'],
+      [.12,.975,.91,.15,.75,1.115,.54,'c'],[-.38,.985,.92,.15,.765,1.125,.54,'p'],[-.45,.985,.92,.15,.765,1.12,.54,'c'],
+      [-.82,1.0,.935,.15,.78,1.07,.57,'r'],[-1.02,1.02,.95,.16,.8,1.0,.62,'t'],[-1.5,1.04,.97,.16,.83,.95,.68,'t'],
+      [-1.98,1.03,.96,.18,.845,.915,.69,'t'],[-2.24,.99,.91,.22,.83,.885,.63,'t'],[-2.31,.9,.8,.28,.79,.83,.52,'t']]},
+  // super-SUV (Urus-like): low sharp nose, fast coupé roofline, big flared arches, 23-inch wheels, no chrome
+  suv:{len:5.11,wheel:{r:.405,f:1.53,b:-1.49,tw:.3,rim:'y5',rimCol:'black',caliper:'red'},
+    crease:.62,shoulder:.042,flare:.022,flareR:.04,archGap:.07,roof:'black',pillars:'black',belt:'black',doors:2,archClad:1,
+    k:[[2.555,.7,.62,.3,.66,.7,.48,'h'],[2.52,.86,.79,.24,.74,.79,.62,'h'],[2.4,.95,.88,.22,.81,.87,.7,'h'],[2.05,.985,.92,.23,.89,.95,.74,'h'],
+      [1.53,1.0,.935,.25,.95,1.01,.75,'h'],[.98,.99,.925,.27,1.01,1.055,.76,'w'],[.5,.98,.915,.28,1.05,1.42,.72,'w'],
+      [.08,.98,.915,.28,1.06,1.615,.67,'c'],[-.42,.98,.915,.28,1.07,1.635,.67,'p'],[-.5,.98,.915,.28,1.07,1.635,.67,'c'],
+      [-1.32,.99,.925,.28,1.08,1.585,.66,'p'],[-1.42,.99,.925,.28,1.08,1.565,.66,'c'],[-1.66,1.0,.935,.29,1.09,1.5,.65,'r'],
+      [-2.2,1.0,.935,.31,1.1,1.27,.62,'t'],[-2.45,.98,.915,.34,1.08,1.17,.58,'t'],[-2.555,.89,.82,.4,1.0,1.07,.5,'t']]},
   // four-door super saloon (M5 CS-like): long wheelbase, carbon roof, quad pipes
   saloon:{len:4.983,wheel:{r:.352,f:1.63,b:-1.352,tw:.275,rim:'y5',rimCol:'bronze',caliper:'red'},
     crease:.68,shoulder:.036,flare:.012,flareR:.018,roof:'carbon',pillars:'black',belt:'black',doors:2,
@@ -99,6 +99,46 @@ const SHAPES={
       [-.38,1.24,1.22,.58,1.4,2.78,1.15,'p'],[-1.2,1.22,1.2,.62,1.4,2.74,1.12,'t']]}
 };
 
+/* ---------- OVERDRIVE race cars (same columns as above) ----------
+   open: open-wheel (no arches; wheels sit out at wheel.track), numAt: race-number area on the bonnet
+   [x0,z0,x1,z1], lamp: glow + exhaust positions {hl:[x,y]|null, tl:[x,y], ex:[[x,y]…]} */
+Object.assign(SHAPES,{
+  // Inferno F1: needle nose, narrow tub, sidepods, airbox; the wings, halo and arms are added in dressODF1
+  odF1:{len:5.3,open:1,noInterior:1,noPlate:1,doors:0,wheel:{r:.355,f:1.86,b:-1.72,tw:.37,track:.8,rim:'aero10',rimCol:'black',caliper:'#d8a21c'},
+    crease:.5,shoulder:.03,roof:'paint',numAt:[-.11,1.62,.11,1.98],lamp:{hl:null,tl:[0,.36],ex:[[0,.47]]},
+    k:[[2.65,.08,.06,.17,.21,.25,.06,'h'],[2.45,.15,.12,.15,.26,.31,.12,'h'],[1.95,.22,.19,.14,.33,.4,.16,'h'],[1.25,.29,.26,.12,.42,.51,.21,'h'],
+      [.62,.36,.33,.1,.49,.6,.25,'h'],[.22,.6,.56,.09,.5,.63,.24,'t'],[-.35,.76,.72,.08,.51,.66,.24,'t'],[-.95,.7,.66,.08,.5,.72,.2,'t'],
+      [-1.55,.47,.43,.1,.46,.62,.16,'t'],[-2.1,.29,.25,.14,.4,.5,.11,'t'],[-2.45,.19,.15,.2,.36,.42,.09,'t']]},
+  // Voltage GT: wedge supercar, scissor-door profile, racing stripes
+  odSuper:{len:4.7,wheel:{r:.35,f:1.43,b:-1.38,tw:.3,rim:'split5',rimCol:'black',caliper:'#d6ff2e'},
+    crease:.55,shoulder:.06,flare:.02,flareR:.045,archGap:.06,roof:'paint',pillars:'black',belt:'black',doors:1,mirror:'black',noPlate:1,numAt:[-.3,1.25,.3,1.8],
+    lamp:{hl:[.72,.41],tl:[.68,.66],ex:[[.08,.36],[.22,.36]]},
+    k:[[2.35,.58,.48,.2,.3,.33,.4,'h'],[2.3,.83,.73,.13,.37,.41,.6,'h'],[2.15,.96,.88,.11,.48,.53,.68,'h'],[1.9,1.0,.92,.11,.65,.7,.7,'h'],[1.4,1.0,.93,.12,.8,.85,.7,'h'],
+      [.95,.99,.92,.13,.82,.84,.66,'w'],[.45,.98,.91,.14,.79,.98,.58,'w'],[.0,.98,.91,.14,.72,1.1,.52,'c'],[-.5,.99,.92,.14,.74,1.1,.52,'c'],[-.85,1.0,.93,.15,.76,1.04,.56,'r'],
+      [-1.15,1.02,.95,.15,.79,.96,.64,'t'],[-1.7,1.04,.97,.16,.82,.9,.7,'t'],[-2.15,1.02,.95,.18,.82,.87,.68,'t'],[-2.35,.94,.85,.24,.78,.82,.56,'t']]},
+  // Specter GT: front-engined GT3 racer, long bonnet, swan-neck wing
+  odSpecter:{len:4.75,wheel:{r:.355,f:1.38,b:-1.27,tw:.31,rim:'six',rimCol:'black',caliper:'red'},
+    crease:.6,shoulder:.045,flare:.03,flareR:.05,archGap:.06,roof:'paint',pillars:'black',belt:'black',doors:1,mirror:'black',noPlate:1,numAt:[-.3,1.0,.3,1.55],
+    lamp:{hl:[.74,.56],tl:[.72,.84],ex:[[.38,.24]]},
+    k:[[2.375,.66,.56,.2,.42,.46,.46,'h'],[2.33,.88,.8,.12,.5,.55,.64,'h'],[2.15,.98,.92,.1,.6,.66,.72,'h'],[1.75,1.02,.95,.1,.79,.84,.74,'h'],[1.1,1.0,.93,.11,.82,.87,.72,'h'],
+      [.5,.97,.9,.12,.85,.88,.7,'w'],[.1,.96,.89,.12,.84,1.1,.62,'w'],[-.3,.96,.89,.12,.86,1.25,.56,'c'],[-.85,.97,.9,.12,.88,1.24,.56,'c'],[-1.15,.99,.92,.13,.9,1.16,.6,'r'],
+      [-1.6,1.04,.97,.14,.92,1.0,.7,'t'],[-2.1,1.03,.96,.16,.93,.98,.72,'t'],[-2.375,.95,.86,.22,.9,.94,.6,'t']]},
+  // Sentinel V12: grand hypercar, horseshoe grille, LED C-line on the flanks
+  odSentinel:{len:4.6,wheel:{r:.36,f:1.38,b:-1.34,tw:.3,rim:'y5',rimCol:'gunmetal',caliper:'#1fb4ff'},
+    crease:.62,shoulder:.04,flare:.018,flareR:.035,archGap:.065,roof:'paint',pillars:'black',belt:'black',doors:1,mirror:'black',noPlate:1,numAt:[-.28,1.15,.28,1.65],
+    lamp:{hl:[.72,.53],tl:[.6,.8],ex:[[.07,.38],[.2,.38]]},
+    k:[[2.3,.62,.52,.22,.4,.44,.46,'h'],[2.26,.86,.78,.14,.47,.52,.62,'h'],[2.1,.97,.9,.12,.56,.62,.7,'h'],[1.8,1.0,.93,.12,.72,.78,.72,'h'],[1.3,1.0,.93,.13,.82,.87,.72,'h'],
+      [.9,.99,.92,.14,.84,.86,.68,'w'],[.4,.98,.91,.15,.82,1.02,.6,'w'],[-.05,.98,.91,.15,.79,1.14,.56,'c'],[-.55,.99,.92,.15,.8,1.14,.56,'c'],[-.85,1.0,.93,.15,.82,1.1,.58,'r'],
+      [-1.1,1.02,.95,.16,.84,1.02,.64,'t'],[-1.7,1.03,.96,.17,.86,.96,.7,'t'],[-2.15,1.0,.93,.2,.85,.92,.68,'t'],[-2.3,.92,.83,.26,.82,.86,.56,'t']]},
+  // Aero-Blade X: Le Mans-style hypercar, teardrop canopy, three fins
+  odAero:{len:4.9,wheel:{r:.36,f:1.5,b:-1.38,tw:.3,rim:'aero10',rimCol:'gunmetal',caliper:'#ffb42a'},
+    crease:.55,shoulder:.05,flare:.03,flareR:.05,archGap:.06,roof:'paint',pillars:'black',belt:'black',doors:1,mirror:'black',noPlate:1,numAt:[-.26,1.35,.26,1.85],
+    lamp:{hl:[.78,.43],tl:[.7,.62],ex:[[0,.55]]},
+    k:[[2.45,.55,.45,.16,.26,.3,.4,'h'],[2.4,.82,.72,.1,.32,.36,.6,'h'],[2.2,.97,.88,.09,.46,.5,.7,'h'],[1.9,1.0,.92,.09,.66,.71,.72,'h'],[1.4,.99,.92,.1,.8,.84,.6,'h'],
+      [1.0,.97,.9,.11,.82,.835,.46,'w'],[.55,.96,.89,.11,.82,.94,.42,'w'],[.1,.96,.89,.11,.82,1.05,.4,'c'],[-.45,.97,.9,.11,.82,1.05,.4,'c'],[-.8,.99,.92,.11,.82,.99,.42,'r'],
+      [-1.2,1.02,.95,.12,.83,.92,.5,'t'],[-1.8,1.03,.96,.13,.82,.88,.55,'t'],[-2.25,1.0,.93,.15,.78,.83,.52,'t'],[-2.45,.9,.8,.2,.72,.77,.44,'t']]}
+});
+
 /* ---------- smooth interpolation of the key sections (monotone cubic: no wobbles) ---------- */
 const PREP=new WeakMap();
 function prep(K){
@@ -118,10 +158,10 @@ function interp(K,j,z){
 const segAt=(K,z)=>K[segIdx(K,z)][7];
 
 /* ---------- cross-sections ---------- */
-function archY(S,z){const W=S.wheel;if(!W)return -1;const R=W.r+(S.archGap||.075);let y=-1;
+function archY(S,z){const W=S.wheel;if(!W||S.open)return -1;const R=W.r+(S.archGap||.075);let y=-1;
   for(const a of[W.f,W.b]){const dz=z-a;if(Math.abs(dz)<R)y=Math.max(y,W.r+.02+Math.sqrt(R*R-dz*dz))}return y}
 // wheel-arch flare: the body swells a little over each wheel
-function flare(S,z){const W=S.wheel;if(!W||!S.flare)return 0;let f=0;
+function flare(S,z){const W=S.wheel;if(!W||!S.flare||S.open)return 0;let f=0;
   for(const[a,k]of[[W.f,S.flare],[W.b,S.flareR!=null?S.flareR:S.flare]]){const d=Math.abs(z-a)/(W.r+.38);if(d<1)f=Math.max(f,k*.5*(1+Math.cos(d*Math.PI)))}return f}
 // half ring, centre bottom -> centre top (14 points)
 function ring(S,w,ws,yb,yh,yr,wr){
@@ -295,6 +335,7 @@ const RIMS={
   twin:{sp:[...Array(5)].flatMap((_,i)=>[i*72-9,i*72+9]),hw0:.014,hw1:.012,hub:.28,dish:.018},
   six:{sp:[...Array(6)].map((_,i)=>i*60),hw0:.034,hw1:.026,hub:.3,dish:.02},
   y5:{sp:[...Array(5)].map((_,i)=>i*72),hw0:.03,hw1:.05,hub:.28,dish:.035,y:1},
+  aero10:{sp:[...Array(10)].map((_,i)=>i*36+(i%2?4:-4)),hw0:.011,hw1:.013,hub:.25,dish:.045},
   cap:{sp:[...Array(8)].map((_,i)=>i*45),hw0:.05,hw1:.045,hub:.42,dish:.008,cap:1},
   bus:{sp:[...Array(10)].map((_,i)=>i*36),hw0:.06,hw1:.05,hub:.5,dish:.01,cap:1}
 };
@@ -353,6 +394,13 @@ function plateTex(text){
   c.fillStyle='#16181c';c.font='bold 38px "Arial Narrow",Arial,sans-serif';c.textBaseline='middle';c.fillText(String(text).toUpperCase().slice(0,9),142,35);
   const t=new THREE.CanvasTexture(cv);t.anisotropy=4;if(THREE.sRGBEncoding)t.encoding=THREE.sRGBEncoding;return t;
 }
+// race number roundel: white disc, bold number
+function numTex(n,col){
+  const THREE=T(),cv=document.createElement('canvas');cv.width=cv.height=128;const c=cv.getContext('2d');
+  c.fillStyle='rgba(250,250,247,.96)';c.beginPath();c.arc(64,64,58,0,7);c.fill();c.lineWidth=5;c.strokeStyle='rgba(20,20,24,.85)';c.stroke();
+  c.fillStyle=col;c.font='900 72px "Arial Black",Arial,sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText(String(n),64,70);
+  const t=new THREE.CanvasTexture(cv);t.anisotropy=4;if(THREE.sRGBEncoding)t.encoding=THREE.sRGBEncoding;return t;
+}
 function glowTex(){return canvasTex('glow',64,64,(c)=>{const g=c.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.18,'rgba(255,255,255,.6)');g.addColorStop(.5,'rgba(255,255,255,.12)');g.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=g;c.fillRect(0,0,64,64)},{lin:1})}
 
 /* =========================================================================
@@ -372,13 +420,13 @@ function dressCommon(S,add,o={}){
     // window line across the top of the door (sill line of the greenhouse already exists): rocker shadow line
   }
   // mirrors: a rounded housing on a short arm, near the A-pillar
-  if(!o.noMirror){const K=S.k,wz=K.find(k=>k[7]==='w')[0]-.16,s=sectAt(S,wz),y=s.yh+.075,x=s.w-S.shoulder-.01;
+  if(!o.noMirror&&!S.open){const K=S.k,wz=K.find(k=>k[7]==='w')[0]-.16,s=sectAt(S,wz),y=s.yh+.075,x=s.w-S.shoulder-.01;
     [-1,1].forEach(sd=>{const g=new(T().SphereGeometry)(.1,lite?8:16,lite?6:10);g.scale(.95,.6,.55);g.translate(sd*(x+.1),y,wz);add(o.mirrorMat||'paint',g);
       add('black',box(.14,.04,.07,sd*(x+.01),y-.04,wz+.01));
       if(!lite){const gl=new(T().CircleGeometry)(.082,14);gl.scale(1,.54,1);gl.rotateY(Math.PI);gl.translate(sd*(x+.1),y,wz-.052);add('mirror',gl);
         add('amber',box(.06,.01,.03,sd*(x+.15),y-.035,wz+.01))}})}
   // wheel-well liners (half cylinders inside the arches)
-  [W.f,W.b].forEach(z=>{const s=sectAt(S,z),R=W.r+(S.archGap||.075);[-1,1].forEach(sd=>{
+  if(!S.open)[W.f,W.b].forEach(z=>{const s=sectAt(S,z),R=W.r+(S.archGap||.075);[-1,1].forEach(sd=>{
     const g=new(T().CylinderGeometry)(R,R,W.tw+.14,lite?10:18,1,true,0,Math.PI);g.rotateZ(Math.PI/2);g.translate(sd*(s.ws-W.tw/2+.01),W.r+.02,z);add('well',g)})});
   // underbody tray so the car never looks hollow from low angles
   {const zb=F.zb+.25,zf=F.zf-.3,yb=Math.max(sectAt(S,0).yb,.12)+.01,hw=sectAt(S,0).ws*.9;add('under',box(hw*2,.02,zf-zb,0,yb,(zf+zb)/2))}
@@ -413,59 +461,72 @@ function dressGT(S,add){
   add('black',decal(S,'top',ccw([[-.6,-2.3],[.6,-2.3],[.62,-2.25],[-.62,-2.25]]),{off:.004,cell:.06}));
 }
 
-/* ---- the compact SUV ---- */
+/* ---- the mid-engine hypercar ---- */
 function dressHatch(S,add){
   const F=surfOf(S),W=S.wheel;
-  // full-width light bar under the bonnet edge, split headlamps low in the bumper corners
-  add('black',decal(S,'front',ccw(rpoly([[-.8,.7],[.8,.7],[.76,.76],[-.76,.76]],.02)),{off:.003,cell:.035}));
-  add('drl',decal(S,'front',ccw([[-.78,.725],[.78,.725],[.76,.745],[-.76,.745]]),{off:.006,cell:.03}));
-  const lamp=ccw(rpoly([[.5,.5],[.8,.52],[.84,.64],[.56,.66]],.03));
-  add('lampIn',decal(S,'front',lamp,{mirror:1,off:.003,cell:.025}));
-  add('lens',decal(S,'front',circ(.63,.58,.04,14),{mirror:1,off:.006,cell:.02}));
-  add('lens',decal(S,'front',circ(.74,.585,.035,14),{mirror:1,off:.006,cell:.02}));
-  // grille: tri-arrow mesh between the lamps, a wide lower intake and a silver skid plate
-  add('grille',decal(S,'front',ccw(rpoly([[-.42,.52],[.42,.52],[.46,.66],[-.46,.66]],.03)),{off:.003,uv:1,cell:.05}));
-  add('grille',decal(S,'front',ccw(rpoly([[-.55,.36],[.55,.36],[.5,.48],[-.5,.48]],.04)),{off:.003,uv:1,cell:.05}));
-  add('silver',decal(S,'front',ccw(rpoly([[-.45,.3],[.45,.3],[.4,.35],[-.4,.35]],.02)),{off:.004,cell:.05}));
-  // tail: connected light bar across the tailgate
-  add('tailIn',decal(S,'rear',ccw(rpoly([[-.82,1.0],[.82,1.0],[.8,1.1],[-.8,1.1]],.03)),{off:.003,cell:.03}));
-  add('lightR',decal(S,'rear',ccw([[-.8,1.035],[.8,1.035],[.78,1.06],[-.78,1.06]]),{off:.006,cell:.03}));
-  add('lightR',decal(S,'rear',ccw(rpoly([[.6,1.0],[.8,1.0],[.8,1.1],[.66,1.1]],.02)),{mirror:1,off:.0065,cell:.02}));
-  add('silver',decal(S,'rear',ccw(rpoly([[-.45,.42],[.45,.42],[.42,.47],[-.42,.47]],.02)),{off:.004,cell:.05}));
-  add('black',decal(S,'rear',ccw(rpoly([[-.8,.4],[.8,.4],[.8,.58],[-.8,.58]],.03)),{off:.002,cell:.06}));
-  // roof spoiler over the rear glass
-  add('roof',decal(S,'top',ccw([[-.56,-1.55],[.56,-1.55],[.56,-1.47],[-.56,-1.47]]),{off:.012,cell:.05}));
+  // headlights: thin swept slits at the top corners of the nose, each with an LED blade
+  const hl=ccw(rpoly([[.5,.43],[.86,.465],[.9,.52],[.58,.5]],.018));
+  add('lampIn',decal(S,'front',hl,{mirror:1,off:.003,cell:.022}));
+  add('drl',decal(S,'front',ccw([[.54,.468],[.86,.49],[.87,.502],[.55,.48]]),{mirror:1,off:.006,cell:.018}));
+  add('lens',decal(S,'front',circ(.74,.475,.018,12),{mirror:1,off:.006,cell:.018}));
+  // two huge corner intakes and a centre duct, carbon splitter
+  add('black',decal(S,'front',ccw(rpoly([[.36,.14],[.82,.16],[.78,.36],[.44,.3]],.04)),{mirror:1,off:.002,cell:.03}));
+  add('grille',decal(S,'front',ccw(rpoly([[.4,.16],[.78,.18],[.75,.33],[.46,.28]],.035)),{mirror:1,off:.004,uv:1,cell:.03}));
+  add('black',decal(S,'front',ccw(rpoly([[-.3,.17],[.3,.17],[.26,.27],[-.26,.27]],.03)),{off:.003,cell:.04}));
+  add('carbon',decal(S,'front',ccw([[-.98,.115],[.98,.115],[.96,.15],[-.96,.15]]),{off:.006,uv:1,cell:.06}));
+  // bonnet: two heat-extractor ducts
+  add('gap',decal(S,'top',rr(.1,1.55,.36,1.98,.04),{mirror:1,off:.003,cell:.035}));
+  add('grille',decal(S,'top',rr(.13,1.58,.33,1.95,.03),{mirror:1,off:.005,cell:.035,uv:1}));
+  // side: big scoop ahead of the rear wheel feeding the engine, carbon sill
+  const z0=W.b+W.r+.1,z1=W.b+W.r+.9;
+  add('black',decal(S,'side',ccw(rpoly([[z0,.36],[z1,.52],[z1-.06,.7],[z0+.05,.62]],.05)),{mirror:1,off:.004,cell:.04}));
+  add('grille',decal(S,'side',ccw(rpoly([[z0+.06,.4],[z1-.1,.53],[z1-.14,.66],[z0+.1,.6]],.04)),{mirror:1,off:.006,uv:1,cell:.035}));
+  add('carbon',decal(S,'side',ccw([[W.f-W.r-.1,.17],[W.b+W.r+.1,.17],[W.b+W.r+.1,.25],[W.f-W.r-.1,.25]]),{mirror:1,off:.005,uv:1,cell:.06}));
+  // engine cover: louvres across the hump
+  add('gap',decal(S,'top',rr(-.46,-1.82,.46,-1.08,.04),{off:.003,cell:.04}));
+  [-1.17,-1.31,-1.45,-1.59,-1.73].forEach(z=>add('carbon',decal(S,'top',rr(-.43,z-.035,.43,z+.035,.01),{off:.006,cell:.04,uv:1})));
+  // tail: full-width light blade, dark panel, carbon diffuser with fins, twin centre exits
+  add('tailIn',decal(S,'rear',ccw(rpoly([[-.9,.7],[.9,.7],[.88,.8],[-.88,.8]],.02)),{off:.003,cell:.03}));
+  add('lightR',decal(S,'rear',ccw([[-.88,.735],[.88,.735],[.87,.755],[-.87,.755]]),{off:.006,cell:.025}));
+  add('lightR',decal(S,'rear',ccw(rpoly([[.66,.71],[.88,.71],[.87,.79],[.7,.79]],.015)),{mirror:1,off:.0065,cell:.02}));
+  add('black',decal(S,'rear',ccw(rpoly([[-.92,.36],[.92,.36],[.9,.66],[-.9,.66]],.03)),{off:.002,cell:.05}));
+  add('carbon',decal(S,'rear',ccw([[-.86,.2],[.86,.2],[.82,.38],[-.82,.38]]),{off:.004,uv:1,cell:.05}));
+  [-1,1].forEach(sd=>{add('metal',cyl(.055,.058,.18,18,sd*.11,.42,F.zb+.05,'z'));add('black',cyl(.045,.045,.19,14,sd*.11,.42,F.zb+.045,'z'))});
+  // fixed rear wing on two swan-neck struts
+  const wz=-1.98,wy=1.08;add('carbon',box(1.78,.028,.34,0,wy,wz,-.06));add('carbon',box(.02,.13,.36,-.89,wy-.02,wz));add('carbon',box(.02,.13,.36,.89,wy-.02,wz));
+  [-1,1].forEach(sd=>add('black',box(.03,.18,.12,sd*.42,wy-.1,wz+.04,.25)));
 }
 
-/* ---- the body-on-frame SUV ---- */
+/* ---- the super-SUV ---- */
 function dressSUV(S,add){
   const F=surfOf(S),W=S.wheel;
-  // big trapezoid grille with a chrome surround and horizontal slats
-  add('chrome',decal(S,'front',ccw(rpoly([[-.5,.66],[.5,.66],[.62,1.0],[-.62,1.0]],.04)),{off:.002,cell:.05}));
-  add('grilleS',decal(S,'front',ccw(rpoly([[-.46,.69],[.46,.69],[.57,.97],[-.57,.97]],.035)),{off:.004,uv:1,cell:.05}));
-  // swept headlamps with an LED line
-  const hl=ccw(rpoly([[.6,.9],[.86,.93],[.88,1.02],[.64,1.0]],.025));
-  add('lampIn',decal(S,'front',hl,{mirror:1,off:.003,cell:.025}));
-  add('drl',decal(S,'front',ccw([[.62,.985],[.87,1.0],[.87,1.012],[.62,.997]]),{mirror:1,off:.006,cell:.02}));
-  add('lens',decal(S,'front',circ(.72,.95,.03,14),{mirror:1,off:.006,cell:.02}));
-  add('lens',decal(S,'front',circ(.81,.955,.026,14),{mirror:1,off:.006,cell:.02}));
-  // lower bumper: wide intake, fog lamps in chrome housings, skid plate
-  add('grille',decal(S,'front',ccw(rpoly([[-.5,.5],[.5,.5],[.46,.62],[-.46,.62]],.03)),{off:.003,uv:1,cell:.05}));
-  add('chrome',decal(S,'front',ccw(rpoly([[.62,.52],[.78,.54],[.76,.7],[.66,.68]],.02)),{mirror:1,off:.003,cell:.03}));
-  add('lens',decal(S,'front',circ(.7,.6,.03,12),{mirror:1,off:.006,cell:.02}));
-  add('silver',decal(S,'front',ccw(rpoly([[-.42,.45],[.42,.45],[.38,.5],[-.38,.5]],.02)),{off:.004,cell:.05}));
-  // tail lamps + chrome strip across the tailgate
-  add('tailIn',decal(S,'rear',ccw(rpoly([[.56,1.04],[.86,1.06],[.85,1.2],[.58,1.18]],.03)),{mirror:1,off:.003,cell:.03}));
-  add('lightR',decal(S,'rear',ccw(rpoly([[.6,1.08],[.83,1.095],[.83,1.12],[.6,1.105]],.008)),{mirror:1,off:.006,cell:.02}));
-  add('lightR',decal(S,'rear',ccw(rpoly([[.62,1.13],[.83,1.145],[.83,1.17],[.62,1.155]],.008)),{mirror:1,off:.006,cell:.02}));
-  add('chrome',decal(S,'rear',ccw([[-.56,1.1],[.56,1.1],[.56,1.125],[-.56,1.125]]),{off:.004,cell:.04}));
-  add('black',decal(S,'rear',ccw(rpoly([[-.86,.5],[.86,.5],[.86,.66],[-.86,.66]],.03)),{off:.002,cell:.06}));
-  add('silver',decal(S,'rear',ccw(rpoly([[-.4,.52],[.4,.52],[.36,.58],[-.36,.58]],.02)),{off:.004,cell:.05}));
-  // side steps (running boards) between the wheels
-  const z0=W.b+W.r+.12,z1=W.f-W.r-.12,s=sectAt(S,0);
-  [-1,1].forEach(sd=>{add('black',box(.17,.04,z1-z0,sd*(s.ws+.05),.4,(z0+z1)/2));add('silver',box(.17,.008,z1-z0-.04,sd*(s.ws+.05),.423,(z0+z1)/2))});
-  // spare-wheel-free tailgate handle in chrome
-  add('chrome',decal(S,'rear',rr(-.12,1.0,.12,1.03,.012),{off:.005,cell:.04}));
+  // big hexagonal grille in gloss black, honeycomb mesh
+  add('black',decal(S,'front',ccw(rpoly([[-.5,.33],[.5,.33],[.6,.47],[.5,.6],[-.5,.6],[-.6,.47]],.04)),{off:.002,cell:.035}));
+  add('grille',decal(S,'front',ccw(rpoly([[-.47,.355],[.47,.355],[.56,.47],[.47,.575],[-.47,.575],[-.56,.47]],.035)),{off:.004,uv:1,cell:.035}));
+  // headlamps: sharp slits high in the corners with a Y-shaped LED signature
+  const hl=ccw(rpoly([[.56,.68],[.92,.72],[.95,.8],[.6,.76]],.02));
+  add('lampIn',decal(S,'front',hl,{mirror:1,off:.003,cell:.022}));
+  add('drl',decal(S,'front',ccw([[.6,.725],[.9,.755],[.9,.77],[.6,.74]]),{mirror:1,off:.006,cell:.018}));
+  add('drl',decal(S,'front',ccw([[.73,.748],[.76,.75],[.71,.69],[.68,.69]]),{mirror:1,off:.006,cell:.016}));
+  add('lens',decal(S,'front',circ(.83,.758,.02,12),{mirror:1,off:.006,cell:.018}));
+  // corner intakes (vertical blades) and a carbon splitter
+  add('black',decal(S,'front',ccw(rpoly([[.66,.26],[.86,.28],[.86,.56],[.72,.52]],.03)),{mirror:1,off:.002,cell:.03}));
+  add('grilleS',decal(S,'front',ccw(rpoly([[.68,.28],[.84,.3],[.84,.54],[.73,.5]],.025)),{mirror:1,off:.004,uv:1,cell:.03}));
+  add('carbon',decal(S,'front',ccw([[-.86,.225],[.86,.225],[.84,.27],[-.84,.27]]),{off:.006,uv:1,cell:.06}));
+  // bonnet: two raised creases (vents)
+  add('vent',decal(S,'top',rr(.22,1.35,.32,1.95,.02),{mirror:1,off:.003,cell:.04,uv:1}));
+  // side: gloss-black lower sill blade and a vent behind the front wheel
+  add('black',decal(S,'side',ccw([[W.f-W.r-.12,.3],[W.b+W.r+.12,.3],[W.b+W.r+.12,.4],[W.f-W.r-.12,.4]]),{mirror:1,off:.004,cell:.06}));
+  add('black',decal(S,'side',ccw(rpoly([[W.f-W.r-.24,.62],[W.f-W.r-.08,.6],[W.f-W.r-.1,.74],[W.f-W.r-.26,.76]],.01)),{mirror:1,off:.004,cell:.03}));
+  // tail: thin full-width light bar plus Y-shaped lamps, gloss black diffuser, quad trapezoid pipes, roof spoiler
+  add('tailIn',decal(S,'rear',ccw(rpoly([[-.92,1.0],[.92,1.0],[.9,1.1],[-.9,1.1]],.02)),{off:.003,cell:.03}));
+  add('lightR',decal(S,'rear',ccw([[-.9,1.045],[.9,1.045],[.89,1.06],[-.89,1.06]]),{off:.006,cell:.025}));
+  add('lightR',decal(S,'rear',ccw([[.66,1.01],[.9,1.03],[.9,1.05],[.7,1.03]]),{mirror:1,off:.0065,cell:.02}));
+  add('lightR',decal(S,'rear',ccw([[.7,1.07],[.9,1.07],[.9,1.09],[.66,1.09]]),{mirror:1,off:.0065,cell:.02}));
+  add('black',decal(S,'rear',ccw(rpoly([[-.9,.4],[.9,.4],[.88,.62],[-.88,.62]],.03)),{off:.002,cell:.06}));
+  add('carbon',decal(S,'rear',ccw([[-.62,.42],[.62,.42],[.58,.52],[-.58,.52]]),{off:.004,uv:1,cell:.05}));
+  [[.5,.47],[.66,.47]].forEach(([x,y])=>[-1,1].forEach(sd=>{add('metal',box(.13,.07,.16,sd*x,y,F.zb+.06));add('black',box(.11,.05,.17,sd*x,y,F.zb+.055))}));
+  add('black',decal(S,'top',ccw([[-.6,-1.73],[.6,-1.73],[.6,-1.62],[-.6,-1.62]]),{off:.014,cell:.05}));
 }
 
 /* ---- the super saloon ---- */
@@ -562,7 +623,7 @@ function plates(S,plate,add){
   const F=surfOf(S),PT=plateTex(plate||'SLIP 01'),THREE=T();
   const mk=(kind,y)=>{const g=decal(S,kind,ccw(rr(-.26,y-.065,.26,y+.065,.012)),{off:.01,uv:1,cell:.06});
     const U=g.attributes.uv;for(let i=0;i<U.count;i++){U.setXY(i,(U.getX(i)*(kind==='rear'?-1:1)+.26)/.52,(U.getY(i)-(y-.065))/.13)}return g};
-  const yF={gt:.28,hatch:.42,suv:.56,saloon:.27}[S.id]||.4,yR={gt:.58,hatch:.5,suv:.75,saloon:.58}[S.id]||.6;
+  const yF={gt:.28,hatch:.21,suv:.29,saloon:.27}[S.id]||.4,yR={gt:.58,hatch:.59,suv:.78,saloon:.58}[S.id]||.6;
   const mat=new THREE.MeshStandardMaterial({map:PT,roughness:.45,metalness:.1});
   return{mat,tex:PT,meshes:[new THREE.Mesh(mk('front',yF),mat),new THREE.Mesh(mk('rear',yR),mat)]};
 }
@@ -609,7 +670,7 @@ function shared(){
   return SHARED;
 }
 const RIMCOL={gunmetal:[0x3a3d42,.8,.3],diamond:[0xd7dbe0,.95,.18],machined:[0xcfd3d8,.95,.22],bronze:[0x8a6a3a,.9,.3],silver:[0xc4c8ce,.9,.28],black:[0x141518,.6,.35]};
-function carMats(S,paint){
+function carMats(S,paint,o={}){
   const THREE=T(),SH=shared(),pc=new THREE.Color(paint).convertSRGBToLinear(),hsl={};pc.getHSL(hsl);
   const P=new THREE.MeshPhysicalMaterial({color:pc,metalness:.5,roughness:.32,clearcoat:1,clearcoatRoughness:.04,envMapIntensity:1.2,vertexColors:true});
   const roofKind=S.roof==='contrast'?(hsl.l<.25?'white':'black'):S.roof;
@@ -617,11 +678,17 @@ function carMats(S,paint){
   const rc=RIMCOL[(S.wheel&&S.wheel.rimCol)||'silver'];
   const M={paint:P,roof,pillar:S.pillars==='black'?SH.black:P,belt:S.belt==='chrome'?SH.chrome:SH.black,
     rim:lin(new THREE.MeshStandardMaterial({color:rc[0],metalness:rc[1],roughness:rc[2],envMapIntensity:1.3})),
-    caliper:lin(new THREE.MeshStandardMaterial({color:S.wheel.caliper==='red'?0xc81e24:0x55585e,roughness:.4,metalness:.2})),
+    caliper:lin(new THREE.MeshStandardMaterial({color:S.wheel.caliper==='red'?0xc81e24:/^#/.test(S.wheel.caliper||'')?S.wheel.caliper:0x55585e,roughness:.4,metalness:.2})),
     lightF:lin(new THREE.MeshStandardMaterial({color:0xffffff,emissive:0xfff4e0,emissiveIntensity:1.6,roughness:.2})),
     drl:lin(new THREE.MeshStandardMaterial({color:0xffffff,emissive:0xf2f6ff,emissiveIntensity:2.2,roughness:.2})),
     drlY:lin(new THREE.MeshStandardMaterial({color:0xffe08a,emissive:0xffc93c,emissiveIntensity:2.2,roughness:.2})),
     lightR:lin(new THREE.MeshStandardMaterial({color:0x8a0010,emissive:0xff1a2a,emissiveIntensity:1.3,roughness:.25}))};
+  // race liveries (Overdrive): a second paint, LED accent strips, helmet, number
+  M.acc=o.acc?new THREE.MeshPhysicalMaterial({color:new THREE.Color(o.acc).convertSRGBToLinear(),metalness:.35,roughness:.3,clearcoat:1,clearcoatRoughness:.05,envMapIntensity:1.1}):P;
+  M.neon=lin(new THREE.MeshStandardMaterial({color:0x0b0b0d,emissive:o.neon||'#9fe8ff',emissiveIntensity:2.4,roughness:.3}));
+  M.helmet=new THREE.MeshPhysicalMaterial({color:new THREE.Color(o.helmet||o.acc||paint).convertSRGBToLinear(),roughness:.25,clearcoat:1,metalness:.2});
+  M.visor=lin(new THREE.MeshStandardMaterial({color:0x101418,metalness:.9,roughness:.05,envMapIntensity:1.6}));
+  if(o.num!=null){const t=numTex(o.num,o.numCol||'#111318');M.num=new THREE.MeshStandardMaterial({map:t,transparent:true,roughness:.35,metalness:0,polygonOffset:true,polygonOffsetFactor:-2});M.num.userData.tex=t}
   return Object.assign({},SH,M);
 }
 
@@ -629,29 +696,161 @@ function carMats(S,paint){
    PLAYER / RIVAL CAR (full detail, separate moving parts)
    ========================================================================= */
 const DRESS={gt:dressGT,hatch:dressHatch,suv:dressSUV,saloon:dressSaloon};
+/* ---- OVERDRIVE race cars ---- */
+// a thin bar from a to b ([x,y,z]), for wishbones and struts
+function bar(a,b,t=.028){const THREE=T(),d=new THREE.Vector3(b[0]-a[0],b[1]-a[1],b[2]-a[2]),L=d.length(),g=new THREE.BoxGeometry(t,t*.7,L);
+  g.applyMatrix4(new THREE.Matrix4().lookAt(new THREE.Vector3(),d,new THREE.Vector3(0,1,0)));g.translate((a[0]+b[0])/2,(a[1]+b[1])/2,(a[2]+b[2])/2);return g}
+// a swept fin: low leading edge, rising to a raked trailing edge; t thick, centred on x
+function fin(x,z0,z1,yb,h,t=.012){const THREE=T(),sh=new THREE.Shape();sh.moveTo(z0,yb);sh.lineTo(z1,yb);sh.lineTo(z1+.06,yb+h);sh.quadraticCurveTo(z1+(z0-z1)*.45,yb+h*.92,z0,yb);
+  const g=new THREE.ExtrudeGeometry(sh,{depth:t,bevelEnabled:false,curveSegments:10});g.rotateY(-Math.PI/2);g.translate(x+t/2,0,0);return g}
+function dressODF1(S,add){
+  const F=surfOf(S),W=S.wheel,tr=W.track;
+  // cockpit opening, driver's helmet and visor, the halo
+  add('gap',decal(S,'top',rr(-.21,-.22,.21,.58,.08),{off:.006,cell:.04}));
+  {const h=new(T().SphereGeometry)(.135,20,14);h.scale(1,1.05,1.12);h.translate(0,.7,.08);add('helmet',h);
+   const v=new(T().SphereGeometry)(.137,20,8,-Math.PI*.36,Math.PI*.72,Math.PI*.38,Math.PI*.2);v.scale(1,1.05,1.12);v.translate(0,.7,.08);add('visor',v)}
+  {const g=new(T().TorusGeometry)(.32,.024,8,28,Math.PI);g.rotateX(-Math.PI/2);g.scale(.95,1,1.15);g.translate(0,.84,.2);add('black',g);add('black',bar([0,.84,.56],[0,.6,.74],.05))}
+  // airbox over the driver's head and a shark fin down the engine cover
+  add('paint',box(.3,.3,.75,0,.86,-.62));add('gap',box(.2,.15,.03,0,.92,-.235));add('acc',box(.31,.06,.76,0,1.03,-.62));
+  add('paint',box(.014,.3,1.05,0,.82,-1.55,-.12));
+  // sidepod intakes
+  [-1,1].forEach(sd=>{add('gap',box(.2,.24,.04,sd*.6,.38,.2));add('black',box(.04,.42,.5,sd*.79,.36,.1))});
+  // front wing: main plane, two flaps, endplates, pylons to the nose
+  const fz=2.42;add('black',box(1.9,.022,.42,0,.085,fz));add('acc',box(1.86,.018,.18,0,.13,fz-.1,.25));add('acc',box(1.82,.016,.14,0,.17,fz-.18,.42));
+  [-1,1].forEach(sd=>{add('acc',box(.02,.2,.55,sd*.95,.15,fz-.02));add('black',box(.03,.12,.12,sd*.11,.17,fz+.05))});
+  // rear wing: main plane, DRS flap, endplates, beam wing, central pylon
+  const rz=-2.38;add('black',box(.96,.035,.3,0,.95,rz,-.1));add('acc',box(.94,.025,.18,0,1.04,rz-.07,-.5));
+  [-1,1].forEach(sd=>add('acc',box(.02,.45,.62,sd*.49,.86,rz+.02)));add('black',box(.9,.03,.18,0,.42,rz+.1));add('black',box(.05,.5,.1,0,.68,rz+.12));
+  // suspension: upper and lower wishbones and a push rod to each wheel
+  [[W.f,1],[W.b,0]].forEach(([z,fr])=>[-1,1].forEach(sd=>{const x0=sd*(fr?.26:.42),x1=sd*(tr-.13);
+    add('black',bar([x0,.42,z+.18],[x1,.48,z]));add('black',bar([x0,.42,z-.18],[x1,.48,z]));
+    add('black',bar([x0,.25,z+.2],[x1,.22,z]));add('black',bar([x0,.25,z-.2],[x1,.22,z]));add('black',bar([x0*.8,.5,z],[x1,.24,z],.022))}));
+  // floor with sidewalls, diffuser, rain light
+  add('carbon',box(1.3,.02,2.6,0,.06,-.55));add('carbon',decal(S,'rear',ccw([[-.3,.18],[.3,.18],[.26,.3],[-.26,.3]]),{off:.004,uv:1,cell:.04}));
+  add('lightR',box(.08,.05,.02,0,.36,F.zb-.02));
+  // livery: the nose and engine cover in the second colour
+  add('acc',decal(S,'top',ccw([[-.15,2.62],[.15,2.62],[.24,1.3],[-.24,1.3]]),{off:.004,cell:.04}));
+  add('acc',decal(S,'side',ccw([[-.3,.3],[-1.6,.3],[-1.6,.42],[-.3,.5]]),{mirror:1,off:.004,cell:.05}));
+}
+function raceCommon(S,add,o){const F=surfOf(S),W=S.wheel;
+  // race kit every closed car shares: carbon splitter lip, tow hook, side skirts
+  add('carbon',decal(S,'front',ccw([[-.96,o.splitY],[.96,o.splitY],[.94,o.splitY+.035],[-.94,o.splitY+.035]]),{off:.006,uv:1,cell:.05}));
+  add('acc',box(.06,.03,.08,.45,o.splitY+.08,F.zf+.02));
+  add('carbon',decal(S,'side',ccw([[W.f-W.r-.12,.14],[W.b+W.r+.12,.14],[W.b+W.r+.12,.2],[W.f-W.r-.12,.2]]),{mirror:1,off:.005,uv:1,cell:.06}));
+}
+function dressODSuper(S,add){
+  const F=surfOf(S),W=S.wheel;raceCommon(S,add,{splitY:.1});
+  add('lampIn',decal(S,'front',ccw(rpoly([[.5,.36],[.88,.4],[.92,.46],[.6,.44]],.015)),{mirror:1,off:.003,cell:.022}));
+  add('neon',decal(S,'front',ccw([[.56,.395],[.86,.42],[.87,.432],[.57,.407]]),{mirror:1,off:.006,cell:.018}));
+  add('gap',decal(S,'front',ccw(rpoly([[.3,.13],[.84,.15],[.8,.31],[.38,.27]],.03)),{mirror:1,off:.002,cell:.03}));
+  add('grille',decal(S,'front',ccw(rpoly([[.34,.15],[.8,.17],[.77,.29],[.41,.25]],.025)),{mirror:1,off:.004,uv:1,cell:.03}));
+  add('gap',decal(S,'front',ccw(rpoly([[-.24,.15],[.24,.15],[.2,.24],[-.2,.24]],.02)),{off:.003,cell:.03}));
+  // twin racing stripes over the bonnet and the engine cover
+  [[2.33,1.0],[-1.05,-2.34]].forEach(([a,b])=>add('acc',decal(S,'top',ccw([[.1,a],[.27,a],[.27,b],[.1,b]]),{mirror:1,off:.005,cell:.04})));
+  // flank: scoop behind the door, LED line along the sill
+  const z0=W.b+W.r+.12,z1=W.b+W.r+.85;
+  add('gap',decal(S,'side',ccw(rpoly([[z0,.34],[z1,.5],[z1-.08,.66],[z0+.06,.58]],.04)),{mirror:1,off:.004,cell:.035}));
+  add('neon',decal(S,'side',ccw([[W.f-W.r-.08,.215],[W.b+W.r+.08,.215],[W.b+W.r+.08,.228],[W.f-W.r-.08,.228]]),{mirror:1,off:.007,cell:.05}));
+  // tail: hexagon lamps, gloss panel, diffuser, four centre pipes, ducktail
+  add('black',decal(S,'rear',ccw(rpoly([[-.92,.4],[.92,.4],[.9,.74],[-.9,.74]],.03)),{off:.002,cell:.05}));
+  [.5,.7].forEach(x=>{add('tailIn',decal(S,'rear',circ(x,.64,.075,6),{mirror:1,off:.004,cell:.02}));add('lightR',decal(S,'rear',circ(x,.64,.05,6),{mirror:1,off:.007,cell:.02}))});
+  add('carbon',decal(S,'rear',ccw([[-.86,.18],[.86,.18],[.82,.38],[-.82,.38]]),{off:.004,uv:1,cell:.05}));
+  [.08,.22].forEach(x=>[-1,1].forEach(sd=>{add('metal',cyl(.05,.052,.16,6,sd*x,.36,F.zb+.05,'z'));add('black',cyl(.04,.04,.17,6,sd*x,.36,F.zb+.045,'z'))}));
+  add('carbon',box(1.7,.025,.22,0,.9,-2.2,.18));
+}
+function dressODSpecter(S,add){
+  const F=surfOf(S),W=S.wheel;raceCommon(S,add,{splitY:.085});
+  add('carbon',box(1.94,.025,.24,0,.1,F.zf-.04));
+  [-1,1].forEach(sd=>{add('carbon',box(.3,.012,.14,sd*.82,.3,F.zf-.12,0,0,sd*.25));add('carbon',box(.24,.012,.12,sd*.84,.38,F.zf-.16,0,0,sd*.3))});
+  // round-cornered lamps with a ring light, a wide mouth
+  add('lampIn',decal(S,'front',ccw(rpoly([[.56,.5],[.88,.52],[.9,.62],[.6,.6]],.05)),{mirror:1,off:.003,cell:.022}));
+  add('neon',decal(S,'front',circ(.74,.56,.04,16),{mirror:1,off:.006,cell:.018}));
+  add('gap',decal(S,'front',ccw(rpoly([[-.66,.14],[.66,.14],[.62,.36],[-.62,.36]],.05)),{off:.002,cell:.03}));
+  add('grille',decal(S,'front',ccw(rpoly([[-.62,.16],[.62,.16],[.58,.34],[-.58,.34]],.04)),{off:.004,uv:1,cell:.03}));
+  // fender louvres over the front wheels, roof scoop
+  add('gap',decal(S,'top',rr(.56,1.12,.84,1.7,.03),{mirror:1,off:.003,cell:.035}));
+  [1.2,1.32,1.44,1.56].forEach(z=>add('carbon',decal(S,'top',rr(.57,z-.025,.83,z+.025,.008),{mirror:1,off:.006,cell:.035,uv:1})));
+  add('black',box(.32,.09,.42,0,1.27,-.42));add('gap',box(.26,.06,.02,0,1.28,-.2));
+  // livery: a swept stripe down each flank, side exit exhaust
+  add('acc',decal(S,'side',ccw([[1.3,.2],[.7,.2],[-.9,.62],[-.3,.62]]),{mirror:1,off:.005,cell:.05}));
+  add('neon',decal(S,'side',ccw([[1.36,.2],[1.3,.2],[-.3,.62],[-.24,.62]]),{mirror:1,off:.007,cell:.05}));
+  [-1,1].forEach(sd=>{add('metal',cyl(.05,.055,.18,14,sd*1.0,.22,W.b+W.r+.2,'x'));add('black',cyl(.04,.04,.19,12,sd*1.005,.22,W.b+W.r+.2,'x'))});
+  // tail: slim lamp strips, big diffuser, swan-neck wing
+  add('black',decal(S,'rear',ccw(rpoly([[-.9,.66],[.9,.66],[.88,.9],[-.88,.9]],.03)),{off:.002,cell:.05}));
+  add('lightR',decal(S,'rear',ccw(rpoly([[.52,.8],[.88,.81],[.87,.86],[.53,.85]],.01)),{mirror:1,off:.006,cell:.02}));
+  add('carbon',decal(S,'rear',ccw([[-.9,.16],[.9,.16],[.86,.44],[-.86,.44]]),{off:.004,uv:1,cell:.05}));
+  const wz=-2.12,wy=1.3;add('carbon',box(1.94,.032,.36,0,wy,wz,-.08));add('carbon',box(1.9,.02,.14,0,wy+.07,wz-.15,-.45));
+  [-1,1].forEach(sd=>{add('carbon',box(.02,.3,.56,sd*.98,wy-.02,wz-.02));add('black',bar([sd*.38,.96,-2.26],[sd*.38,wy,wz+.05],.04))});
+}
+function dressODSentinel(S,add){
+  const F=surfOf(S),W=S.wheel;raceCommon(S,add,{splitY:.11});
+  // horseshoe grille with a bright surround, quad LED lamps
+  add('metal',decal(S,'front',ccw(rpoly([[-.26,.13],[.26,.13],[.28,.42],[.19,.51],[-.19,.51],[-.28,.42]],.06)),{off:.002,cell:.025}));
+  add('grille',decal(S,'front',ccw(rpoly([[-.23,.15],[.23,.15],[.25,.41],[.17,.48],[-.17,.48],[-.25,.41]],.05)),{off:.004,uv:1,cell:.025}));
+  add('lampIn',decal(S,'front',ccw(rpoly([[.5,.46],[.9,.5],[.92,.58],[.54,.55]],.02)),{mirror:1,off:.003,cell:.022}));
+  [.6,.68,.76,.84].forEach(x=>add('drl',decal(S,'front',rr(x-.025,.5+(x-.6)*.08,x+.025,.53+(x-.6)*.08,.008),{mirror:1,off:.006,cell:.016})));
+  add('gap',decal(S,'front',ccw(rpoly([[.4,.15],[.86,.17],[.84,.38],[.46,.3]],.04)),{mirror:1,off:.002,cell:.03}));
+  // two-tone: the darker panel colour below the crease, an LED "C" sweeping round each door
+  add('acc',decal(S,'side',ccw([[2.1,.14],[-2.1,.14],[-2.1,.4],[2.1,.4]]),{mirror:1,off:.003,cell:.05}));
+  {const P=[],cz=-.25,cy=.52,ra=.82,rb=.3,t=.028;for(let i=0;i<=18;i++){const a=Math.PI*.5+i/18*Math.PI;P.push([cz+Math.cos(a)*-ra,cy+Math.sin(a)*rb])}
+   const In=[];for(let i=18;i>=0;i--){const a=Math.PI*.5+i/18*Math.PI;In.push([cz+Math.cos(a)*-(ra-t),cy+Math.sin(a)*(rb-t)])}
+   add('neon',decal(S,'side',ccw([...P,...In]),{mirror:1,off:.007,cell:.04}))}
+  // tail: full-width LED bar, quad square pipes, diffuser, flush spoiler
+  add('black',decal(S,'rear',ccw(rpoly([[-.9,.46],[.9,.46],[.88,.86],[-.88,.86]],.03)),{off:.002,cell:.05}));
+  add('lightR',decal(S,'rear',ccw([[-.86,.78],[.86,.78],[.85,.81],[-.85,.81]]),{off:.006,cell:.025}));
+  add('neon',decal(S,'rear',ccw([[-.86,.83],[.86,.83],[.85,.842],[-.85,.842]]),{off:.006,cell:.025}));
+  add('carbon',decal(S,'rear',ccw([[-.84,.18],[.84,.18],[.8,.44],[-.8,.44]]),{off:.004,uv:1,cell:.05}));
+  [.07,.2].forEach(x=>[-1,1].forEach(sd=>{add('metal',box(.1,.09,.16,sd*x,.38,F.zb+.06));add('black',box(.08,.07,.17,sd*x,.38,F.zb+.055))}));
+  add('carbon',decal(S,'top',ccw([[-.62,-1.95],[.62,-1.95],[.62,-1.75],[-.62,-1.75]]),{off:.008,uv:1,cell:.05}));
+}
+function dressODAero(S,add){
+  const F=surfOf(S),W=S.wheel;raceCommon(S,add,{splitY:.08});
+  // small lamp clusters high on the fenders, huge venturi intakes, gold nose blade
+  add('lampIn',decal(S,'front',ccw(rpoly([[.64,.36],[.9,.39],[.92,.46],[.68,.44]],.02)),{mirror:1,off:.003,cell:.02}));
+  add('neon',decal(S,'front',ccw([[.68,.4],[.89,.42],[.89,.432],[.68,.412]]),{mirror:1,off:.006,cell:.016}));
+  add('gap',decal(S,'front',ccw(rpoly([[.18,.1],[.86,.12],[.84,.32],[.24,.26]],.05)),{mirror:1,off:.002,cell:.03}));
+  add('grille',decal(S,'front',ccw(rpoly([[.22,.12],[.82,.14],[.8,.3],[.27,.25]],.04)),{mirror:1,off:.004,uv:1,cell:.03}));
+  add('acc',decal(S,'top',ccw([[-.09,2.44],[.09,2.44],[.13,1.2],[-.13,1.2]]),{off:.005,cell:.04}));
+  // panels: dark carbon lower body
+  add('carbon',decal(S,'side',ccw([[2.3,.12],[-2.3,.12],[-2.3,.32],[2.3,.32]]),{mirror:1,off:.003,uv:1,cell:.05}));
+  // the three fins: a central shark fin over the engine, and one above each rear wheel
+  add('acc',fin(0,-.8,-2.3,.9,.26,.014));
+  [-1,1].forEach(sd=>add('acc',fin(sd*.72,W.b+.55,W.b-.6,.8,.16,.012)));
+  // tail: a thin light blade, gold LED strip, huge diffuser, single central pipe, wing between the fins
+  add('black',decal(S,'rear',ccw(rpoly([[-.9,.4],[.9,.4],[.88,.68],[-.88,.68]],.03)),{off:.002,cell:.05}));
+  add('lightR',decal(S,'rear',ccw([[-.86,.6],[.86,.6],[.85,.625],[-.85,.625]]),{off:.006,cell:.025}));
+  add('neon',decal(S,'rear',ccw([[-.86,.645],[.86,.645],[.85,.656],[-.85,.656]]),{off:.006,cell:.025}));
+  add('carbon',decal(S,'rear',ccw([[-.88,.14],[.88,.14],[.84,.4],[-.84,.4]]),{off:.004,uv:1,cell:.05}));
+  add('metal',cyl(.07,.072,.16,18,0,.55,F.zb+.05,'z'));add('black',cyl(.058,.058,.17,16,0,.55,F.zb+.045,'z'));
+  add('carbon',box(1.46,.03,.3,0,.98,-2.28,-.08));
+}
+Object.assign(DRESS,{odF1:dressODF1,odSuper:dressODSuper,odSpecter:dressODSpecter,odSentinel:dressODSentinel,odAero:dressODAero});
 const PLAYER_GEO={};   // the static geometry of each style is built once and reused
 function playerGeo(style){
   if(PLAYER_GEO[style])return PLAYER_GEO[style];
   const S=SHAPES[style];S.id=style;const parts={};const add=(k,g)=>{if(!g)return;(parts[k]=parts[k]||[]).push(g)};
   const bg=body(S,{ds:.045});
-  dressCommon(S,add,{mirrorMat:S.id==='saloon'||S.id==='hatch'?'black':'paint'});(DRESS[style]||(()=>{}))(S,add);interior(S,add);
+  dressCommon(S,add,{mirrorMat:S.mirror||(S.id==='saloon'||S.id==='hatch'||S.id==='suv'?'black':'paint')});(DRESS[style]||(()=>{}))(S,add);if(!S.noInterior)interior(S,add);
+  // race number on the bonnet (reads the right way round from the chase camera)
+  if(S.numAt){const[x0,z0,x1,z1]=S.numAt,g=decal(S,'top',ccw(rr(x0,z0,x1,z1,.01)),{off:.009,uv:1,cell:.05}),U=g.attributes.uv,Pp=g.attributes.position;
+    for(let i=0;i<U.count;i++)U.setXY(i,(x1-Pp.getX(i))/(x1-x0),(Pp.getZ(i)-z0)/(z1-z0));add('num',g)}
   // roof rails
   if(S.rails){const a=sectAt(S,.0),z0=S.k.find(k=>k[7]==='c')[0]-.05,z1=S.k.filter(k=>k[7]==='r')[0][0]+.1;[-1,1].forEach(sd=>{add('silver',box(.035,.04,z0-z1,sd*a.wr*.8,a.yr+.06,(z0+z1)/2));[z0-.04,z1+.04,(z0+z1)/2].forEach(z=>add('black',box(.045,.07,.07,sd*a.wr*.8,a.yr+.025,z)))})}
   const merged={};for(const k in parts){const m=merge(parts[k]);if(m)merged[k]=m}
   return PLAYER_GEO[style]={body:bg,parts:merged};
 }
-function player(style,paint,plate){
+function player(style,paint,plate,o={}){
   const THREE=T();if(!SHAPES[style]||!DRESS[style])style='gt';const S=SHAPES[style];S.id=style;
-  const M=carMats(S,paint),W=S.wheel,G=playerGeo(style);
+  const M=carMats(S,paint,o),W=S.wheel,G=playerGeo(style);
   const root=new THREE.Group(),bodyG=new THREE.Group();root.add(bodyG);
   const shell=new THREE.Mesh(G.body,MK.map(k=>M[k==='glass'?'glass':k]));shell.castShadow=true;bodyG.add(shell);
-  const meshes={};for(const k in G.parts){const m=new THREE.Mesh(G.parts[k],M[k]||M.dark);m.castShadow=!/glass|cabin|seat|skin|hair|shirt|liner|light|drl|lens/.test(k);bodyG.add(m);meshes[k]=m}
-  const pl=plates(S,plate,null);pl.meshes.forEach(m=>bodyG.add(m));
+  const meshes={};for(const k in G.parts){if(k==='num'&&!M.num)continue;const m=new THREE.Mesh(G.parts[k],M[k]||M.dark);m.castShadow=!/glass|cabin|seat|skin|hair|shirt|liner|light|drl|lens/.test(k);bodyG.add(m);meshes[k]=m}
+  const pl=S.noPlate?{meshes:[],tex:null,mat:null}:plates(S,plate,null);pl.meshes.forEach(m=>bodyG.add(m));
   const F=surfOf(S);
   // wheels: steer group > spin group
   const wheels=[],wp=wheelParts(W.r,W.tw,W.rim,false),wg={};for(const k in wp){const m=merge(wp[k]);if(m)wg[k]=m}
   [[W.f,1],[W.b,0]].forEach(([z,front])=>[-1,1].forEach(sd=>{
-    const s=sectAt(S,z),steer=new THREE.Group(),spin=new THREE.Group();steer.position.set(sd*(s.ws-W.tw/2+.015),W.r,z);steer.add(spin);
+    const s=sectAt(S,z),steer=new THREE.Group(),spin=new THREE.Group();steer.position.set(sd*(W.track!=null?W.track:s.ws-W.tw/2+.015),W.r,z);steer.add(spin);
     if(sd<0)steer.scale.x=-1;   // mirror so the rim faces outward
     for(const k of['rubber','rim','dark','disc']){if(!wg[k])continue;const m=new THREE.Mesh(wg[k],M[k]);m.castShadow=k==='rubber';spin.add(m)}
     if(wg.caliper)steer.add(new THREE.Mesh(wg.caliper,M.caliper));
@@ -660,11 +859,11 @@ function player(style,paint,plate){
   // light glows (camera-facing, additive): bright at night, tail glow brightens when braking
   const glow=glowTex(),gF=new THREE.SpriteMaterial({map:glow,color:0xfff2dc,blending:THREE.AdditiveBlending,depthWrite:false,transparent:true,opacity:0}),
     gR=new THREE.SpriteMaterial({map:glow,color:0xff2030,blending:THREE.AdditiveBlending,depthWrite:false,transparent:true,opacity:.0});
-  const hlY={gt:.66,hatch:.6,suv:.96,saloon:.63}[style],tlY={gt:.87,hatch:1.05,suv:1.12,saloon:.88}[style],hx={gt:.7,hatch:.68,suv:.75,saloon:.6}[style];
-  const glows=new THREE.Group();[-1,1].forEach(sd=>{const a=new THREE.Sprite(gF);a.position.set(sd*hx,hlY,F.zf+.06);a.scale.set(.9,.9,1);glows.add(a);
-    const b=new THREE.Sprite(gR);b.position.set(sd*.66,tlY,F.zb-.05);b.scale.set(.7,.7,1);glows.add(b)});bodyG.add(glows);
+  const LP=S.lamp||{hl:[{gt:.7,hatch:.72,suv:.78,saloon:.6}[style],{gt:.66,hatch:.47,suv:.75,saloon:.63}[style]],tl:[.66,{gt:.87,hatch:.745,suv:1.05,saloon:.88}[style]]};
+  const glows=new THREE.Group();[-1,1].forEach(sd=>{if(LP.hl){const a=new THREE.Sprite(gF);a.position.set(sd*LP.hl[0],LP.hl[1]-.02,F.zf+.1);a.scale.set(.6,.6,1);glows.add(a)}
+    if(LP.tl&&(LP.tl[0]||sd>0)){const b=new THREE.Sprite(gR);b.position.set(sd*LP.tl[0],LP.tl[1],F.zb-.05);b.scale.set(.7,.7,1);glows.add(b)}});bodyG.add(glows);
   // nitro flames from the exhausts (or under the bumper when the pipes are hidden)
-  const ex={gt:[[.36,.31],[.5,.31]],saloon:[[.42,.3],[.56,.3]],hatch:[[.3,.33]],suv:[[.45,.45]]}[style].flatMap(([x,y])=>style==='hatch'||style==='suv'?[[x,y]]:[[-x,y],[x,y]]);
+  const ex=(LP.ex||{gt:[[.36,.31],[.5,.31]],saloon:[[.42,.3],[.56,.3]],hatch:[[.11,.42]],suv:[[.5,.47],[.66,.47]]}[style]).flatMap(([x,y])=>x?[[-x,y],[x,y]]:[[0,y]]);
   const flames=new THREE.Group();ex.forEach(([x,y])=>{const f=new THREE.Mesh(new THREE.ConeGeometry(.055,.5,10,1,true),M.flame);f.rotation.x=-Math.PI/2;f.position.set(x,y,F.zb-.28);flames.add(f)});
   flames.visible=false;bodyG.add(flames);
   let night=false,brake=false;
@@ -674,7 +873,7 @@ function player(style,paint,plate){
     setNight(n){night=!!n;upd()},
     setBoost(on,t){flames.visible=on;if(on)flames.children.forEach((f,i)=>{const s=.75+.45*Math.sin(t*47+i*2)+Math.random()*.25;f.scale.set(1,s,1);f.position.z=F.zb-.1-.25*s})},
     paint:M.paint,
-    dispose(){pl.tex.dispose();pl.mat.dispose();[M.paint,M.rim,M.caliper,M.lightF,M.lightR,M.drl,M.drlY,gF,gR].forEach(m=>m.dispose());if(M.roof!==M.paint&&!Object.values(SHARED).includes(M.roof))M.roof.dispose();
+    dispose(){if(pl.tex){pl.tex.dispose();pl.mat.dispose()}if(M.num){M.num.userData.tex.dispose();M.num.dispose()}[M.paint,M.rim,M.caliper,M.lightF,M.lightR,M.drl,M.drlY,M.neon,M.helmet,M.visor,gF,gR].forEach(m=>m.dispose());if(M.acc!==M.paint)M.acc.dispose();if(M.roof!==M.paint&&!Object.values(SHARED).includes(M.roof))M.roof.dispose();
       flames.children.forEach(f=>f.geometry.dispose());for(const k in wg)wg[k].dispose()}};
 }
 

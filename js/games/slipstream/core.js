@@ -37,8 +37,8 @@ const CFG={
 // player cars: top speed (m/s), acceleration, steering, width
 const STYLES={
   gt:    {n:'Vento GT',     sub:'V8 fastback coupé',          top:67,acc:10.2,steer:1.04,w:1.92,l:4.81,hp:480,kg:1750,zs:4.3},
-  hatch: {n:'Metro X',      sub:'Compact SUV · nimble',       top:57,acc:11.4,steer:1.18,w:1.8, l:4.0, hp:120,kg:1250,zs:9.8},
-  suv:   {n:'Ridgeback 4x4',sub:'Big SUV · tough and tall',   top:60,acc:9.0, steer:.92, w:1.86,l:4.8, hp:201,kg:2180,zs:10.5},
+  hatch: {n:'Nova R',       sub:'Mid-engine hypercar',        top:72,acc:11.8,steer:1.12,w:1.96,l:4.62,hp:780,kg:1420,zs:2.7},
+  suv:   {n:'Ridgeback RS', sub:'Super-SUV · twin-turbo V8',  top:63,acc:10.4,steer:.95, w:1.98,l:5.1, hp:666,kg:2200,zs:3.5},
   saloon:{n:'Vanta CS',     sub:'Super saloon · 4 doors',     top:70,acc:10.7,steer:.98, w:1.9, l:4.98,hp:627,kg:1825,zs:3.0}
 };
 // traffic: length / width (m), drawn in cars.js
